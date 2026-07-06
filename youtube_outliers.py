@@ -73,7 +73,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
         part="statistics,snippet,contentDetails",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url,contentDetails/duration)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/medium/url,contentDetails/duration)",
     )
     response = execute_request(request)
     if not response:
@@ -296,7 +296,11 @@ def main() -> None:
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
             thumbnail_url = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}).get("url", "")
-            published_at = stats.get("snippet", {}).get("publishedAt", "")
+            raw_published_at = stats.get("snippet", {}).get("publishedAt", "")
+            try:
+                published_at = datetime.strptime(raw_published_at, "%Y-%m-%dT%H:%M:%SZ").strftime("%b %d, %Y") if raw_published_at else ""
+            except ValueError:
+                published_at = raw_published_at
 
             subscriber_count = 0
             channel_total_views = 0
