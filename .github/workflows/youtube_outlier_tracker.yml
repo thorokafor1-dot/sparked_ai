@@ -1,0 +1,44 @@
+name: YouTube outlier tracker
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 12 * * 0'
+
+jobs:
+  scan-outliers:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Generate outlier spreadsheet
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          YOUTUBE_KEYWORDS: 'cold approach,infield'
+          LOOKBACK_DAYS: '90'
+          OUTPUT_FILE: 'youtube_outliers.xlsx'
+        run: python youtube_outliers.py
+
+      - name: Commit updated spreadsheet
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add youtube_outliers.xlsx
+          if git diff --cached --quiet; then
+            echo "No spreadsheet changes to commit."
+          else
+            git commit -m "Update YouTube outlier spreadsheet"
+            git push
+          fi
