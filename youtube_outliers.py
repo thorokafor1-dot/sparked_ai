@@ -88,7 +88,7 @@ def get_channel_stats(youtube, channel_id: str) -> Dict[str, Any]:
     request = youtube.channels().list(
         part="statistics",
         id=channel_id,
-        fields="items(id,statistics/subscriberCount)",
+        fields="items(id,statistics/subscriberCount,statistics/viewCount,statistics/videoCount)",
     )
     response = execute_request(request)
     if not response:
@@ -99,25 +99,34 @@ def get_channel_stats(youtube, channel_id: str) -> Dict[str, Any]:
     return items[0]
 
 
-def is_short_video(duration_str: str) -> bool:
-    """Check if a video is a short (< 60 seconds) based on ISO 8601 duration format."""
+def is_short_video(duration_str: str, title: str = "", tags: list = None) -> bool:
+    """Check if a video is a short based on duration (<60s) or #shorts in title/tags."""
+    # Check for #shorts in title
+    if title and "#shorts" in title.lower():
+        return True
+
+    # Check for #shorts in tags
+    if tags:
+        for tag in tags:
+            if "#shorts" in tag.lower() or tag.lower() == "shorts":
+                return True
+
     if not duration_str:
         return False
-    
+
     try:
-        # Parse ISO 8601 duration (e.g., PT1M30S, PT45S, PT1H23M45S)
         import re
         pattern = r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
         match = re.match(pattern, duration_str)
         if not match:
             return False
-        
+
         hours = int(match.group(1)) if match.group(1) else 0
         minutes = int(match.group(2)) if match.group(2) else 0
         seconds = int(match.group(3)) if match.group(3) else 0
-        
+
         total_seconds = hours * 3600 + minutes * 60 + seconds
-        return total_seconds < 60  # Shorts are less than 60 seconds
+        return total_seconds < 60
     except:
         return False
 
@@ -146,9 +155,18 @@ def is_relevant_tags(tags: list) -> bool:
     return False
 
 
-def is_outlier(view_count: int, subscriber_count: int) -> tuple[bool, str]:
-    if view_count > HIGH_VIEW_THRESHOLD:
+def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str]:
+    # Qualify if views exceed the minimum threshold
+    if view_count >= HIGH_VIEW_THRESHOLD:
         return True, f"Over {HIGH_VIEW_THRESHOLD:,} views"
+
+    # Qualify if views are 100x or more the channel's average views per video
+    if channel_video_count > 0 and channel_total_views > 0:
+        avg_views = channel_total_views / channel_video_count
+        if avg_views > 0 and view_count >= avg_views * 100:
+            multiplier = int(view_count / avg_views)
+            return True, f"{multiplier}x channel average views"
+
     return False, ""
 
 
@@ -240,27 +258,32 @@ def main() -> None:
             published_at = stats.get("snippet", {}).get("publishedAt", "")
 
             subscriber_count = 0
+            channel_total_views = 0
+            channel_video_count = 0
             if channel_id:
                 channel_stats = get_channel_stats(youtube, channel_id)
-                subscriber_count = int(channel_stats.get("statistics", {}).get("subscriberCount", 0) or 0)
+                ch_statistics = channel_stats.get("statistics", {})
+                subscriber_count = int(ch_statistics.get("subscriberCount", 0) or 0)
+                channel_total_views = int(ch_statistics.get("viewCount", 0) or 0)
+                channel_video_count = int(ch_statistics.get("videoCount", 0) or 0)
 
             # Debug: Print all found videos
             title = stats.get("snippet", {}).get("title", "")
             print(f"Found video: '{title}' - Views: {view_count:,}, Subscribers: {subscriber_count:,}, Channel: {channel_title}")
 
-            # Filter out shorts (videos under 60 seconds)
+            # Filter out shorts (under 60s, or has #shorts in title/tags)
             duration = stats.get("contentDetails", {}).get("duration", "")
-            if is_short_video(duration):
-                print(f"  → Skipped (short video)")
+            tags = stats.get("snippet", {}).get("tags", []) or []
+            if is_short_video(duration, title, tags):
+                print(f"  → Skipped (short video or #shorts)")
                 continue
 
             # Filter out unrelated content based on video tags
-            tags = stats.get("snippet", {}).get("tags", []) or []
             if not is_relevant_tags(tags):
                 print(f"  → Skipped (tags not relevant to cold approach/pickup niche)")
                 continue
 
-            is_flagged, reason = is_outlier(view_count, subscriber_count)
+            is_flagged, reason = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
             if not is_flagged:
                 continue
 
