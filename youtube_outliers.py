@@ -32,6 +32,24 @@ SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SUBSCRIBER_MULTIPLIER_THRESHO
 # Cap how many outliers from the same channel land in the sheet, to keep results diverse.
 PER_CHANNEL_CAP = int(os.getenv("PER_CHANNEL_CAP", "3"))
 
+# Shorts get pushed by YouTube's feed algorithm to viewers largely independent of
+# subscriber count, so channel-average/subscriber ratios (used for long-form) are weak
+# signals here. Instead: did it spike fast (velocity), and did people actually engage
+# (like ratio) rather than just autoplay past it.
+GOOGLE_SHORTS_SHEET_NAME = os.getenv("GOOGLE_SHORTS_SHEET_NAME", "Shorts Outliers")
+SHORTS_LOOKBACK_DAYS = int(os.getenv("SHORTS_LOOKBACK_DAYS", "90"))
+# Absolute view count that alone qualifies a short as an outlier.
+SHORTS_HIGH_VIEW_THRESHOLD = int(os.getenv("SHORTS_HIGH_VIEW_THRESHOLD", "300000"))
+# Minimum views before the velocity signal is allowed to trigger, so a video published
+# hours ago with a handful of views can't produce an artificially huge views/day figure.
+SHORTS_MIN_VIEW_THRESHOLD = int(os.getenv("SHORTS_MIN_VIEW_THRESHOLD", "50000"))
+# Views per day since publish that alone qualifies a short as an outlier (catches a
+# recent viral spike even before it clears the absolute view floor).
+SHORTS_VELOCITY_THRESHOLD = float(os.getenv("SHORTS_VELOCITY_THRESHOLD", "15000"))
+# Minimum like-to-view ratio required (when the like count is public) — filters out
+# clips that got algorithmic reach but little real audience resonance.
+SHORTS_ENGAGEMENT_THRESHOLD = float(os.getenv("SHORTS_ENGAGEMENT_THRESHOLD", "0.04"))
+
 # YouTube category IDs that are never dating/pickup content, regardless of how a video
 # is worded — a much more reliable signal than keyword-guessing (e.g. blocks song uploads
 # like "Pinky Up" that a fuzzy search match let through).
@@ -277,6 +295,42 @@ def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int 
     return True, reason, round(score, 2)
 
 
+def is_outlier_short(view_count: int, days_since_published: float, like_count: int = None) -> tuple[bool, str, float]:
+    """Score a short against reach + engagement signals and return the strongest reach signal.
+
+    Shorts get algorithmic distribution largely independent of subscriber count, so a
+    channel-average or subscriber ratio (used for long-form) doesn't reliably indicate a
+    standout — it just reflects normal Shorts reach. Instead: did it spike fast (views/day),
+    or does it clear a high absolute floor — AND, when public, did people actually engage
+    (like ratio) rather than just autoplay past it.
+    """
+    candidates: List[tuple[float, str]] = []
+    days_since_published = max(days_since_published, 1.0)
+
+    # Signal 1: absolute view floor.
+    if view_count >= SHORTS_HIGH_VIEW_THRESHOLD:
+        candidates.append((view_count / SHORTS_HIGH_VIEW_THRESHOLD, f"Over {SHORTS_HIGH_VIEW_THRESHOLD:,} views"))
+
+    # Signal 2: view velocity — catches a recent spike even before the absolute floor.
+    if view_count >= SHORTS_MIN_VIEW_THRESHOLD:
+        velocity = view_count / days_since_published
+        if velocity >= SHORTS_VELOCITY_THRESHOLD:
+            candidates.append((velocity / SHORTS_VELOCITY_THRESHOLD, f"{velocity:,.0f} views/day"))
+
+    if not candidates:
+        return False, "", 0.0
+
+    # Engagement gate: when the like count is public, require real audience resonance,
+    # not just algorithmic reach. If likes are hidden, we can't verify, so skip the gate.
+    if like_count is not None and view_count > 0:
+        like_ratio = like_count / view_count
+        if like_ratio < SHORTS_ENGAGEMENT_THRESHOLD:
+            return False, "", 0.0
+
+    score, reason = max(candidates, key=lambda c: c[0])
+    return True, reason, round(score, 2)
+
+
 def build_google_sheets_client():
     if not GOOGLE_SERVICE_ACCOUNT_JSON:
         print("Google Sheets credentials not configured. Set GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Sheets output.")
@@ -292,20 +346,21 @@ def build_google_sheets_client():
     return gspread.authorize(credentials)
 
 
-def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
+def open_spreadsheet():
     client = build_google_sheets_client()
     if not client:
         return None
 
     if GOOGLE_SPREADSHEET_ID:
-        spreadsheet = client.open_by_key(GOOGLE_SPREADSHEET_ID)
-    else:
-        spreadsheet = client.create("YouTube Outlier Tracker")
+        return client.open_by_key(GOOGLE_SPREADSHEET_ID)
+    return client.create("YouTube Outlier Tracker")
 
+
+def write_rows_to_worksheet(spreadsheet, sheet_name: str, rows: List[Dict[str, Any]]):
     try:
-        worksheet = spreadsheet.worksheet(GOOGLE_SHEET_NAME)
+        worksheet = spreadsheet.worksheet(sheet_name)
     except gspread.exceptions.WorksheetNotFound:
-        worksheet = spreadsheet.add_worksheet(title=GOOGLE_SHEET_NAME, rows=1000, cols=20)
+        worksheet = spreadsheet.add_worksheet(title=sheet_name, rows=1000, cols=20)
 
     worksheet.clear()
     worksheet.append_row(HEADERS)
@@ -373,8 +428,24 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
     return spreadsheet.url
 
 
+def cap_and_sort_by_channel(rows: List[Dict[str, Any]], per_channel_cap: int = None) -> List[Dict[str, Any]]:
+    """Group rows by channel, optionally cap per channel, then sort by score descending."""
+    rows_by_channel: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        rows_by_channel.setdefault(row["channel_key"], []).append(row)
+
+    capped: List[Dict[str, Any]] = []
+    for channel_rows in rows_by_channel.values():
+        channel_rows.sort(key=lambda r: r["score"], reverse=True)
+        capped.extend(channel_rows[:per_channel_cap] if per_channel_cap else channel_rows)
+
+    capped.sort(key=lambda r: r["score"], reverse=True)
+    return capped
+
+
 def main() -> None:
     rows: List[Dict[str, Any]] = []
+    shorts_rows: List[Dict[str, Any]] = []
     seen_video_ids = set()  # Track videos we've already added to avoid duplicates
     youtube = build_youtube_client()
 
@@ -402,12 +473,19 @@ def main() -> None:
                 continue
 
             view_count = int(stats.get("statistics", {}).get("viewCount", 0) or 0)
+            raw_like_count = stats.get("statistics", {}).get("likeCount")
+            like_count = int(raw_like_count) if raw_like_count is not None else None
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
             thumbnail_url = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}).get("url", "")
             raw_published_at = stats.get("snippet", {}).get("publishedAt", "")
+            published_dt = None
             try:
-                published_at = datetime.strptime(raw_published_at, "%Y-%m-%dT%H:%M:%SZ").strftime("%b %d, %Y") if raw_published_at else ""
+                if raw_published_at:
+                    published_dt = datetime.strptime(raw_published_at, "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=timezone.utc)
+                    published_at = published_dt.strftime("%b %d, %Y")
+                else:
+                    published_at = ""
             except ValueError:
                 published_at = raw_published_at
 
@@ -425,12 +503,9 @@ def main() -> None:
             title = stats.get("snippet", {}).get("title", "")
             print(f"Found video: '{title}' - Views: {view_count:,}, Subscribers: {subscriber_count:,}, Channel: {channel_title}")
 
-            # Filter out shorts (under 60s, or has #shorts in title/tags)
             duration = stats.get("contentDetails", {}).get("duration", "")
             tags = stats.get("snippet", {}).get("tags", []) or []
-            if is_short_video(duration, title, tags):
-                print(f"  → Skipped (short video or #shorts)")
-                continue
+            is_short = is_short_video(duration, title, tags)
 
             # Filter out unrelated content based on video tags (with title fallback)
             category_id = stats.get("snippet", {}).get("categoryId", "")
@@ -438,46 +513,57 @@ def main() -> None:
                 print(f"  → Skipped (not relevant to cold approach/pickup niche)")
                 continue
 
-            is_flagged, reason, score = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
-            if not is_flagged:
-                continue
+            row_data = {
+                "title": title,
+                "channel": channel_title,
+                "channel_key": channel_id or channel_title,
+                "published_at": published_at,
+                "duration": format_duration(duration),
+                "views": view_count,
+                "subscribers": subscriber_count,
+                "keyword": keyword,
+                "video_url": f"https://www.youtube.com/watch?v={video_id}",
+                "thumbnail_url": thumbnail_url,
+            }
 
-            seen_video_ids.add(video_id)
-            rows.append(
-                {
-                    "title": stats.get("snippet", {}).get("title", ""),
-                    "channel": channel_title,
-                    "channel_key": channel_id or channel_title,
-                    "published_at": published_at,
-                    "duration": format_duration(duration),
-                    "views": view_count,
-                    "subscribers": subscriber_count,
-                    "keyword": keyword,
-                    "video_url": f"https://www.youtube.com/watch?v={video_id}",
-                    "thumbnail_url": thumbnail_url,
-                    "reason": reason,
-                    "score": score,
-                }
-            )
+            if is_short:
+                if published_dt is None:
+                    continue
+                days_since_published = (datetime.now(timezone.utc) - published_dt).total_seconds() / 86400
+                if days_since_published > SHORTS_LOOKBACK_DAYS:
+                    print(f"  → Skipped (short older than {SHORTS_LOOKBACK_DAYS} days)")
+                    continue
+
+                is_flagged, reason, score = is_outlier_short(view_count, days_since_published, like_count)
+                if not is_flagged:
+                    continue
+
+                seen_video_ids.add(video_id)
+                shorts_rows.append({**row_data, "reason": reason, "score": score})
+            else:
+                is_flagged, reason, score = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
+                if not is_flagged:
+                    continue
+
+                seen_video_ids.add(video_id)
+                rows.append({**row_data, "reason": reason, "score": score})
 
     # Cap outliers per channel so a few prolific channels don't crowd out variety,
-    # then sort by score so the strongest thumbnail/title wins surface first.
-    rows_by_channel: Dict[str, List[Dict[str, Any]]] = {}
-    for row in rows:
-        rows_by_channel.setdefault(row["channel_key"], []).append(row)
+    # then sort by score so the strongest examples surface first. Shorts aren't
+    # capped in total count, just kept diverse across channels.
+    capped_rows = cap_and_sort_by_channel(rows, PER_CHANNEL_CAP)
+    capped_shorts_rows = cap_and_sort_by_channel(shorts_rows, PER_CHANNEL_CAP)
 
-    capped_rows: List[Dict[str, Any]] = []
-    for channel_rows in rows_by_channel.values():
-        channel_rows.sort(key=lambda r: r["score"], reverse=True)
-        capped_rows.extend(channel_rows[:PER_CHANNEL_CAP])
-
-    capped_rows.sort(key=lambda r: r["score"], reverse=True)
-
-    sheet_url = write_rows_to_google_sheets(capped_rows)
-    if sheet_url:
-        print(f"Wrote {len(capped_rows)} outlier videos to {sheet_url}")
-    else:
+    spreadsheet = open_spreadsheet()
+    if not spreadsheet:
         print("No Google Sheets output was created.")
+        return
+
+    sheet_url = write_rows_to_worksheet(spreadsheet, GOOGLE_SHEET_NAME, capped_rows)
+    print(f"Wrote {len(capped_rows)} outlier videos to {sheet_url} ({GOOGLE_SHEET_NAME})")
+
+    shorts_url = write_rows_to_worksheet(spreadsheet, GOOGLE_SHORTS_SHEET_NAME, capped_shorts_rows)
+    print(f"Wrote {len(capped_shorts_rows)} outlier shorts to {shorts_url} ({GOOGLE_SHORTS_SHEET_NAME})")
 
 
 if __name__ == "__main__":
