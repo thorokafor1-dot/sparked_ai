@@ -133,8 +133,9 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
 
 def is_relevant_tags(tags: list, title: str = "") -> bool:
     """Check if a video's tags or title indicate it's relevant to cold approach/pickup dating content."""
+    import re
 
-    # Hard exclusions — reject immediately if any of these appear in title or tags
+    # Hard exclusions — whole-word match against title and tags
     exclusion_keywords = [
         "infield", "outfield", "baseball", "softball", "pitcher", "batter", "batting",
         "home run", "strikeout", "mlb", "little league",
@@ -143,12 +144,13 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
         "sports", "sport", "athlete", "stadium", "field goal", "touchdown",
         "gaming", "gameplay", "video game", "minecraft", "fortnite", "roblox",
         "music video", "rap", "hip hop", "album", "song", "lyrics",
-        "coding", "programming", "software", "javascript", "python tutorial",
+        "programming", "software", "javascript", "python tutorial",
     ]
 
     combined_text = (title + " " + " ".join(tags or [])).lower()
     for term in exclusion_keywords:
-        if term in combined_text:
+        # Use word boundary matching so "coding" won't match "coaching"
+        if re.search(r'\b' + re.escape(term) + r'\b', combined_text):
             return False
 
     relevant_keywords = [
