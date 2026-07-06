@@ -295,6 +295,10 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
     worksheet.clear()
     worksheet.append_row(HEADERS)
 
+    # IMAGE() mode 4 renders at a fixed pixel size instead of shrinking to fit the
+    # default (tiny) cell, so thumbnails are actually visible.
+    thumbnail_width, thumbnail_height = 160, 90
+
     if rows:
         values = [
             [
@@ -305,13 +309,47 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
                 row.get("subscribers", ""),
                 row.get("keyword", ""),
                 row.get("video_url", ""),
-                f'=IMAGE("{row.get("thumbnail_url", "")}")' if row.get("thumbnail_url") else "",
+                f'=IMAGE("{row.get("thumbnail_url", "")}", 4, {thumbnail_height}, {thumbnail_width})' if row.get("thumbnail_url") else "",
                 row.get("reason", ""),
                 row.get("score", ""),
             ]
             for row in rows
         ]
         worksheet.append_rows(values, value_input_option="USER_ENTERED")
+
+    # Widen the thumbnail column and heighten data rows so the fixed-size images
+    # (set above) aren't clipped by Google Sheets' default row/column dimensions.
+    thumbnail_col_index = HEADERS.index("Thumbnail URL")
+    resize_requests = [
+        {
+            "updateDimensionProperties": {
+                "range": {
+                    "sheetId": worksheet.id,
+                    "dimension": "COLUMNS",
+                    "startIndex": thumbnail_col_index,
+                    "endIndex": thumbnail_col_index + 1,
+                },
+                "properties": {"pixelSize": thumbnail_width + 20},
+                "fields": "pixelSize",
+            }
+        },
+    ]
+    if rows:
+        resize_requests.append(
+            {
+                "updateDimensionProperties": {
+                    "range": {
+                        "sheetId": worksheet.id,
+                        "dimension": "ROWS",
+                        "startIndex": 1,
+                        "endIndex": 1 + len(rows),
+                    },
+                    "properties": {"pixelSize": thumbnail_height + 20},
+                    "fields": "pixelSize",
+                }
+            }
+        )
+    spreadsheet.batch_update({"requests": resize_requests})
 
     # Add filter row so columns can be sorted/filtered by clicking the header arrows
     worksheet.set_basic_filter()
