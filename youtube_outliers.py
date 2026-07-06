@@ -261,6 +261,9 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
         ]
         worksheet.append_rows(values, value_input_option="USER_ENTERED")
 
+    # Add filter row so columns can be sorted/filtered by clicking the header arrows
+    worksheet.set_basic_filter()
+
     return spreadsheet.url
 
 
