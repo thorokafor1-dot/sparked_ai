@@ -10,12 +10,12 @@ from googleapiclient.errors import HttpError
 
 
 API_KEY = os.getenv("YOUTUBE_API_KEY", "")
-KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "cold approach,infield").split(",") if k.strip()]
+KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "picking up girls,cold approach,approach women,daygame,street approach").split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
 GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
 GOOGLE_SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID", "").strip()
 GOOGLE_SHEET_NAME = os.getenv("GOOGLE_SHEET_NAME", "Outliers")
-MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "10"))
+MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "50"))
 MIN_VIEW_THRESHOLD = int(os.getenv("MIN_VIEW_THRESHOLD", "50000"))
 MIN_SUBSCRIBER_THRESHOLD = int(os.getenv("MIN_SUBSCRIBER_THRESHOLD", "50000"))
 HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "100000"))
@@ -58,7 +58,7 @@ def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
         part="snippet",
         type="video",
         maxResults=MAX_RESULTS_PER_KEYWORD,
-        order="date",
+        order="relevance",
         publishedAfter=published_after,
         fields="items(id/videoId,snippet/title,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/default/url)",
     )
