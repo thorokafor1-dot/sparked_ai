@@ -32,6 +32,17 @@ SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SUBSCRIBER_MULTIPLIER_THRESHO
 # Cap how many outliers from the same channel land in the sheet, to keep results diverse.
 PER_CHANNEL_CAP = int(os.getenv("PER_CHANNEL_CAP", "3"))
 
+# YouTube category IDs that are never dating/pickup content, regardless of how a video
+# is worded — a much more reliable signal than keyword-guessing (e.g. blocks song uploads
+# like "Pinky Up" that a fuzzy search match let through).
+EXCLUDED_CATEGORY_IDS = {"10", "20", "17"}  # Music, Gaming, Sports
+
+# Search terms specific enough to this niche that we trust whatever YouTube's search
+# returns for them. Broader/ambiguous terms below are NOT trusted blindly, since
+# YouTube's fuzzy search matching can surface unrelated content for them (e.g.
+# "picking up girls" surfacing a video about picking up kids from school).
+PRECISE_SEARCH_KEYWORDS = {"cold approach", "daygame", "day game", "street approach", "infield"}
+
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 HEADERS = [
     "Title",
@@ -85,7 +96,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
         part="statistics,snippet,contentDetails",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/medium/url,contentDetails/duration)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/medium/url,contentDetails/duration)",
     )
     response = execute_request(request)
     if not response:
@@ -143,9 +154,14 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
         return False
 
 
-def is_relevant_tags(tags: list, title: str = "") -> bool:
-    """Check if a video's tags or title indicate it's relevant to cold approach/pickup dating content."""
+def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "") -> bool:
+    """Check if a video's tags/title/category indicate it's relevant to cold approach/pickup dating content."""
     import re
+
+    # Hard category exclusion — catches things keyword-matching can't, like songs
+    # or gameplay videos that a fuzzy search match let through.
+    if category_id in EXCLUDED_CATEGORY_IDS:
+        return False
 
     # Hard exclusions — whole-word match against title and tags
     # Only include terms that are UNAMBIGUOUSLY non-dating content
@@ -173,20 +189,20 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
         if re.search(r'\b' + re.escape(term) + r'\b', combined_text):
             return False
 
+    # Specific dating/pickup phrases only — deliberately excludes generic standalone
+    # words like "girls", "women", "date", "relationship", "confidence", "approach"
+    # that are common enough in off-topic content (e.g. a video about picking up
+    # kids from school, or an unrelated self-help video) to produce false positives.
     relevant_keywords = [
-        "cold approach", "approach women", "picking up girls", "pickup", "pick up",
-        "flirt", "flirting", "daygame", "day game",
-        "street approach", "meet women", "talk to women",
-        "attraction", "dating", "how to approach", "dating tips",
-        "seduction", "pua", "pick up artist", "rizz",
-        "alpha male", "sigma male", "sigma", "alpha",
-        "confidence", "charisma", "social skills", "self improvement",
-        "masculinity", "red pill", "tate", "andrew tate",
+        "cold approach", "approach women", "picking up girls", "pick up girls",
+        "pickup artist", "pick up artist", "pua",
+        "flirt", "flirting", "daygame", "day game", "street approach", "infield",
+        "how to approach", "how to approach women", "dating tips", "dating advice",
+        "seduction", "rizz",
         "how to get girls", "get girls", "attract women", "attract girls",
-        "talking to girls", "talking to women", "meeting women",
-        "date", "dates", "girlfriend", "relationship", "hookup",
-        "body language", "eye contact", "conversation skills",
-        "women", "girls", "girl", "approach",
+        "talking to girls", "talking to women", "meeting women", "meet women",
+        "talk to women", "get a girlfriend",
+        "andrew tate",
     ]
 
     # Check tags
@@ -204,11 +220,11 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
             if keyword in title_lower:
                 return True
 
-    # If no exclusion keywords matched, trust the search query that found it.
-    # Cold approach / daygame videos frequently use clickbait titles and generic
-    # tags ("viral", "reaction", "social experiment") that don't contain niche
-    # terms, so requiring a positive tag/title match filters them out incorrectly.
-    return True
+    # If no positive match, only trust the search query for precise/unambiguous
+    # search terms. Broader terms (e.g. "picking up girls", "approach women") can
+    # surface unrelated fuzzy matches from YouTube's own search, so those require
+    # an actual positive tag/title match above instead of a blind pass-through.
+    return search_keyword.lower() in PRECISE_SEARCH_KEYWORDS
 
 
 def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str, float]:
@@ -363,8 +379,9 @@ def main() -> None:
                 continue
 
             # Filter out unrelated content based on video tags (with title fallback)
-            if not is_relevant_tags(tags, title):
-                print(f"  → Skipped (tags not relevant to cold approach/pickup niche)")
+            category_id = stats.get("snippet", {}).get("categoryId", "")
+            if not is_relevant_tags(tags, title, category_id, keyword):
+                print(f"  → Skipped (not relevant to cold approach/pickup niche)")
                 continue
 
             is_flagged, reason, score = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
