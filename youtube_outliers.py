@@ -40,14 +40,16 @@ EXCLUDED_CATEGORY_IDS = {"10", "20", "17"}  # Music, Gaming, Sports
 # Search terms specific enough to this niche that we trust whatever YouTube's search
 # returns for them. Broader/ambiguous terms below are NOT trusted blindly, since
 # YouTube's fuzzy search matching can surface unrelated content for them (e.g.
-# "picking up girls" surfacing a video about picking up kids from school).
-PRECISE_SEARCH_KEYWORDS = {"cold approach", "daygame", "day game", "street approach", "infield"}
+# "picking up girls" surfacing a video about picking up kids from school, or
+# "street approach" surfacing street photography videos).
+PRECISE_SEARCH_KEYWORDS = {"cold approach", "daygame", "day game", "infield"}
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 HEADERS = [
     "Title",
     "Channel",
     "Published At",
+    "Duration",
     "Views",
     "Subscribers",
     "Keyword",
@@ -122,6 +124,33 @@ def get_channel_stats(youtube, channel_id: str) -> Dict[str, Any]:
     return items[0]
 
 
+def parse_duration_seconds(duration_str: str) -> int:
+    """Convert an ISO 8601 duration (e.g. 'PT1H14M32S') to total seconds."""
+    if not duration_str:
+        return 0
+
+    import re
+    pattern = r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
+    match = re.match(pattern, duration_str)
+    if not match:
+        return 0
+
+    hours = int(match.group(1)) if match.group(1) else 0
+    minutes = int(match.group(2)) if match.group(2) else 0
+    seconds = int(match.group(3)) if match.group(3) else 0
+    return hours * 3600 + minutes * 60 + seconds
+
+
+def format_duration(duration_str: str) -> str:
+    """Format an ISO 8601 duration as H:MM:SS (or M:SS under an hour)."""
+    total_seconds = parse_duration_seconds(duration_str)
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+    if hours:
+        return f"{hours}:{minutes:02d}:{seconds:02d}"
+    return f"{minutes}:{seconds:02d}"
+
+
 def is_short_video(duration_str: str, title: str = "", tags: list = None) -> bool:
     """Check if a video is a short based on duration (<60s) or #shorts in title/tags."""
     # Check for #shorts in title
@@ -134,24 +163,7 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
             if "#shorts" in tag.lower() or tag.lower() == "shorts":
                 return True
 
-    if not duration_str:
-        return False
-
-    try:
-        import re
-        pattern = r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
-        match = re.match(pattern, duration_str)
-        if not match:
-            return False
-
-        hours = int(match.group(1)) if match.group(1) else 0
-        minutes = int(match.group(2)) if match.group(2) else 0
-        seconds = int(match.group(3)) if match.group(3) else 0
-
-        total_seconds = hours * 3600 + minutes * 60 + seconds
-        return total_seconds < 60
-    except:
-        return False
+    return bool(duration_str) and parse_duration_seconds(duration_str) < 60
 
 
 def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "") -> bool:
@@ -181,6 +193,9 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         "video game", "gameplay",
         # Unambiguous dev/tech
         "programming", "javascript", "python tutorial", "react.js", "machine learning",
+        # Photography — "street" overlaps with cold-approach vocabulary, but street/candid
+        # photography content is unambiguously not dating/pickup content
+        "photography", "photographer", "photo walk",
     ]
 
     combined_text = (title + " " + " ".join(tags or [])).lower()
@@ -305,6 +320,7 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
                 row.get("title", ""),
                 row.get("channel", ""),
                 row.get("published_at", ""),
+                row.get("duration", ""),
                 row.get("views", ""),
                 row.get("subscribers", ""),
                 row.get("keyword", ""),
@@ -433,6 +449,7 @@ def main() -> None:
                     "channel": channel_title,
                     "channel_key": channel_id or channel_title,
                     "published_at": published_at,
+                    "duration": format_duration(duration),
                     "views": view_count,
                     "subscribers": subscriber_count,
                     "keyword": keyword,
