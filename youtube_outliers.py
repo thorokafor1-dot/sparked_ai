@@ -16,10 +16,21 @@ GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
 GOOGLE_SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID", "").strip()
 GOOGLE_SHEET_NAME = os.getenv("GOOGLE_SHEET_NAME", "Outliers")
 MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "50"))
-MIN_VIEW_THRESHOLD = int(os.getenv("MIN_VIEW_THRESHOLD", "50000"))
-MIN_SUBSCRIBER_THRESHOLD = int(os.getenv("MIN_SUBSCRIBER_THRESHOLD", "50000"))
-HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "50000"))
-OUTLIER_MULTIPLIER_THRESHOLD = int(os.getenv("OUTLIER_MULTIPLIER_THRESHOLD", "1000"))
+# Absolute view count that alone qualifies a video as an outlier, regardless of channel size.
+HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "30000"))
+# Minimum views a video must have before the ratio-based signals below are allowed to
+# trigger, so a video with a handful of views can't qualify just from a huge ratio.
+MIN_VIEW_THRESHOLD = int(os.getenv("MIN_VIEW_THRESHOLD", "5000"))
+# Minimum subscribers before the views-vs-subscribers signal applies, so new/tiny
+# channels don't produce inflated ratios from a near-zero denominator.
+MIN_SUBSCRIBER_THRESHOLD = int(os.getenv("MIN_SUBSCRIBER_THRESHOLD", "100"))
+# How many times a channel's own average views a video must clear to be an outlier.
+AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("OUTLIER_MULTIPLIER_THRESHOLD", "8"))
+# How many times a channel's subscriber count a video's views must clear — signals the
+# video pulled in viewers well beyond the channel's existing audience.
+SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SUBSCRIBER_MULTIPLIER_THRESHOLD", "3"))
+# Cap how many outliers from the same channel land in the sheet, to keep results diverse.
+PER_CHANNEL_CAP = int(os.getenv("PER_CHANNEL_CAP", "3"))
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 HEADERS = [
@@ -32,6 +43,7 @@ HEADERS = [
     "Video URL",
     "Thumbnail URL",
     "Reason",
+    "Outlier Score",
 ]
 
 
@@ -199,19 +211,39 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
     return True
 
 
-def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str]:
-    # Qualify if views exceed the minimum threshold
+def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str, float]:
+    """Score a video against three independent outlier signals and return the strongest one.
+
+    Any single signal is enough to qualify: a raw view floor (catches big, on-topic hits
+    regardless of channel size), views vs. the channel's own average (catches a channel's
+    own breakout), and views vs. subscriber count (catches videos that pulled well beyond
+    the channel's existing audience — the strongest signal a thumbnail/title did the work).
+    """
+    candidates: List[tuple[float, str]] = []
+
+    # Signal 1: absolute view floor — always evaluated so every outlier gets a comparable score.
     if view_count >= HIGH_VIEW_THRESHOLD:
-        return True, f"Over {HIGH_VIEW_THRESHOLD:,} views"
+        candidates.append((view_count / HIGH_VIEW_THRESHOLD, f"Over {HIGH_VIEW_THRESHOLD:,} views"))
 
-    # Qualify if views are 100x or more the channel's average views per video
-    if channel_video_count > 0 and channel_total_views > 0:
+    # Signal 2: views vs. this channel's own average views per video.
+    if view_count >= MIN_VIEW_THRESHOLD and channel_video_count > 0 and channel_total_views > 0:
         avg_views = channel_total_views / channel_video_count
-        if avg_views > 0 and view_count >= avg_views * 100:
-            multiplier = int(view_count / avg_views)
-            return True, f"{multiplier}x channel average views"
+        if avg_views > 0:
+            multiplier = view_count / avg_views
+            if multiplier >= AVERAGE_MULTIPLIER_THRESHOLD:
+                candidates.append((multiplier, f"{multiplier:.1f}x channel average views"))
 
-    return False, ""
+    # Signal 3: views vs. subscriber count — reached far beyond the existing audience.
+    if view_count >= MIN_VIEW_THRESHOLD and subscriber_count >= MIN_SUBSCRIBER_THRESHOLD:
+        sub_multiplier = view_count / subscriber_count
+        if sub_multiplier >= SUBSCRIBER_MULTIPLIER_THRESHOLD:
+            candidates.append((sub_multiplier, f"{sub_multiplier:.1f}x subscriber count in views"))
+
+    if not candidates:
+        return False, "", 0.0
+
+    score, reason = max(candidates, key=lambda c: c[0])
+    return True, reason, round(score, 2)
 
 
 def build_google_sheets_client():
@@ -259,6 +291,7 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
                 row.get("video_url", ""),
                 f'=IMAGE("{row.get("thumbnail_url", "")}")' if row.get("thumbnail_url") else "",
                 row.get("reason", ""),
+                row.get("score", ""),
             ]
             for row in rows
         ]
@@ -334,7 +367,7 @@ def main() -> None:
                 print(f"  → Skipped (tags not relevant to cold approach/pickup niche)")
                 continue
 
-            is_flagged, reason = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
+            is_flagged, reason, score = is_outlier(view_count, subscriber_count, channel_total_views, channel_video_count)
             if not is_flagged:
                 continue
 
@@ -343,6 +376,7 @@ def main() -> None:
                 {
                     "title": stats.get("snippet", {}).get("title", ""),
                     "channel": channel_title,
+                    "channel_key": channel_id or channel_title,
                     "published_at": published_at,
                     "views": view_count,
                     "subscribers": subscriber_count,
@@ -350,12 +384,26 @@ def main() -> None:
                     "video_url": f"https://www.youtube.com/watch?v={video_id}",
                     "thumbnail_url": thumbnail_url,
                     "reason": reason,
+                    "score": score,
                 }
             )
 
-    sheet_url = write_rows_to_google_sheets(rows)
+    # Cap outliers per channel so a few prolific channels don't crowd out variety,
+    # then sort by score so the strongest thumbnail/title wins surface first.
+    rows_by_channel: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        rows_by_channel.setdefault(row["channel_key"], []).append(row)
+
+    capped_rows: List[Dict[str, Any]] = []
+    for channel_rows in rows_by_channel.values():
+        channel_rows.sort(key=lambda r: r["score"], reverse=True)
+        capped_rows.extend(channel_rows[:PER_CHANNEL_CAP])
+
+    capped_rows.sort(key=lambda r: r["score"], reverse=True)
+
+    sheet_url = write_rows_to_google_sheets(capped_rows)
     if sheet_url:
-        print(f"Wrote {len(rows)} outlier videos to {sheet_url}")
+        print(f"Wrote {len(capped_rows)} outlier videos to {sheet_url}")
     else:
         print("No Google Sheets output was created.")
 
