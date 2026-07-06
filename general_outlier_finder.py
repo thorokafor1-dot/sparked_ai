@@ -28,11 +28,13 @@ from youtube_outliers import (
 LOOKBACK_DAYS = int(os.getenv("GENERAL_LOOKBACK_DAYS", "90"))
 MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_MULTIPLIER_THRESHOLD", "100"))
 MIN_VIEW_THRESHOLD = int(os.getenv("GENERAL_MIN_VIEW_THRESHOLD", "100000"))
-MAX_RESULTS_PER_KEYWORD = int(os.getenv("GENERAL_MAX_RESULTS_PER_KEYWORD", "25"))
+MAX_RESULTS_PER_KEYWORD = int(os.getenv("GENERAL_MAX_RESULTS_PER_KEYWORD", "50"))
 
 # Niches chosen for social/narrative structure that maps onto a cold-approach video:
 # stakes & challenge, deception/dramatic irony, transformation, fear, documentary
 # underdog arcs, forbidden access/mystery, generosity/karma, social experiments.
+# A first pass at 15 keywords found nothing above 44x, so this list is deliberately
+# much wider to hunt for the rarer 100x hits the 90-day window allows.
 KEYWORDS = [
     "porch pirate revenge prank",
     "extreme survival challenge",
@@ -49,6 +51,26 @@ KEYWORDS = [
     "confronting my fear",
     "asking strangers for help experiment",
     "last to leave challenge",
+    "reading minds street experiment",
+    "compliments to strangers reaction",
+    "free hugs experiment",
+    "handing out cash to strangers",
+    "would they help a stranger test",
+    "exposing a cheater confrontation",
+    "extreme makeover reveal reaction",
+    "hardest conversation of my life",
+    "telling my crush how I feel",
+    "rejected on camera compilation",
+    "surprising my parents with news",
+    "quitting my job on camera",
+    "moving to a new city alone documentary",
+    "talking to homeless people stories",
+    "first date blind experiment",
+    "confessing secret on camera",
+    "starting over from nothing documentary",
+    "convincing people I'm famous prank",
+    "disguise social experiment",
+    "asking out strangers reaction",
 ]
 
 
