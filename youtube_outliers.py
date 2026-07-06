@@ -136,15 +136,20 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
     import re
 
     # Hard exclusions — whole-word match against title and tags
+    # Only include terms that are UNAMBIGUOUSLY non-dating content
     exclusion_keywords = [
+        # Baseball specific
         "infield", "outfield", "baseball", "softball", "pitcher", "batter", "batting",
         "home run", "strikeout", "mlb", "little league",
-        "football", "soccer", "basketball", "nfl", "nba", "fifa", "cricket",
-        "hockey", "tennis", "golf", "volleyball", "wrestling", "boxing", "mma",
-        "sports", "sport", "athlete", "stadium", "field goal", "touchdown",
-        "gaming", "gameplay", "video game", "minecraft", "fortnite", "roblox",
-        "music video", "rap", "hip hop", "album", "song", "lyrics",
-        "programming", "software", "javascript", "python tutorial",
+        # Other sports leagues/orgs (very specific, won't appear in pickup content)
+        "nfl", "nba", "nhl", "fifa", "cricket",
+        # Unambiguous sports plays
+        "field goal", "touchdown", "slam dunk",
+        # Specific video games
+        "minecraft", "fortnite", "roblox", "call of duty", "warzone", "valorant",
+        "video game", "gameplay",
+        # Unambiguous dev/tech
+        "programming", "javascript", "python tutorial", "react.js", "machine learning",
     ]
 
     combined_text = (title + " " + " ".join(tags or [])).lower()
