@@ -195,12 +195,12 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
                 row.get("subscribers", ""),
                 row.get("keyword", ""),
                 row.get("video_url", ""),
-                row.get("thumbnail_url", ""),
+                f'=IMAGE("{row.get("thumbnail_url", "")}")' if row.get("thumbnail_url") else "",
                 row.get("reason", ""),
             ]
             for row in rows
         ]
-        worksheet.append_rows(values)
+        worksheet.append_rows(values, value_input_option="USER_ENTERED")
 
     return spreadsheet.url
 
