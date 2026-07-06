@@ -73,7 +73,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
         part="statistics,snippet,contentDetails",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url,contentDetails/duration)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url,contentDetails/duration)",
     )
     response = execute_request(request)
     if not response:
@@ -122,37 +122,26 @@ def is_short_video(duration_str: str) -> bool:
         return False
 
 
-def is_relevant_title(title: str) -> bool:
-    """Filter titles to only include those relevant to cold approach/pickup dating content."""
-    title_lower = title.lower()
+def is_relevant_tags(tags: list) -> bool:
+    """Check if a video's tags indicate it's relevant to cold approach/pickup dating content."""
+    if not tags:
+        return False
     
-    # Positive keywords that indicate relevant content
+    tags_lower = [t.lower() for t in tags]
+    
     relevant_keywords = [
-        "cold approach", "approach women", "picking up", "pickup",
-        "flirt", "flirting", "chat up", "hit on", "daygame",
-        "street approach", "meet women", "talk to women", "conversation",
-        "attraction", "dating", "guy meets", "girl meets", "girl approach",
-        "how to talk", "how to approach", "ask out", "dating tips",
-        "confidence", "social", "meeting", "women", "girls"
+        "cold approach", "approach women", "picking up girls", "pickup", "pick up",
+        "flirt", "flirting", "daygame", "day game",
+        "street approach", "meet women", "talk to women",
+        "attraction", "dating", "how to approach", "dating tips",
+        "seduction", "pua", "pick up artist", "rizz", "game",
+        "women", "girls", "girl", "approach"
     ]
     
-    # Negative keywords that indicate non-dating content
-    irrelevant_keywords = [
-        "infield", "baseball", "football", "soccer", "sports",
-        "music", "gaming", "game stream", "gameplay", "comedy",
-        "prank", "tutorial", "tutorial on", "unity", "unreal",
-        "coding", "programming", "software", "tech", "business"
-    ]
-    
-    # Check if title contains any negative keywords
-    for keyword in irrelevant_keywords:
-        if keyword in title_lower:
-            return False
-    
-    # Check if title contains at least one positive keyword
-    for keyword in relevant_keywords:
-        if keyword in title_lower:
-            return True
+    for tag in tags_lower:
+        for keyword in relevant_keywords:
+            if keyword in tag:
+                return True
     
     return False
 
@@ -265,9 +254,10 @@ def main() -> None:
                 print(f"  → Skipped (short video)")
                 continue
 
-            # Filter out unrelated content
-            if not is_relevant_title(title):
-                print(f"  → Skipped (not relevant to cold approach/pickup niche)")
+            # Filter out unrelated content based on video tags
+            tags = stats.get("snippet", {}).get("tags", []) or []
+            if not is_relevant_tags(tags):
+                print(f"  → Skipped (tags not relevant to cold approach/pickup niche)")
                 continue
 
             is_flagged, reason = is_outlier(view_count, subscriber_count)
