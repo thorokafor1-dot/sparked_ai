@@ -116,7 +116,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
         part="statistics,snippet,contentDetails",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/medium/url,contentDetails/duration)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/medium,contentDetails/duration)",
     )
     response = execute_request(request)
     if not response:
@@ -169,8 +169,11 @@ def format_duration(duration_str: str) -> str:
     return f"{minutes}:{seconds:02d}"
 
 
-def is_short_video(duration_str: str, title: str = "", tags: list = None) -> bool:
-    """Check if a video is a short based on duration (<60s) or #shorts in title/tags."""
+def is_short_video(duration_str: str, title: str = "", tags: list = None,
+                    thumbnail_width: int = None, thumbnail_height: int = None) -> bool:
+    """Check if a video is a Short: #shorts in title/tags, a vertical (portrait) thumbnail
+    — the clearest visual tell, since Shorts are filmed for phone screens — or duration
+    under 3 minutes (YouTube's current Shorts length cap; older code assumed 60s)."""
     # Check for #shorts in title
     if title and "#shorts" in title.lower():
         return True
@@ -181,7 +184,11 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
             if "#shorts" in tag.lower() or tag.lower() == "shorts":
                 return True
 
-    return bool(duration_str) and parse_duration_seconds(duration_str) < 60
+    # Vertical/portrait thumbnail (height > width) is a Short regardless of duration.
+    if thumbnail_width and thumbnail_height and thumbnail_height > thumbnail_width:
+        return True
+
+    return bool(duration_str) and parse_duration_seconds(duration_str) < 180
 
 
 def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "") -> bool:
@@ -477,7 +484,10 @@ def main() -> None:
             like_count = int(raw_like_count) if raw_like_count is not None else None
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
-            thumbnail_url = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}).get("url", "")
+            medium_thumbnail = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}) or {}
+            thumbnail_url = medium_thumbnail.get("url", "")
+            thumbnail_width = medium_thumbnail.get("width")
+            thumbnail_height = medium_thumbnail.get("height")
             raw_published_at = stats.get("snippet", {}).get("publishedAt", "")
             published_dt = None
             try:
@@ -505,7 +515,7 @@ def main() -> None:
 
             duration = stats.get("contentDetails", {}).get("duration", "")
             tags = stats.get("snippet", {}).get("tags", []) or []
-            is_short = is_short_video(duration, title, tags)
+            is_short = is_short_video(duration, title, tags, thumbnail_width, thumbnail_height)
 
             # Filter out unrelated content based on video tags (with title fallback)
             category_id = stats.get("snippet", {}).get("categoryId", "")
