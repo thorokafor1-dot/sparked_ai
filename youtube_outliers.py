@@ -131,27 +131,43 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
         return False
 
 
-def is_relevant_tags(tags: list) -> bool:
-    """Check if a video's tags indicate it's relevant to cold approach/pickup dating content."""
-    if not tags:
-        return False
-    
-    tags_lower = [t.lower() for t in tags]
-    
+def is_relevant_tags(tags: list, title: str = "") -> bool:
+    """Check if a video's tags or title indicate it's relevant to cold approach/pickup dating content."""
     relevant_keywords = [
         "cold approach", "approach women", "picking up girls", "pickup", "pick up",
         "flirt", "flirting", "daygame", "day game",
         "street approach", "meet women", "talk to women",
         "attraction", "dating", "how to approach", "dating tips",
         "seduction", "pua", "pick up artist", "rizz", "game",
-        "women", "girls", "girl", "approach"
+        "women", "girls", "girl", "approach",
+        "alpha male", "sigma male", "sigma", "alpha",
+        "confidence", "charisma", "social skills", "self improvement",
+        "masculinity", "red pill", "tate", "andrew tate",
+        "how to get girls", "get girls", "attract women", "attract girls",
+        "talking to girls", "talking to women", "meeting women",
+        "date", "dates", "girlfriend", "relationship", "hookup",
+        "body language", "eye contact", "conversation skills",
     ]
-    
-    for tag in tags_lower:
+
+    # Check tags first
+    if tags:
+        tags_lower = [t.lower() for t in tags]
+        for tag in tags_lower:
+            for keyword in relevant_keywords:
+                if keyword in tag:
+                    return True
+
+    # Fallback: check title if no tags matched (video already came from a relevant search)
+    if title:
+        title_lower = title.lower()
         for keyword in relevant_keywords:
-            if keyword in tag:
+            if keyword in title_lower:
                 return True
-    
+
+    # If the video has no tags at all, trust the search query that found it
+    if not tags:
+        return True
+
     return False
 
 
@@ -278,8 +294,8 @@ def main() -> None:
                 print(f"  → Skipped (short video or #shorts)")
                 continue
 
-            # Filter out unrelated content based on video tags
-            if not is_relevant_tags(tags):
+            # Filter out unrelated content based on video tags (with title fallback)
+            if not is_relevant_tags(tags, title):
                 print(f"  → Skipped (tags not relevant to cold approach/pickup niche)")
                 continue
 
