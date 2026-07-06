@@ -133,13 +133,30 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None) -> boo
 
 def is_relevant_tags(tags: list, title: str = "") -> bool:
     """Check if a video's tags or title indicate it's relevant to cold approach/pickup dating content."""
+
+    # Hard exclusions — reject immediately if any of these appear in title or tags
+    exclusion_keywords = [
+        "infield", "outfield", "baseball", "softball", "pitcher", "batter", "batting",
+        "home run", "strikeout", "mlb", "little league",
+        "football", "soccer", "basketball", "nfl", "nba", "fifa", "cricket",
+        "hockey", "tennis", "golf", "volleyball", "wrestling", "boxing", "mma",
+        "sports", "sport", "athlete", "stadium", "field goal", "touchdown",
+        "gaming", "gameplay", "video game", "minecraft", "fortnite", "roblox",
+        "music video", "rap", "hip hop", "album", "song", "lyrics",
+        "coding", "programming", "software", "javascript", "python tutorial",
+    ]
+
+    combined_text = (title + " " + " ".join(tags or [])).lower()
+    for term in exclusion_keywords:
+        if term in combined_text:
+            return False
+
     relevant_keywords = [
         "cold approach", "approach women", "picking up girls", "pickup", "pick up",
         "flirt", "flirting", "daygame", "day game",
         "street approach", "meet women", "talk to women",
         "attraction", "dating", "how to approach", "dating tips",
-        "seduction", "pua", "pick up artist", "rizz", "game",
-        "women", "girls", "girl", "approach",
+        "seduction", "pua", "pick up artist", "rizz",
         "alpha male", "sigma male", "sigma", "alpha",
         "confidence", "charisma", "social skills", "self improvement",
         "masculinity", "red pill", "tate", "andrew tate",
@@ -147,9 +164,10 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
         "talking to girls", "talking to women", "meeting women",
         "date", "dates", "girlfriend", "relationship", "hookup",
         "body language", "eye contact", "conversation skills",
+        "women", "girls", "girl", "approach",
     ]
 
-    # Check tags first
+    # Check tags
     if tags:
         tags_lower = [t.lower() for t in tags]
         for tag in tags_lower:
@@ -157,14 +175,14 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
                 if keyword in tag:
                     return True
 
-    # Fallback: check title if no tags matched (video already came from a relevant search)
+    # Fallback: check title
     if title:
         title_lower = title.lower()
         for keyword in relevant_keywords:
             if keyword in title_lower:
                 return True
 
-    # If the video has no tags at all, trust the search query that found it
+    # If video has no tags, trust the search query that found it
     if not tags:
         return True
 
