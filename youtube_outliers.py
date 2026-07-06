@@ -1,21 +1,37 @@
+import json
 import os
-import sys
 from datetime import datetime, timedelta, timezone
-from typing import List, Dict, Any
+from typing import Any, Dict, List
 
+import gspread
+from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
-from openpyxl import Workbook
 
 
 API_KEY = os.getenv("YOUTUBE_API_KEY", "")
 KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "cold approach,infield").split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
-OUTPUT_FILE = os.getenv("OUTPUT_FILE", "youtube_outliers.xlsx")
+GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
+GOOGLE_SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID", "").strip()
+GOOGLE_SHEET_NAME = os.getenv("GOOGLE_SHEET_NAME", "Outliers")
 MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "10"))
 MIN_VIEW_THRESHOLD = int(os.getenv("MIN_VIEW_THRESHOLD", "50000"))
 MIN_SUBSCRIBER_THRESHOLD = int(os.getenv("MIN_SUBSCRIBER_THRESHOLD", "50000"))
 HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "100000"))
+
+SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
+HEADERS = [
+    "Title",
+    "Channel",
+    "Published At",
+    "Views",
+    "Subscribers",
+    "Keyword",
+    "Video URL",
+    "Thumbnail URL",
+    "Reason",
+]
 
 
 def build_youtube_client():
@@ -90,35 +106,57 @@ def is_outlier(view_count: int, subscriber_count: int) -> tuple[bool, str]:
     return False, ""
 
 
-def create_workbook(rows: List[Dict[str, Any]]) -> Workbook:
-    workbook = Workbook()
-    sheet = workbook.active
-    sheet.title = "Outliers"
-    headers = [
-        "Title",
-        "Channel",
-        "Published At",
-        "Views",
-        "Subscribers",
-        "Keyword",
-        "Video URL",
-        "Thumbnail URL",
-        "Reason",
-    ]
-    sheet.append(headers)
-    for row in rows:
-        sheet.append([
-            row.get("title", ""),
-            row.get("channel", ""),
-            row.get("published_at", ""),
-            row.get("views", ""),
-            row.get("subscribers", ""),
-            row.get("keyword", ""),
-            row.get("video_url", ""),
-            row.get("thumbnail_url", ""),
-            row.get("reason", ""),
-        ])
-    return workbook
+def build_google_sheets_client():
+    if not GOOGLE_SERVICE_ACCOUNT_JSON:
+        print("Google Sheets credentials not configured. Set GOOGLE_SERVICE_ACCOUNT_JSON to enable Google Sheets output.")
+        return None
+
+    try:
+        service_account_info = json.loads(GOOGLE_SERVICE_ACCOUNT_JSON)
+    except json.JSONDecodeError as exc:
+        print(f"Invalid Google service account JSON: {exc}")
+        return None
+
+    credentials = Credentials.from_service_account_info(service_account_info, scopes=SCOPES)
+    return gspread.authorize(credentials)
+
+
+def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
+    client = build_google_sheets_client()
+    if not client:
+        return None
+
+    if GOOGLE_SPREADSHEET_ID:
+        spreadsheet = client.open_by_key(GOOGLE_SPREADSHEET_ID)
+    else:
+        spreadsheet = client.create("YouTube Outlier Tracker")
+
+    try:
+        worksheet = spreadsheet.worksheet(GOOGLE_SHEET_NAME)
+    except gspread.exceptions.WorksheetNotFound:
+        worksheet = spreadsheet.add_worksheet(title=GOOGLE_SHEET_NAME, rows=1000, cols=20)
+
+    worksheet.clear()
+    worksheet.update("A1:I1", [HEADERS])
+
+    if rows:
+        values = [
+            [
+                row.get("title", ""),
+                row.get("channel", ""),
+                row.get("published_at", ""),
+                row.get("views", ""),
+                row.get("subscribers", ""),
+                row.get("keyword", ""),
+                row.get("video_url", ""),
+                row.get("thumbnail_url", ""),
+                row.get("reason", ""),
+            ]
+            for row in rows
+        ]
+        worksheet.update(f"A2:I{len(values) + 1}", values)
+
+    return spreadsheet.url
 
 
 def main() -> None:
@@ -126,9 +164,7 @@ def main() -> None:
     youtube = build_youtube_client()
 
     if not youtube:
-        workbook = create_workbook([])
-        workbook.save(OUTPUT_FILE)
-        print(f"No YouTube API key found. Created empty workbook at {OUTPUT_FILE}")
+        print("No YouTube API key found. Skipping YouTube search.")
         return
 
     for keyword in KEYWORDS:
@@ -170,9 +206,11 @@ def main() -> None:
                 }
             )
 
-    workbook = create_workbook(rows)
-    workbook.save(OUTPUT_FILE)
-    print(f"Wrote {len(rows)} outlier videos to {OUTPUT_FILE}")
+    sheet_url = write_rows_to_google_sheets(rows)
+    if sheet_url:
+        print(f"Wrote {len(rows)} outlier videos to {sheet_url}")
+    else:
+        print("No Google Sheets output was created.")
 
 
 if __name__ == "__main__":

@@ -28,21 +28,7 @@ jobs:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           YOUTUBE_KEYWORDS: 'cold approach,infield'
           LOOKBACK_DAYS: '90'
-          OUTPUT_FILE: 'youtube_outliers.xlsx'
+          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
+          GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
+          GOOGLE_SHEET_NAME: 'Outliers'
         run: python youtube_outliers.py
-
-      - name: Commit updated spreadsheet
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ -f youtube_outliers.xlsx ]; then
-            git add youtube_outliers.xlsx
-            if git diff --cached --quiet; then
-              echo "No spreadsheet changes to commit."
-            else
-              git commit -m "Update YouTube outlier spreadsheet"
-              git push
-            fi
-          else
-            echo "No spreadsheet file was generated; skipping commit."
-          fi
