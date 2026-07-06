@@ -1,5 +1,21 @@
-"""Searches YouTube across niches outside cold-approach for genuine statistical
-outliers (100x+ a channel's own average views) published in the last 90 days.
+"""Searches YouTube across niches outside cold-approach for videos with genuinely
+strong packaging, published in the last 90 days.
+
+"100x a channel's own average" (the original signal) structurally can only ever
+flag a small/mid channel having a fluke breakout — a mega-channel like MrBeast or
+Mark Rober can never trigger it, since their own average is already huge, even
+though their packaging is often the best in the sample (confirmed: the first scan's
+log had 250M/165M/69M-view videos in it that never surfaced because of this). So
+three independent signals are used instead, any one of which qualifies:
+  1. Absolute reach: 1M+ views regardless of channel size — proves broad appeal on
+     its own, and is how a big channel's strong packaging shows up.
+  2. Audience breakout: views >= 5x the channel's subscriber count — reached far
+     beyond the built-in audience, a direct sign the click came from the
+     thumbnail/title, not brand loyalty.
+  3. Self-breakout: views >= 20x the channel's own average views per video —
+     catches a normally-unremarkable channel nailing packaging once. (Lowered from
+     100x based on real data: the highest multipliers actually found in two scans
+     were 115x and 44x — 100x is right at the edge of what occurs at all.)
 
 This only surfaces candidates — it does not judge whether a video's packaging
 cleanly translates into a cold-approach video idea. That curation step happens
@@ -26,7 +42,9 @@ from youtube_outliers import (
 )
 
 LOOKBACK_DAYS = int(os.getenv("GENERAL_LOOKBACK_DAYS", "90"))
-MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_MULTIPLIER_THRESHOLD", "100"))
+ABSOLUTE_VIEW_THRESHOLD = int(os.getenv("GENERAL_ABSOLUTE_VIEW_THRESHOLD", "1000000"))
+SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_SUBSCRIBER_MULTIPLIER_THRESHOLD", "5"))
+AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_AVERAGE_MULTIPLIER_THRESHOLD", "20"))
 MIN_VIEW_THRESHOLD = int(os.getenv("GENERAL_MIN_VIEW_THRESHOLD", "100000"))
 MAX_RESULTS_PER_KEYWORD = int(os.getenv("GENERAL_MAX_RESULTS_PER_KEYWORD", "50"))
 
@@ -97,8 +115,10 @@ def main() -> None:
         print("No YouTube API key found. Skipping search.")
         return
 
-    print(f"Scanning {len(KEYWORDS)} keywords, lookback={LOOKBACK_DAYS} days, "
-          f"multiplier>={MULTIPLIER_THRESHOLD}x, min views={MIN_VIEW_THRESHOLD:,}")
+    print(f"Scanning {len(KEYWORDS)} keywords, lookback={LOOKBACK_DAYS} days. "
+          f"Qualifies if: views>={ABSOLUTE_VIEW_THRESHOLD:,} OR "
+          f"views>={SUBSCRIBER_MULTIPLIER_THRESHOLD}x subscribers OR "
+          f"views>={AVERAGE_MULTIPLIER_THRESHOLD}x channel avg (min views={MIN_VIEW_THRESHOLD:,})")
 
     seen_video_ids = set()
     candidates: List[Dict[str, Any]] = []
@@ -136,14 +156,21 @@ def main() -> None:
                 continue
 
             avg_views = channel_total_views / channel_video_count
-            if avg_views <= 0:
-                continue
+            avg_multiplier = (view_count / avg_views) if avg_views > 0 else 0
+            sub_multiplier = (view_count / subscriber_count) if subscriber_count > 0 else 0
 
-            multiplier = view_count / avg_views
+            reasons = []
+            if view_count >= ABSOLUTE_VIEW_THRESHOLD:
+                reasons.append(f"{view_count/1_000_000:.1f}M views")
+            if sub_multiplier >= SUBSCRIBER_MULTIPLIER_THRESHOLD:
+                reasons.append(f"{sub_multiplier:.1f}x subscribers")
+            if avg_multiplier >= AVERAGE_MULTIPLIER_THRESHOLD:
+                reasons.append(f"{avg_multiplier:.1f}x channel avg")
+
             print(f"Checked: '{title}' ({channel_title}) - {view_count:,} views, "
-                  f"{multiplier:.1f}x channel avg")
+                  f"{sub_multiplier:.1f}x subs, {avg_multiplier:.1f}x avg")
 
-            if multiplier < MULTIPLIER_THRESHOLD:
+            if not reasons:
                 continue
 
             seen_video_ids.add(video_id)
@@ -155,7 +182,9 @@ def main() -> None:
                 "views": view_count,
                 "subscribers": subscriber_count,
                 "channel_avg_views": round(avg_views),
-                "multiplier": round(multiplier, 1),
+                "sub_multiplier": round(sub_multiplier, 1),
+                "avg_multiplier": round(avg_multiplier, 1),
+                "reasons": reasons,
                 "published_at": published_at,
                 "thumbnail_url": thumbnail_url,
             }
@@ -163,9 +192,8 @@ def main() -> None:
             # Marker line so the run log can be grepped for structured results.
             print(f"CANDIDATE: {json.dumps(candidate)}")
 
-    candidates.sort(key=lambda c: c["multiplier"], reverse=True)
-    print(f"\nFound {len(candidates)} candidates at {MULTIPLIER_THRESHOLD}x+ "
-          f"in the last {LOOKBACK_DAYS} days.")
+    candidates.sort(key=lambda c: c["views"], reverse=True)
+    print(f"\nFound {len(candidates)} candidates in the last {LOOKBACK_DAYS} days.")
 
 
 if __name__ == "__main__":
