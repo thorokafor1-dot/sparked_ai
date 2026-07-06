@@ -139,7 +139,10 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
     # Only include terms that are UNAMBIGUOUSLY non-dating content
     exclusion_keywords = [
         # Baseball specific
-        "infield", "outfield", "baseball", "softball", "pitcher", "batter", "batting",
+        # Note: "infield" and "outfield" are deliberately NOT excluded here —
+        # "infield" is core cold-approach/pickup terminology (live footage of
+        # street approaches), not a baseball reference in this niche.
+        "baseball", "softball", "pitcher", "batter", "batting",
         "home run", "strikeout", "mlb", "little league",
         # Other sports leagues/orgs (very specific, won't appear in pickup content)
         "nfl", "nba", "nhl", "fifa", "cricket",
@@ -189,11 +192,11 @@ def is_relevant_tags(tags: list, title: str = "") -> bool:
             if keyword in title_lower:
                 return True
 
-    # If video has no tags, trust the search query that found it
-    if not tags:
-        return True
-
-    return False
+    # If no exclusion keywords matched, trust the search query that found it.
+    # Cold approach / daygame videos frequently use clickbait titles and generic
+    # tags ("viral", "reaction", "social experiment") that don't contain niche
+    # terms, so requiring a positive tag/title match filters them out incorrectly.
+    return True
 
 
 def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str]:
