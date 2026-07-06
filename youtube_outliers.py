@@ -10,15 +10,16 @@ from googleapiclient.errors import HttpError
 
 
 API_KEY = os.getenv("YOUTUBE_API_KEY", "")
-KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "cold approach,infield").split(",") if k.strip()]
+KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "picking up girls,cold approach,approach women,daygame,street approach").split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
 GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
 GOOGLE_SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID", "").strip()
 GOOGLE_SHEET_NAME = os.getenv("GOOGLE_SHEET_NAME", "Outliers")
-MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "10"))
+MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "50"))
 MIN_VIEW_THRESHOLD = int(os.getenv("MIN_VIEW_THRESHOLD", "50000"))
 MIN_SUBSCRIBER_THRESHOLD = int(os.getenv("MIN_SUBSCRIBER_THRESHOLD", "50000"))
-HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "100000"))
+HIGH_VIEW_THRESHOLD = int(os.getenv("HIGH_VIEW_THRESHOLD", "50000"))
+OUTLIER_MULTIPLIER_THRESHOLD = int(os.getenv("OUTLIER_MULTIPLIER_THRESHOLD", "1000"))
 
 SCOPES = ["https://www.googleapis.com/auth/spreadsheets", "https://www.googleapis.com/auth/drive"]
 HEADERS = [
@@ -58,7 +59,7 @@ def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
         part="snippet",
         type="video",
         maxResults=MAX_RESULTS_PER_KEYWORD,
-        order="date",
+        order="viewCount",
         publishedAfter=published_after,
         fields="items(id/videoId,snippet/title,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/default/url)",
     )
@@ -70,9 +71,9 @@ def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
 
 def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
-        part="statistics,snippet",
+        part="statistics,snippet,contentDetails",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url,contentDetails/duration)",
     )
     response = execute_request(request)
     if not response:
@@ -98,11 +99,67 @@ def get_channel_stats(youtube, channel_id: str) -> Dict[str, Any]:
     return items[0]
 
 
+def is_short_video(duration_str: str) -> bool:
+    """Check if a video is a short (< 60 seconds) based on ISO 8601 duration format."""
+    if not duration_str:
+        return False
+    
+    try:
+        # Parse ISO 8601 duration (e.g., PT1M30S, PT45S, PT1H23M45S)
+        import re
+        pattern = r'PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?'
+        match = re.match(pattern, duration_str)
+        if not match:
+            return False
+        
+        hours = int(match.group(1)) if match.group(1) else 0
+        minutes = int(match.group(2)) if match.group(2) else 0
+        seconds = int(match.group(3)) if match.group(3) else 0
+        
+        total_seconds = hours * 3600 + minutes * 60 + seconds
+        return total_seconds < 60  # Shorts are less than 60 seconds
+    except:
+        return False
+
+
+def is_relevant_title(title: str) -> bool:
+    """Filter titles to only include those relevant to cold approach/pickup dating content."""
+    title_lower = title.lower()
+    
+    # Positive keywords that indicate relevant content
+    relevant_keywords = [
+        "cold approach", "approach women", "picking up", "pickup",
+        "flirt", "flirting", "chat up", "hit on", "daygame",
+        "street approach", "meet women", "talk to women", "conversation",
+        "attraction", "dating", "guy meets", "girl meets", "girl approach",
+        "how to talk", "how to approach", "ask out", "dating tips",
+        "confidence", "social", "meeting", "women", "girls"
+    ]
+    
+    # Negative keywords that indicate non-dating content
+    irrelevant_keywords = [
+        "infield", "baseball", "football", "soccer", "sports",
+        "music", "gaming", "game stream", "gameplay", "comedy",
+        "prank", "tutorial", "tutorial on", "unity", "unreal",
+        "coding", "programming", "software", "tech", "business"
+    ]
+    
+    # Check if title contains any negative keywords
+    for keyword in irrelevant_keywords:
+        if keyword in title_lower:
+            return False
+    
+    # Check if title contains at least one positive keyword
+    for keyword in relevant_keywords:
+        if keyword in title_lower:
+            return True
+    
+    return False
+
+
 def is_outlier(view_count: int, subscriber_count: int) -> tuple[bool, str]:
     if view_count > HIGH_VIEW_THRESHOLD:
         return True, f"Over {HIGH_VIEW_THRESHOLD:,} views"
-    if view_count > MIN_VIEW_THRESHOLD and subscriber_count < MIN_SUBSCRIBER_THRESHOLD:
-        return True, f"{MIN_VIEW_THRESHOLD:,}+ views on a channel under {MIN_SUBSCRIBER_THRESHOLD:,} subscribers"
     return False, ""
 
 
@@ -137,7 +194,7 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
         worksheet = spreadsheet.add_worksheet(title=GOOGLE_SHEET_NAME, rows=1000, cols=20)
 
     worksheet.clear()
-    worksheet.update("A1:I1", [HEADERS])
+    worksheet.append_row(HEADERS)
 
     if rows:
         values = [
@@ -154,23 +211,33 @@ def write_rows_to_google_sheets(rows: List[Dict[str, Any]]):
             ]
             for row in rows
         ]
-        worksheet.update(f"A2:I{len(values) + 1}", values)
+        worksheet.append_rows(values)
 
     return spreadsheet.url
 
 
 def main() -> None:
     rows: List[Dict[str, Any]] = []
+    seen_video_ids = set()  # Track videos we've already added to avoid duplicates
     youtube = build_youtube_client()
 
     if not youtube:
         print("No YouTube API key found. Skipping YouTube search.")
         return
 
+    print(f"Searching for keywords: {', '.join(KEYWORDS)}")
+    print(f"Lookback period: {LOOKBACK_DAYS} days")
+    print(f"High view threshold: {HIGH_VIEW_THRESHOLD:,}")
+    print()
+
     for keyword in KEYWORDS:
         for item in search_videos(youtube, keyword):
             video_id = item.get("id", {}).get("videoId")
             if not video_id:
+                continue
+
+            # Skip if we've already added this video
+            if video_id in seen_video_ids:
                 continue
 
             stats = get_video_stats(youtube, video_id)
@@ -188,10 +255,26 @@ def main() -> None:
                 channel_stats = get_channel_stats(youtube, channel_id)
                 subscriber_count = int(channel_stats.get("statistics", {}).get("subscriberCount", 0) or 0)
 
+            # Debug: Print all found videos
+            title = stats.get("snippet", {}).get("title", "")
+            print(f"Found video: '{title}' - Views: {view_count:,}, Subscribers: {subscriber_count:,}, Channel: {channel_title}")
+
+            # Filter out shorts (videos under 60 seconds)
+            duration = stats.get("contentDetails", {}).get("duration", "")
+            if is_short_video(duration):
+                print(f"  → Skipped (short video)")
+                continue
+
+            # Filter out unrelated content
+            if not is_relevant_title(title):
+                print(f"  → Skipped (not relevant to cold approach/pickup niche)")
+                continue
+
             is_flagged, reason = is_outlier(view_count, subscriber_count)
             if not is_flagged:
                 continue
 
+            seen_video_ids.add(video_id)
             rows.append(
                 {
                     "title": stats.get("snippet", {}).get("title", ""),
