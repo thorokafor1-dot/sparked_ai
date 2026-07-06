@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 from typing import List, Dict, Any
 
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from openpyxl import Workbook
 
 
@@ -23,6 +24,17 @@ def build_youtube_client():
     return build("youtube", "v3", developerKey=API_KEY)
 
 
+def execute_request(request):
+    try:
+        return request.execute()
+    except HttpError as exc:
+        print(f"YouTube API error: {exc}")
+        return None
+    except Exception as exc:  # pragma: no cover - defensive fallback
+        print(f"Unexpected YouTube API failure: {exc}")
+        return None
+
+
 def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
     published_after = (datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)).strftime("%Y-%m-%dT%H:%M:%SZ")
     request = youtube.search().list(
@@ -34,7 +46,9 @@ def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
         publishedAfter=published_after,
         fields="items(id/videoId,snippet/title,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails/default/url)",
     )
-    response = request.execute()
+    response = execute_request(request)
+    if not response:
+        return []
     return response.get("items", [])
 
 
@@ -44,7 +58,9 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
         id=video_id,
         fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/channelId,snippet/channelTitle,snippet/thumbnails/medium/url)",
     )
-    response = request.execute()
+    response = execute_request(request)
+    if not response:
+        return {}
     items = response.get("items", [])
     if not items:
         return {}
@@ -57,7 +73,9 @@ def get_channel_stats(youtube, channel_id: str) -> Dict[str, Any]:
         id=channel_id,
         fields="items(id,statistics/subscriberCount)",
     )
-    response = request.execute()
+    response = execute_request(request)
+    if not response:
+        return {}
     items = response.get("items", [])
     if not items:
         return {}
