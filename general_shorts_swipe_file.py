@@ -257,7 +257,13 @@ def main() -> None:
     try:
         worksheet = spreadsheet.worksheet(SHEET_NAME)
     except gspread.exceptions.WorksheetNotFound:
-        worksheet = spreadsheet.add_worksheet(title=SHEET_NAME, rows=100, cols=20)
+        # Renamed from "General Shorts Models" — reuse and rename that tab in place
+        # instead of leaving it as an orphaned stale duplicate.
+        try:
+            worksheet = spreadsheet.worksheet("General Shorts Models")
+            worksheet.update_title(SHEET_NAME)
+        except gspread.exceptions.WorksheetNotFound:
+            worksheet = spreadsheet.add_worksheet(title=SHEET_NAME, rows=100, cols=20)
 
     worksheet.clear()
     worksheet.append_row(HEADERS)
