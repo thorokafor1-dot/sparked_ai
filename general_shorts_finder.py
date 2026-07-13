@@ -1,20 +1,21 @@
-"""Searches YouTube Shorts across niches outside cold-approach for ultra-viral, short-form
-packaging published in the last 90 days — a stricter, shorts-only sibling of
+"""Searches YouTube Shorts across niches outside cold-approach for viral, short-form
+packaging published in the last 90 days — a shorts-only sibling of
 general_outlier_finder.py.
 
-Reuses the same niche keyword list (social/narrative dynamics with translation
-potential), but with much higher bars, since this tab is meant to hold only genuinely
-exceptional shorts worth modeling, not merely good ones:
-  1. Absolute reach: 5M+ views — an order of magnitude above the long-form general tab's
-     1M floor, matching "ultra viral" rather than just "viral."
-  2. Audience breakout: views >= 20x the channel's subscriber count (vs. 5x for long-form).
-  3. Self-breakout: views >= 50x the channel's own average views per video (vs. 20x for
-     long-form) — Shorts naturally get more algorithmic reach than a channel's typical
-     upload, so the self-breakout bar needs to be higher to mean anything.
+First pass used the long-form KEYWORDS list verbatim with much higher bars (5M views,
+20x subs, 50x avg). That returned nearly the same ~40 candidates on a re-scan days
+later — the pool was tapped out, and most were duplicates of General Outlier Models
+entries or low-value edit-clip channels (Roblox/k-drama/manhwa recuts). Two fixes:
+  1. Added SHORTS_NATIVE_KEYWORDS — formats that skew short-form specifically
+     (satisfying reveals, before/after transformations, plot-twist storytimes, POV
+     moments) that the long-form-oriented list doesn't reach.
+  2. Lowered the bars (2M views / 10x subs / 25x avg, from 5M / 20x / 50x) — still well
+     above the main cold-approach Shorts tab's bars (300K / 5x / 10x), so "ultra viral"
+     is preserved relative to that tab, just not so strict the candidate pool starves.
 
-Like general_outlier_finder.py, this only surfaces candidates as CANDIDATE log lines —
-picking which ones cleanly translate to cold approach and writing the analysis is a
-manual/Claude curation step, done afterward in general_shorts_swipe_file.py.
+Like general_outlier_finder.py, this only surfaces candidates as SHORTCANDIDATE log
+lines — picking which ones cleanly translate to cold approach and writing the analysis
+is a manual/Claude curation step, done afterward in general_shorts_swipe_file.py.
 """
 import json
 import os
@@ -29,13 +30,29 @@ from youtube_outliers import (
     is_short_video,
     is_english_title,
 )
-from general_outlier_finder import KEYWORDS
+from general_outlier_finder import KEYWORDS as LONG_FORM_KEYWORDS
+
+SHORTS_NATIVE_KEYWORDS = [
+    "satisfying transformation reveal shorts",
+    "before and after transformation shorts",
+    "plot twist storytime shorts",
+    "unexpected reaction shorts",
+    "relatable pov shorts",
+    "wholesome surprise shorts",
+    "green screen reveal shorts",
+    "life hack viral shorts",
+    "glow up reveal shorts",
+    "shocking reveal shorts",
+    "comedy sketch viral shorts",
+    "real reaction shorts",
+]
+KEYWORDS = LONG_FORM_KEYWORDS + SHORTS_NATIVE_KEYWORDS
 
 LOOKBACK_DAYS = int(os.getenv("SHORTS_GENERAL_LOOKBACK_DAYS", "90"))
-ABSOLUTE_VIEW_THRESHOLD = int(os.getenv("SHORTS_GENERAL_ABSOLUTE_VIEW_THRESHOLD", "5000000"))
-SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_GENERAL_SUBSCRIBER_MULTIPLIER_THRESHOLD", "20"))
-AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_GENERAL_AVERAGE_MULTIPLIER_THRESHOLD", "50"))
-MIN_VIEW_THRESHOLD = int(os.getenv("SHORTS_GENERAL_MIN_VIEW_THRESHOLD", "500000"))
+ABSOLUTE_VIEW_THRESHOLD = int(os.getenv("SHORTS_GENERAL_ABSOLUTE_VIEW_THRESHOLD", "2000000"))
+SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_GENERAL_SUBSCRIBER_MULTIPLIER_THRESHOLD", "10"))
+AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_GENERAL_AVERAGE_MULTIPLIER_THRESHOLD", "25"))
+MIN_VIEW_THRESHOLD = int(os.getenv("SHORTS_GENERAL_MIN_VIEW_THRESHOLD", "250000"))
 MAX_RESULTS_PER_KEYWORD = int(os.getenv("SHORTS_GENERAL_MAX_RESULTS_PER_KEYWORD", "50"))
 
 
