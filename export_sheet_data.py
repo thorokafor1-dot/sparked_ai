@@ -1,13 +1,15 @@
-"""One-off export: dumps all rows from the Outliers, Shorts Outliers, and General
-Outlier Models tabs as JSON to stdout, so a dashboard can be built from real current
-data. Not part of the scheduled pipeline — run manually via its GitHub Actions workflow.
+"""One-off export: dumps all rows from every tracker tab (Outliers, Shorts Outliers,
+General Outlier Models, General Shorts Models) as JSON to stdout, so a dashboard can be
+built from real current data. Not part of the scheduled pipeline — run manually via its
+GitHub Actions workflow.
 """
 import json
 
 from youtube_outliers import GOOGLE_SPREADSHEET_ID, GOOGLE_SHEET_NAME, GOOGLE_SHORTS_SHEET_NAME, build_google_sheets_client
 from general_outlier_swipe_file import SHEET_NAME as GENERAL_SHEET_NAME
+from general_shorts_swipe_file import SHEET_NAME as GENERAL_SHORTS_SHEET_NAME
 
-TABS = [GOOGLE_SHEET_NAME, GOOGLE_SHORTS_SHEET_NAME, GENERAL_SHEET_NAME]
+TABS = [GOOGLE_SHEET_NAME, GOOGLE_SHORTS_SHEET_NAME, GENERAL_SHEET_NAME, GENERAL_SHORTS_SHEET_NAME]
 
 
 def main() -> None:
