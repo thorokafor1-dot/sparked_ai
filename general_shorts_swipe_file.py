@@ -25,6 +25,7 @@ HEADERS = [
     "Video URL",
     "Original Niche",
     "Views",
+    "Subscribers",
     "Outlier Score",
     "Core Packaging Pattern",
     "Psychological Trigger",
@@ -46,6 +47,7 @@ SWIPE_FILE = [
         "niche": "Raw Security-Cam Justice/POV",
         "views": "39,315,165",
         "views_num": 39315165,
+        "subscribers": 117000,
         "score": "336.0x subs",
         "pattern": "Raw, unproduced security-camera footage framed as \"gotcha\" justice content, with a plain caption labeling exactly what's happening rather than describing the twist — letting the reveal do the work.",
         "trigger": "Curiosity about how the \"outsmarting\" happens (an open loop, no visual spoiler) + the voyeuristic pull of real surveillance footage feeling more authentic than staged content + a satisfying justice payoff implied by the title.",
@@ -65,6 +67,7 @@ SWIPE_FILE = [
         "niche": "Real Emotional Milestone Moment",
         "views": "10,389,410",
         "views_num": 10389410,
+        "subscribers": 38200,
         "score": "272.0x subs",
         "pattern": "A real, unscripted emotional milestone moment captured with the actual spoken words overlaid as on-screen text, letting the sentimentality come from genuine dialogue rather than a title's summary.",
         "trigger": "Universal emotional resonance (parent/child milestone moments) + the caption functioning as an emotional preview that makes viewers want to hear the rest + the bride as the clear, warm visual focal point.",
@@ -84,6 +87,7 @@ SWIPE_FILE = [
         "niche": "Candid Chivalry/Kindness",
         "views": "854,996",
         "views_num": 854996,
+        "subscribers": 15400,
         "score": "55.5x subs",
         "pattern": "A small, genuine act of chivalry caught candidly on a \"hidden camera,\" with the visual itself doing all the emotional work without needing a caption to explain it.",
         "trigger": "Warm, wholesome social proof of good character (a faith-in-humanity payoff) + the \"hidden camera\" framing implying total authenticity, since nobody knew they were being filmed + a simple, instantly-readable visual story.",
@@ -103,6 +107,7 @@ SWIPE_FILE = [
         "niche": "Raw Security-Cam Justice/POV",
         "views": "29,892,483",
         "views_num": 29892483,
+        "subscribers": 13100,
         "score": "2281.9x subs",
         "pattern": "The same raw security-cam \"gotcha\" genre as Patrol POV's porch-pirate video — an independent channel hitting a massive breakout with the near-identical format confirms this is a proven, repeatable structure, not a one-off fluke.",
         "trigger": "Same as the format's other example: an open-loop twist withheld from the thumbnail, plus the authenticity of raw, unproduced camera footage — reinforced here by a genuinely enormous subscriber multiplier (2281.9x, one of the largest found in this entire project).",
@@ -122,6 +127,7 @@ SWIPE_FILE = [
         "niche": "Candid Social Experiment/Kindness Test",
         "views": "763,151",
         "views_num": 763151,
+        "subscribers": 19700,
         "score": "38.7x subs",
         "pattern": "A vulnerable stranger's real, unscripted request for help captured candidly, with the title stating the discouraging outcome upfront (most walked away) to set up the moment someone doesn't.",
         "trigger": "Moral tension (the viewer wants to know who, if anyone, helps) + protective/empathetic instinct toward a vulnerable person + the \"most people walked away\" framing creating suspense around the exceptions.",
@@ -158,7 +164,7 @@ def main() -> None:
 
     values = [
         [
-            row["title"], row["channel"], row["url"], row["niche"], row["views"], row["score"],
+            row["title"], row["channel"], row["url"], row["niche"], row["views"], row["subscribers"], row["score"],
             row["pattern"], row["trigger"], row["thumbnail"], row["formula"], row["why"],
             row["translation"], row["ca_title"], row["ca_thumbnail"], row["notes"], row["status"],
         ]
