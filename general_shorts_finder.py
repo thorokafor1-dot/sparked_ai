@@ -27,6 +27,7 @@ from youtube_outliers import (
     get_video_stats,
     get_channel_stats,
     is_short_video,
+    is_english_title,
 )
 from general_outlier_finder import KEYWORDS
 
@@ -84,6 +85,9 @@ def main() -> None:
                 continue
 
             title = stats.get("snippet", {}).get("title", "")
+            if not is_english_title(title):
+                continue
+
             tags = stats.get("snippet", {}).get("tags", []) or []
             duration = stats.get("contentDetails", {}).get("duration", "")
             medium_thumbnail = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}) or {}

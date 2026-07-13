@@ -39,6 +39,7 @@ from youtube_outliers import (
     execute_request,
     get_video_stats,
     get_channel_stats,
+    is_english_title,
 )
 
 LOOKBACK_DAYS = int(os.getenv("GENERAL_LOOKBACK_DAYS", "90"))
@@ -137,9 +138,12 @@ def main() -> None:
             if view_count < MIN_VIEW_THRESHOLD:
                 continue
 
+            title = stats.get("snippet", {}).get("title", "")
+            if not is_english_title(title):
+                continue
+
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
-            title = stats.get("snippet", {}).get("title", "")
             thumbnail_url = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}).get("url", "")
             published_at = stats.get("snippet", {}).get("publishedAt", "")
 

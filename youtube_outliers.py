@@ -197,6 +197,28 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None,
     return bool(duration_str) and parse_duration_seconds(duration_str) < 180
 
 
+# Unicode ranges for scripts that are unambiguously non-English when present in a title —
+# catches Arabic, Hebrew, Korean, CJK, Devanagari (Hindi), Thai, Cyrillic. Doesn't catch
+# other-language content written in Latin script (e.g. Indonesian) — that still needs a
+# human read during curation.
+_NON_ENGLISH_SCRIPT_PATTERN = None
+
+
+def is_english_title(title: str) -> bool:
+    """Reject titles containing non-Latin script — a cheap first-pass language filter for
+    the cross-niche finders, which have no other signal to scope results to English."""
+    global _NON_ENGLISH_SCRIPT_PATTERN
+    if _NON_ENGLISH_SCRIPT_PATTERN is None:
+        import re
+        _NON_ENGLISH_SCRIPT_PATTERN = re.compile(
+            r'[؀-ۿ֐-׿가-힯一-鿿぀-ヿ'
+            r'ऀ-ॿ฀-๿Ѐ-ӿ]'
+        )
+    if not title:
+        return True
+    return not _NON_ENGLISH_SCRIPT_PATTERN.search(title)
+
+
 def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "") -> bool:
     """Check if a video's tags/title/category indicate it's relevant to cold approach/pickup dating content."""
     import re
