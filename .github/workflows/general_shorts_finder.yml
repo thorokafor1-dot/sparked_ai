@@ -1,0 +1,25 @@
+name: General shorts finder
+
+on:
+  workflow_dispatch:
+
+jobs:
+  find-candidates:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Scan for ultra-viral cross-niche shorts
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python general_shorts_finder.py
