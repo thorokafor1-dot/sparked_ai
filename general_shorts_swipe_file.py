@@ -1,4 +1,4 @@
-"""One-off writer for the "General Shorts Models" tab: a curated swipe file of
+"""One-off writer for the "General Shorts Outliers" tab: a curated swipe file of
 ultra-viral, cross-niche YouTube Shorts packaging, each translated into a
 cold-approach-ready title and thumbnail concept.
 
@@ -17,7 +17,7 @@ import gspread
 
 from youtube_outliers import GOOGLE_SPREADSHEET_ID, build_google_sheets_client
 
-SHEET_NAME = os.getenv("GENERAL_SHORTS_SHEET_NAME", "General Shorts Models")
+SHEET_NAME = os.getenv("GENERAL_SHORTS_SHEET_NAME", "General Shorts Outliers")
 
 HEADERS = [
     "Original Video Title",

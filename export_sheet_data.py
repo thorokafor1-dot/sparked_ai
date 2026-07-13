@@ -1,5 +1,5 @@
 """One-off export: dumps all rows from every tracker tab (Outliers, Shorts Outliers,
-General Outlier Models, General Shorts Models) as JSON to stdout, so a dashboard can be
+General Outlier Models, General Shorts Outliers) as JSON to stdout, so a dashboard can be
 built from real current data. Not part of the scheduled pipeline — run manually via its
 GitHub Actions workflow.
 """

@@ -269,7 +269,7 @@ SWIPE_FILE = [
         "translation": "Reframe \"a porch pirate gets an instant-karma glitter surprise\" as \"a guy who disrespects a woman gets an instant social comeuppance\" — same real-time on-screen-label narration and unapologetic \"they had it coming\" framing.",
         "ca_title": "Crazy Comeback When A Guy Disrespected Her! He Got Instant Karma.",
         "ca_thumbnail": "A real street scene, a woman's confident reaction as a disrespectful guy visibly backpedals, bold real-time captions labeling the moment as it happens, natural daylight setting.",
-        "notes": "This is the same core mechanic as the porch-pirate Shorts already in the General Shorts Models swipe file — a third real example of it succeeding further confirms the format is genuinely repeatable, not a fluke.",
+        "notes": "This is the same core mechanic as the porch-pirate Shorts already in the General Shorts Outliers swipe file — a third real example of it succeeding further confirms the format is genuinely repeatable, not a fluke.",
         "status": "Not Adapted",
     },
     {
