@@ -26,7 +26,7 @@ jobs:
       - name: Generate outlier spreadsheet
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          YOUTUBE_KEYWORDS: 'picking up girls,cold approach,approach women,daygame,street approach'
+          YOUTUBE_KEYWORDS: 'picking up girls,cold approach,approach women,daygame,street approach,street flirting,rizz in public,asking for her number,asking for instagram,handling rejection,mall approach,campus approach,girl reaction to approach'
           LOOKBACK_DAYS: '180'
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}

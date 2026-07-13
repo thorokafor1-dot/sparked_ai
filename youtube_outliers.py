@@ -10,7 +10,12 @@ from googleapiclient.errors import HttpError
 
 
 API_KEY = os.getenv("YOUTUBE_API_KEY", "")
-KEYWORDS = [k.strip() for k in os.getenv("YOUTUBE_KEYWORDS", "picking up girls,cold approach,approach women,daygame,street approach").split(",") if k.strip()]
+KEYWORDS = [k.strip() for k in os.getenv(
+    "YOUTUBE_KEYWORDS",
+    "picking up girls,cold approach,approach women,daygame,street approach,"
+    "street flirting,rizz in public,asking for her number,asking for instagram,"
+    "handling rejection,mall approach,campus approach,girl reaction to approach"
+).split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
 GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
 GOOGLE_SPREADSHEET_ID = os.getenv("GOOGLE_SPREADSHEET_ID", "").strip()
@@ -33,22 +38,23 @@ SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SUBSCRIBER_MULTIPLIER_THRESHO
 PER_CHANNEL_CAP = int(os.getenv("PER_CHANNEL_CAP", "3"))
 
 # Shorts get pushed by YouTube's feed algorithm to viewers largely independent of
-# subscriber count, so channel-average/subscriber ratios (used for long-form) are weak
-# signals here. Instead: did it spike fast (velocity), and did people actually engage
-# (like ratio) rather than just autoplay past it.
+# subscriber count, so these mirror the long-form three-signal design (absolute floor,
+# channel-average breakout, subscriber breakout) rather than requiring reach AND
+# engagement simultaneously — that combo was too strict and left the tab too thin.
 GOOGLE_SHORTS_SHEET_NAME = os.getenv("GOOGLE_SHORTS_SHEET_NAME", "Shorts Outliers")
 SHORTS_LOOKBACK_DAYS = int(os.getenv("SHORTS_LOOKBACK_DAYS", "90"))
 # Absolute view count that alone qualifies a short as an outlier.
 SHORTS_HIGH_VIEW_THRESHOLD = int(os.getenv("SHORTS_HIGH_VIEW_THRESHOLD", "300000"))
-# Minimum views before the velocity signal is allowed to trigger, so a video published
-# hours ago with a handful of views can't produce an artificially huge views/day figure.
+# Minimum views before the ratio-based signals below are allowed to trigger, so a video
+# published hours ago with a handful of views can't produce an artificially huge ratio.
 SHORTS_MIN_VIEW_THRESHOLD = int(os.getenv("SHORTS_MIN_VIEW_THRESHOLD", "50000"))
 # Views per day since publish that alone qualifies a short as an outlier (catches a
 # recent viral spike even before it clears the absolute view floor).
 SHORTS_VELOCITY_THRESHOLD = float(os.getenv("SHORTS_VELOCITY_THRESHOLD", "15000"))
-# Minimum like-to-view ratio required (when the like count is public) — filters out
-# clips that got algorithmic reach but little real audience resonance.
-SHORTS_ENGAGEMENT_THRESHOLD = float(os.getenv("SHORTS_ENGAGEMENT_THRESHOLD", "0.04"))
+# How many times a channel's own average views a short must clear to be an outlier.
+SHORTS_AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_AVERAGE_MULTIPLIER_THRESHOLD", "10"))
+# How many times a channel's subscriber count a short's views must clear.
+SHORTS_SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SHORTS_SUBSCRIBER_MULTIPLIER_THRESHOLD", "5"))
 
 # YouTube category IDs that are never dating/pickup content, regardless of how a video
 # is worded — a much more reliable signal than keyword-guessing (e.g. blocks song uploads
@@ -302,14 +308,14 @@ def is_outlier(view_count: int, subscriber_count: int, channel_total_views: int 
     return True, reason, round(score, 2)
 
 
-def is_outlier_short(view_count: int, days_since_published: float, like_count: int = None) -> tuple[bool, str, float]:
-    """Score a short against reach + engagement signals and return the strongest reach signal.
+def is_outlier_short(view_count: int, days_since_published: float, subscriber_count: int = 0,
+                      channel_total_views: int = 0, channel_video_count: int = 0) -> tuple[bool, str, float]:
+    """Score a short against four independent signals and return the strongest one.
 
-    Shorts get algorithmic distribution largely independent of subscriber count, so a
-    channel-average or subscriber ratio (used for long-form) doesn't reliably indicate a
-    standout — it just reflects normal Shorts reach. Instead: did it spike fast (views/day),
-    or does it clear a high absolute floor — AND, when public, did people actually engage
-    (like ratio) rather than just autoplay past it.
+    Mirrors the long-form design: any one signal qualifies. Velocity catches a recent
+    spike even before the absolute floor; the channel-average and subscriber signals
+    reuse the long-form logic but with higher bars, since Shorts naturally get more
+    algorithmic reach than a channel's typical video.
     """
     candidates: List[tuple[float, str]] = []
     days_since_published = max(days_since_published, 1.0)
@@ -324,15 +330,22 @@ def is_outlier_short(view_count: int, days_since_published: float, like_count: i
         if velocity >= SHORTS_VELOCITY_THRESHOLD:
             candidates.append((velocity / SHORTS_VELOCITY_THRESHOLD, f"{velocity:,.0f} views/day"))
 
+    # Signal 3: views vs. this channel's own average views per video.
+    if view_count >= SHORTS_MIN_VIEW_THRESHOLD and channel_video_count > 0 and channel_total_views > 0:
+        avg_views = channel_total_views / channel_video_count
+        if avg_views > 0:
+            multiplier = view_count / avg_views
+            if multiplier >= SHORTS_AVERAGE_MULTIPLIER_THRESHOLD:
+                candidates.append((multiplier, f"{multiplier:.1f}x channel average views"))
+
+    # Signal 4: views vs. subscriber count — reached far beyond the existing audience.
+    if view_count >= SHORTS_MIN_VIEW_THRESHOLD and subscriber_count >= MIN_SUBSCRIBER_THRESHOLD:
+        sub_multiplier = view_count / subscriber_count
+        if sub_multiplier >= SHORTS_SUBSCRIBER_MULTIPLIER_THRESHOLD:
+            candidates.append((sub_multiplier, f"{sub_multiplier:.1f}x subscriber count in views"))
+
     if not candidates:
         return False, "", 0.0
-
-    # Engagement gate: when the like count is public, require real audience resonance,
-    # not just algorithmic reach. If likes are hidden, we can't verify, so skip the gate.
-    if like_count is not None and view_count > 0:
-        like_ratio = like_count / view_count
-        if like_ratio < SHORTS_ENGAGEMENT_THRESHOLD:
-            return False, "", 0.0
 
     score, reason = max(candidates, key=lambda c: c[0])
     return True, reason, round(score, 2)
@@ -480,8 +493,6 @@ def main() -> None:
                 continue
 
             view_count = int(stats.get("statistics", {}).get("viewCount", 0) or 0)
-            raw_like_count = stats.get("statistics", {}).get("likeCount")
-            like_count = int(raw_like_count) if raw_like_count is not None else None
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
             medium_thumbnail = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}) or {}
@@ -544,7 +555,7 @@ def main() -> None:
                     print(f"  → Skipped (short older than {SHORTS_LOOKBACK_DAYS} days)")
                     continue
 
-                is_flagged, reason, score = is_outlier_short(view_count, days_since_published, like_count)
+                is_flagged, reason, score = is_outlier_short(view_count, days_since_published, subscriber_count, channel_total_views, channel_video_count)
                 if not is_flagged:
                     continue
 
