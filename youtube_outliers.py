@@ -249,6 +249,11 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         # Photography — "street" overlaps with cold-approach vocabulary, but street/candid
         # photography content is unambiguously not dating/pickup content
         "photography", "photographer", "photo walk",
+        # Niche mismatch — this tracker is for male-approaching-women content; "street
+        # flirting"/"street approach" search terms also surface LGBT and ladyboy content
+        # that shares the same vocabulary but isn't the target niche (e.g. Kiriakos Spanos,
+        # Always Abroad's "Ladyboy Street Approach" videos).
+        "lgbt", "ladyboy",
     ]
 
     combined_text = (title + " " + " ".join(tags or [])).lower()
