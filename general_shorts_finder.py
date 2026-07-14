@@ -74,6 +74,42 @@ SHORTS_NATIVE_KEYWORDS = [
     "revenge story shorts",
     "second chance story shorts",
     "life changing moment shorts",
+    # Third pass: the first two keyword sets converged on the same ~55-candidate pool,
+    # heavily dominated by transformation/glow-up and revenge-fanedit content. This
+    # batch targets stranger-interaction and generosity formats (tipping, disguised
+    # tests, street interviews, courage/confrontation) that map more directly onto a
+    # cold-approach street moment.
+    "stranger helped me shorts",
+    "waitress tip surprise shorts",
+    "generous tipper reveal shorts",
+    "mystery tipper shorts",
+    "delivery driver kindness shorts",
+    "tow truck driver kindness shorts",
+    "roadside assistance surprise shorts",
+    "restaurant kindness surprise shorts",
+    "homeless man kindness test shorts",
+    "disguised billionaire test shorts",
+    "hidden camera kindness test shorts",
+    "would they help a stranger shorts",
+    "social experiment stranger shorts",
+    "street interview reaction shorts",
+    "asking strangers questions shorts",
+    "confidence glow up reveal shorts",
+    "first impression change shorts",
+    "rejection reaction shorts",
+    "asking her out shorts",
+    "compliment stranger reaction shorts",
+    "paying it forward shorts",
+    "surprise reunion shorts",
+    "military surprise reunion shorts",
+    "veteran surprise shorts",
+    "act of courage shorts",
+    "standing up for stranger shorts",
+    "confronting bully in public shorts",
+    "public confrontation justice shorts",
+    "instant regret shorts",
+    "porch pirate karma shorts",
+    "car confrontation karma shorts",
 ]
 KEYWORDS = LONG_FORM_KEYWORDS + SHORTS_NATIVE_KEYWORDS
 
