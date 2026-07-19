@@ -239,9 +239,23 @@ def is_english_title(title: str) -> bool:
     return not _NON_ENGLISH_SCRIPT_PATTERN.search(title)
 
 
-def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "") -> bool:
+# Channels excluded by name rather than keyword — these produce content that keeps
+# resurfacing through the niche's shared vocabulary (e.g. "street flirting") but isn't
+# the target niche (male-approaching-women): Kiriakos Spanos is a woman interviewing/
+# flirting with men on the street (gender-reversed format, no LGBT/ladyboy keywords to
+# catch it), and Always Abroad's "Ladyboy Street Approach" series. Keyword-based
+# exclusion already failed twice for Kiriakos Spanos via two different mechanisms, so
+# this is a direct, reliable backstop per explicit user request.
+EXCLUDED_CHANNELS = {"kiriakos spanos", "always abroad"}
+
+
+def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "",
+                      channel_title: str = "") -> bool:
     """Check if a video's tags/title/category indicate it's relevant to cold approach/pickup dating content."""
     import re
+
+    if channel_title and channel_title.strip().lower() in EXCLUDED_CHANNELS:
+        return False
 
     # Hard category exclusion — catches things keyword-matching can't, like songs
     # or gameplay videos that a fuzzy search match let through.
@@ -577,7 +591,7 @@ def main() -> None:
 
             # Filter out unrelated content based on video tags (with title fallback)
             category_id = stats.get("snippet", {}).get("categoryId", "")
-            if not is_relevant_tags(tags, title, category_id, keyword):
+            if not is_relevant_tags(tags, title, category_id, keyword, channel_title):
                 print(f"  → Skipped (not relevant to cold approach/pickup niche)")
                 continue
 
