@@ -30,7 +30,18 @@ KEYWORDS = [k.strip() for k in os.getenv(
     "getting her number in public,asking for her snapchat,flirting experiment public,"
     "social experiment flirting,her reaction to being approached,"
     "approaching girls at the beach,approaching girls downtown,night game approach,"
-    "bar approach women,club approach women"
+    "bar approach women,club approach women,"
+    # Second widening pass — the first widening (13 -> 48 terms) plus a direct
+    # channel-name exclusion for Kiriakos Spanos/Always Abroad still left the
+    # count short of 40 once that channel's entries were removed.
+    "approaching strangers experiment,flirting infield,girl reaction compilation,"
+    "walking up to strangers,cold approach fails,cold approach wins,"
+    "daygame breakdown,infield breakdown,talking to random women,"
+    "flirty response compilation,asking her out compilation,street pickup shorts,"
+    "picking up women shorts,his approach worked,her honest reaction to approach,"
+    "does she like me shorts,reading her body language approach,she smiled at me shorts,"
+    "cold approach tips shorts,daygame tips shorts,street approach compilation,"
+    "she gave me her number shorts,approaching her at the coffee shop"
 ).split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
 GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
