@@ -600,6 +600,10 @@ def main() -> None:
             tags = stats.get("snippet", {}).get("tags", []) or []
             is_short = is_short_video(duration, title, tags, thumbnail_width, thumbnail_height)
 
+            if not is_english_title(title):
+                print(f"  → Skipped (non-English title)")
+                continue
+
             # Filter out unrelated content based on video tags (with title fallback)
             category_id = stats.get("snippet", {}).get("categoryId", "")
             if not is_relevant_tags(tags, title, category_id, keyword, channel_title):
