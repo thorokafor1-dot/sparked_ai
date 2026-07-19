@@ -14,7 +14,23 @@ KEYWORDS = [k.strip() for k in os.getenv(
     "YOUTUBE_KEYWORDS",
     "picking up girls,cold approach,approach women,daygame,street approach,"
     "street flirting,rizz in public,asking for her number,asking for instagram,"
-    "handling rejection,mall approach,campus approach,girl reaction to approach"
+    "handling rejection,mall approach,campus approach,girl reaction to approach,"
+    # Widened for volume in the Shorts Outliers tab — the original 13 terms
+    # only surfaced 21 qualifying shorts; these add more niche-specific phrasing
+    # rather than broadening into ambiguous terms that could dilute relevance.
+    "cold approach shorts,daygame shorts,street approach shorts,"
+    "flirting with strangers,talking to girls in public,approaching random girls,"
+    "picking up girls in public,walk up and talk to her,she said yes to my number,"
+    "she gave me her number,asking girls out in public,rejected by a girl,"
+    "girl says no to date,public rejection compilation,street game infield,"
+    "daygame infield,cold approach infield,approaching women in the mall,"
+    "approaching women at the gym,approaching women at college,"
+    "confidence to approach women,overcoming approach anxiety,"
+    "how to talk to strangers women,pickup artist infield,seduction infield,"
+    "getting her number in public,asking for her snapchat,flirting experiment public,"
+    "social experiment flirting,her reaction to being approached,"
+    "approaching girls at the beach,approaching girls downtown,night game approach,"
+    "bar approach women,club approach women"
 ).split(",") if k.strip()]
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "90"))
 GOOGLE_SERVICE_ACCOUNT_JSON = os.getenv("GOOGLE_SERVICE_ACCOUNT_JSON", "")
@@ -36,6 +52,10 @@ AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("OUTLIER_MULTIPLIER_THRESHOLD", "
 SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("SUBSCRIBER_MULTIPLIER_THRESHOLD", "3"))
 # Cap how many outliers from the same channel land in the sheet, to keep results diverse.
 PER_CHANNEL_CAP = int(os.getenv("PER_CHANNEL_CAP", "3"))
+# Separate, more generous per-channel cap for Shorts — the shorts tab needs more volume
+# than long-form, and a handful of prolific creators shouldn't crowd it out at the same
+# tight cap used for long-form videos.
+SHORTS_PER_CHANNEL_CAP = int(os.getenv("SHORTS_PER_CHANNEL_CAP", "5"))
 
 # Shorts get pushed by YouTube's feed algorithm to viewers largely independent of
 # subscriber count, so these mirror the long-form three-signal design (absolute floor,
@@ -600,7 +620,7 @@ def main() -> None:
     # then sort by score so the strongest examples surface first. Shorts aren't
     # capped in total count, just kept diverse across channels.
     capped_rows = cap_and_sort_by_channel(rows, PER_CHANNEL_CAP)
-    capped_shorts_rows = cap_and_sort_by_channel(shorts_rows, PER_CHANNEL_CAP)
+    capped_shorts_rows = cap_and_sort_by_channel(shorts_rows, SHORTS_PER_CHANNEL_CAP)
 
     spreadsheet = open_spreadsheet()
     if not spreadsheet:
