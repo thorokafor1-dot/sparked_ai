@@ -26,8 +26,12 @@ jobs:
       - name: Generate outlier spreadsheet
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-          YOUTUBE_KEYWORDS: 'picking up girls,cold approach,approach women,daygame,street approach,street flirting,rizz in public,asking for her number,asking for instagram,handling rejection,mall approach,campus approach,girl reaction to approach'
+          # YOUTUBE_KEYWORDS intentionally omitted so this falls through to the
+          # widened default keyword list in youtube_outliers.py — a hardcoded
+          # 13-term override here silently discarded every later widening of
+          # that default (13 -> 48 -> 71 terms never actually ran).
           LOOKBACK_DAYS: '180'
+          SHORTS_LOOKBACK_DAYS: '180'
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
           GOOGLE_SHEET_NAME: 'Outliers'
