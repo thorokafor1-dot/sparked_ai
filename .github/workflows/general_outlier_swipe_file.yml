@@ -24,4 +24,4 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
           GENERAL_OUTLIER_SHEET_NAME: 'General Outlier Models'
-        run: python general_outlier_swipe_file.py
+        run: python outlier-tracking/general_outlier_swipe_file.py

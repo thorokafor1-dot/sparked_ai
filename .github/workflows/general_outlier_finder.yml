@@ -22,4 +22,4 @@ jobs:
       - name: Scan for cross-niche outliers
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-        run: python general_outlier_finder.py
+        run: python outlier-tracking/general_outlier_finder.py

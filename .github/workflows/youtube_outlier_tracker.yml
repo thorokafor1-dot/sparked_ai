@@ -35,4 +35,4 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
           GOOGLE_SHEET_NAME: 'Outliers'
-        run: python youtube_outliers.py
+        run: python outlier-tracking/youtube_outliers.py
