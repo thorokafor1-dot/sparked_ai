@@ -24,4 +24,4 @@ jobs:
           GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
           GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
           GENERAL_SHORTS_SHEET_NAME: 'General Shorts Outliers'
-        run: python shorts-research/general_shorts_swipe_file.py
+        run: python shorts-hook-research/general_shorts_swipe_file.py
