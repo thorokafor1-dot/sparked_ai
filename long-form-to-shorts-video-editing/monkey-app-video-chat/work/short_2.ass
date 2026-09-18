@@ -1,0 +1,115 @@
+[Script Info]
+ScriptType: v4.00+
+PlayResX: 1080
+PlayResY: 1920
+WrapStyle: 2
+ScaledBorderAndShadow: yes
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Caption,Arial Black,78,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,7,3,2,60,60,300,1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:00.04,0:00:00.30,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}IN?{\1c&H00FFFFFF&} IT SAYS
+Dialogue: 0,0:00:00.30,0:00:00.40,Caption,,0,0,0,,{\pos(540,1620)}IN? {\1c&H00782DFF&}IT{\1c&H00FFFFFF&} SAYS
+Dialogue: 0,0:00:00.40,0:00:00.56,Caption,,0,0,0,,{\pos(540,1620)}IN? IT {\1c&H00782DFF&}SAYS{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:00.56,0:00:01.20,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}TEXAS.{\1c&H00FFFFFF&} ARE YOU
+Dialogue: 0,0:00:01.20,0:00:01.22,Caption,,0,0,0,,{\pos(540,1620)}TEXAS. {\1c&H00782DFF&}ARE{\1c&H00FFFFFF&} YOU
+Dialogue: 0,0:00:01.22,0:00:01.32,Caption,,0,0,0,,{\pos(540,1620)}TEXAS. ARE {\1c&H00782DFF&}YOU{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:01.32,0:00:01.46,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}IN{\1c&H00FFFFFF&} TEXAS? I'M
+Dialogue: 0,0:00:01.46,0:00:02.12,Caption,,0,0,0,,{\pos(540,1620)}IN {\1c&H00782DFF&}TEXAS?{\1c&H00FFFFFF&} I'M
+Dialogue: 0,0:00:02.12,0:00:02.22,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}IN{\1c&H00FFFFFF&} AUSTIN. OH,
+Dialogue: 0,0:00:02.22,0:00:03.32,Caption,,0,0,0,,{\pos(540,1620)}IN {\1c&H00782DFF&}AUSTIN.{\1c&H00FFFFFF&} OH,
+Dialogue: 0,0:00:03.32,0:00:03.62,Caption,,0,0,0,,{\pos(540,1620)}IN AUSTIN. {\1c&H00782DFF&}OH,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:03.70,0:00:04.16,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}I'VE{\1c&H00FFFFFF&} NEVER BEEN.
+Dialogue: 0,0:00:04.16,0:00:04.40,Caption,,0,0,0,,{\pos(540,1620)}I'VE {\1c&H00782DFF&}NEVER{\1c&H00FFFFFF&} BEEN.
+Dialogue: 0,0:00:04.40,0:00:04.66,Caption,,0,0,0,,{\pos(540,1620)}I'VE NEVER {\1c&H00782DFF&}BEEN.{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:05.02,0:00:05.16,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}ARE{\1c&H00FFFFFF&} YOU FROM
+Dialogue: 0,0:00:05.16,0:00:05.28,Caption,,0,0,0,,{\pos(540,1620)}ARE {\1c&H00782DFF&}YOU{\1c&H00FFFFFF&} FROM
+Dialogue: 0,0:00:05.28,0:00:05.52,Caption,,0,0,0,,{\pos(540,1620)}ARE YOU {\1c&H00782DFF&}FROM{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:05.52,0:00:06.02,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}THERE?{\1c&H00FFFFFF&} I AM
+Dialogue: 0,0:00:06.02,0:00:06.18,Caption,,0,0,0,,{\pos(540,1620)}THERE? {\1c&H00782DFF&}I{\1c&H00FFFFFF&} AM
+Dialogue: 0,0:00:06.18,0:00:06.30,Caption,,0,0,0,,{\pos(540,1620)}THERE? I {\1c&H00782DFF&}AM{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:06.30,0:00:06.68,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}NOW,{\1c&H00FFFFFF&} BUT NO,
+Dialogue: 0,0:00:06.68,0:00:06.94,Caption,,0,0,0,,{\pos(540,1620)}NOW, {\1c&H00782DFF&}BUT{\1c&H00FFFFFF&} NO,
+Dialogue: 0,0:00:06.94,0:00:07.12,Caption,,0,0,0,,{\pos(540,1620)}NOW, BUT {\1c&H00782DFF&}NO,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:07.20,0:00:07.28,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}I'M{\1c&H00FFFFFF&} NOT ORIGINALLY,
+Dialogue: 0,0:00:07.28,0:00:07.40,Caption,,0,0,0,,{\pos(540,1620)}I'M {\1c&H00782DFF&}NOT{\1c&H00FFFFFF&} ORIGINALLY,
+Dialogue: 0,0:00:07.40,0:00:07.70,Caption,,0,0,0,,{\pos(540,1620)}I'M NOT {\1c&H00782DFF&}ORIGINALLY,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:07.90,0:00:08.00,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}YOU{\1c&H00FFFFFF&} KNOW. WHERE
+Dialogue: 0,0:00:08.00,0:00:08.34,Caption,,0,0,0,,{\pos(540,1620)}YOU {\1c&H00782DFF&}KNOW.{\1c&H00FFFFFF&} WHERE
+Dialogue: 0,0:00:08.34,0:00:08.48,Caption,,0,0,0,,{\pos(540,1620)}YOU KNOW. {\1c&H00782DFF&}WHERE{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:08.48,0:00:08.62,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}ARE{\1c&H00FFFFFF&} YOU FROM
+Dialogue: 0,0:00:08.62,0:00:08.86,Caption,,0,0,0,,{\pos(540,1620)}ARE YOU {\1c&H00782DFF&}FROM{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:08.86,0:00:09.64,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}ORIGINALLY?{\1c&H00FFFFFF&} LIKE WHERE
+Dialogue: 0,0:00:09.64,0:00:09.78,Caption,,0,0,0,,{\pos(540,1620)}ORIGINALLY? {\1c&H00782DFF&}LIKE{\1c&H00FFFFFF&} WHERE
+Dialogue: 0,0:00:09.78,0:00:10.06,Caption,,0,0,0,,{\pos(540,1620)}ORIGINALLY? LIKE {\1c&H00782DFF&}WHERE{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:10.06,0:00:10.18,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}WERE{\1c&H00FFFFFF&} YOU BORN
+Dialogue: 0,0:00:10.18,0:00:10.28,Caption,,0,0,0,,{\pos(540,1620)}WERE {\1c&H00782DFF&}YOU{\1c&H00FFFFFF&} BORN
+Dialogue: 0,0:00:10.28,0:00:10.56,Caption,,0,0,0,,{\pos(540,1620)}WERE YOU {\1c&H00782DFF&}BORN{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:10.56,0:00:10.82,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}IN?{\1c&H00FFFFFF&} I WAS
+Dialogue: 0,0:00:10.82,0:00:10.92,Caption,,0,0,0,,{\pos(540,1620)}IN? {\1c&H00782DFF&}I{\1c&H00FFFFFF&} WAS
+Dialogue: 0,0:00:10.92,0:00:11.38,Caption,,0,0,0,,{\pos(540,1620)}IN? I {\1c&H00782DFF&}WAS{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:11.38,0:00:11.58,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}BORN{\1c&H00FFFFFF&} AND RAISED
+Dialogue: 0,0:00:11.58,0:00:11.72,Caption,,0,0,0,,{\pos(540,1620)}BORN {\1c&H00782DFF&}AND{\1c&H00FFFFFF&} RAISED
+Dialogue: 0,0:00:11.72,0:00:11.84,Caption,,0,0,0,,{\pos(540,1620)}BORN AND {\1c&H00782DFF&}RAISED{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:11.84,0:00:12.18,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}IN{\1c&H00FFFFFF&} EUROPE. OH,
+Dialogue: 0,0:00:12.18,0:00:12.96,Caption,,0,0,0,,{\pos(540,1620)}IN {\1c&H00782DFF&}EUROPE.{\1c&H00FFFFFF&} OH,
+Dialogue: 0,0:00:12.96,0:00:13.08,Caption,,0,0,0,,{\pos(540,1620)}IN EUROPE. {\1c&H00782DFF&}OH,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:13.18,0:00:13.28,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}OKAY.{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:14.16,0:00:14.24,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}YOU{\1c&H00FFFFFF&} EVER BEEN
+Dialogue: 0,0:00:14.24,0:00:14.34,Caption,,0,0,0,,{\pos(540,1620)}YOU {\1c&H00782DFF&}EVER{\1c&H00FFFFFF&} BEEN
+Dialogue: 0,0:00:14.34,0:00:14.50,Caption,,0,0,0,,{\pos(540,1620)}YOU EVER {\1c&H00782DFF&}BEEN{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:14.50,0:00:14.92,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}THERE?{\1c&H00FFFFFF&} I'VE BEEN
+Dialogue: 0,0:00:14.92,0:00:15.24,Caption,,0,0,0,,{\pos(540,1620)}THERE? {\1c&H00782DFF&}I'VE{\1c&H00FFFFFF&} BEEN
+Dialogue: 0,0:00:15.24,0:00:15.40,Caption,,0,0,0,,{\pos(540,1620)}THERE? I'VE {\1c&H00782DFF&}BEEN{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:15.40,0:00:15.82,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}TO{\1c&H00FFFFFF&} ITALY. DANG,
+Dialogue: 0,0:00:15.82,0:00:17.08,Caption,,0,0,0,,{\pos(540,1620)}TO {\1c&H00782DFF&}ITALY.{\1c&H00FFFFFF&} DANG,
+Dialogue: 0,0:00:17.08,0:00:17.28,Caption,,0,0,0,,{\pos(540,1620)}TO ITALY. {\1c&H00782DFF&}DANG,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:17.36,0:00:17.44,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}BUT{\1c&H00FFFFFF&} YOU HAVEN'T
+Dialogue: 0,0:00:17.44,0:00:17.50,Caption,,0,0,0,,{\pos(540,1620)}BUT {\1c&H00782DFF&}YOU{\1c&H00FFFFFF&} HAVEN'T
+Dialogue: 0,0:00:17.50,0:00:17.68,Caption,,0,0,0,,{\pos(540,1620)}BUT YOU {\1c&H00782DFF&}HAVEN'T{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:17.68,0:00:17.80,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}BEEN{\1c&H00FFFFFF&} IN FRANCE,
+Dialogue: 0,0:00:17.80,0:00:17.92,Caption,,0,0,0,,{\pos(540,1620)}BEEN {\1c&H00782DFF&}IN{\1c&H00FFFFFF&} FRANCE,
+Dialogue: 0,0:00:17.92,0:00:18.16,Caption,,0,0,0,,{\pos(540,1620)}BEEN IN {\1c&H00782DFF&}FRANCE,{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:18.34,0:00:18.68,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}HUH?{\1c&H00FFFFFF&} I LIKE
+Dialogue: 0,0:00:18.68,0:00:18.78,Caption,,0,0,0,,{\pos(540,1620)}HUH? {\1c&H00782DFF&}I{\1c&H00FFFFFF&} LIKE
+Dialogue: 0,0:00:18.78,0:00:18.96,Caption,,0,0,0,,{\pos(540,1620)}HUH? I {\1c&H00782DFF&}LIKE{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:18.96,0:00:19.20,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}THAT.{\1c&H00FFFFFF&} THAT GIVES
+Dialogue: 0,0:00:19.20,0:00:19.28,Caption,,0,0,0,,{\pos(540,1620)}THAT. {\1c&H00782DFF&}THAT{\1c&H00FFFFFF&} GIVES
+Dialogue: 0,0:00:19.28,0:00:19.42,Caption,,0,0,0,,{\pos(540,1620)}THAT. THAT {\1c&H00782DFF&}GIVES{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:19.42,0:00:19.58,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}ME{\1c&H00FFFFFF&} SOME CARDS
+Dialogue: 0,0:00:19.58,0:00:19.74,Caption,,0,0,0,,{\pos(540,1620)}ME {\1c&H00782DFF&}SOME{\1c&H00FFFFFF&} CARDS
+Dialogue: 0,0:00:19.74,0:00:19.98,Caption,,0,0,0,,{\pos(540,1620)}ME SOME {\1c&H00782DFF&}CARDS{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:19.98,0:00:20.18,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}TO{\1c&H00FFFFFF&} PLAY WITH.
+Dialogue: 0,0:00:20.18,0:00:20.32,Caption,,0,0,0,,{\pos(540,1620)}TO {\1c&H00782DFF&}PLAY{\1c&H00FFFFFF&} WITH.
+Dialogue: 0,0:00:20.32,0:00:20.56,Caption,,0,0,0,,{\pos(540,1620)}TO PLAY {\1c&H00782DFF&}WITH.{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:20.74,0:00:20.84,Caption,,0,0,0,,{\pos(540,1620)}YOU {\1c&H00782DFF&}KNOW,{\1c&H00FFFFFF&} I
+Dialogue: 0,0:00:20.84,0:00:20.88,Caption,,0,0,0,,{\pos(540,1620)}YOU KNOW, {\1c&H00782DFF&}I{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:20.88,0:00:20.98,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}CAN{\1c&H00FFFFFF&} SHOW YOU
+Dialogue: 0,0:00:20.98,0:00:21.28,Caption,,0,0,0,,{\pos(540,1620)}CAN {\1c&H00782DFF&}SHOW{\1c&H00FFFFFF&} YOU
+Dialogue: 0,0:00:21.28,0:00:21.46,Caption,,0,0,0,,{\pos(540,1620)}CAN SHOW {\1c&H00782DFF&}YOU{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:21.46,0:00:21.62,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}SOMETHING{\1c&H00FFFFFF&} NEW. I
+Dialogue: 0,0:00:21.62,0:00:22.10,Caption,,0,0,0,,{\pos(540,1620)}SOMETHING {\1c&H00782DFF&}NEW.{\1c&H00FFFFFF&} I
+Dialogue: 0,0:00:22.10,0:00:22.20,Caption,,0,0,0,,{\pos(540,1620)}SOMETHING NEW. {\1c&H00782DFF&}I{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:22.20,0:00:22.30,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}CAN{\1c&H00FFFFFF&} SEE IT.
+Dialogue: 0,0:00:22.30,0:00:22.50,Caption,,0,0,0,,{\pos(540,1620)}CAN {\1c&H00782DFF&}SEE{\1c&H00FFFFFF&} IT.
+Dialogue: 0,0:00:22.50,0:00:22.62,Caption,,0,0,0,,{\pos(540,1620)}CAN SEE {\1c&H00782DFF&}IT.{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:22.66,0:00:22.72,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}I{\1c&H00FFFFFF&} FEEL IT.
+Dialogue: 0,0:00:22.72,0:00:22.90,Caption,,0,0,0,,{\pos(540,1620)}I {\1c&H00782DFF&}FEEL{\1c&H00FFFFFF&} IT.
+Dialogue: 0,0:00:22.90,0:00:23.08,Caption,,0,0,0,,{\pos(540,1620)}I FEEL {\1c&H00782DFF&}IT.{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:23.54,0:00:23.94,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}I'M{\1c&H00FFFFFF&} CURIOUS. WHAT'S
+Dialogue: 0,0:00:23.94,0:00:24.56,Caption,,0,0,0,,{\pos(540,1620)}I'M {\1c&H00782DFF&}CURIOUS.{\1c&H00FFFFFF&} WHAT'S
+Dialogue: 0,0:00:24.56,0:00:24.70,Caption,,0,0,0,,{\pos(540,1620)}I'M CURIOUS. {\1c&H00782DFF&}WHAT'S{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:24.70,0:00:24.82,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}YOUR{\1c&H00FFFFFF&} ETHNICITY?
+Dialogue: 0,0:00:24.82,0:00:25.80,Caption,,0,0,0,,{\pos(540,1620)}YOUR {\1c&H00782DFF&}ETHNICITY?{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:26.54,0:00:26.76,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}I{\1c&H00FFFFFF&} AM GERMAN
+Dialogue: 0,0:00:26.76,0:00:27.26,Caption,,0,0,0,,{\pos(540,1620)}I {\1c&H00782DFF&}AM{\1c&H00FFFFFF&} GERMAN
+Dialogue: 0,0:00:27.26,0:00:28.16,Caption,,0,0,0,,{\pos(540,1620)}I AM {\1c&H00782DFF&}GERMAN{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:28.16,0:00:28.70,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}AND{\1c&H00FFFFFF&} IRISH. THAT'S
+Dialogue: 0,0:00:28.70,0:00:29.34,Caption,,0,0,0,,{\pos(540,1620)}AND {\1c&H00782DFF&}IRISH.{\1c&H00FFFFFF&} THAT'S
+Dialogue: 0,0:00:29.34,0:00:29.44,Caption,,0,0,0,,{\pos(540,1620)}AND IRISH. {\1c&H00782DFF&}THAT'S{\1c&H00FFFFFF&}
+Dialogue: 0,0:00:29.44,0:00:29.60,Caption,,0,0,0,,{\pos(540,1620)}{\1c&H00782DFF&}LIKE{\1c&H00FFFFFF&} SO BASIC
+Dialogue: 0,0:00:29.60,0:00:29.78,Caption,,0,0,0,,{\pos(540,1620)}LIKE {\1c&H00782DFF&}SO{\1c&H00FFFFFF&} BASIC
+Dialogue: 0,0:00:29.78,0:00:30.16,Caption,,0,0,0,,{\pos(540,1620)}LIKE SO {\1c&H00782DFF&}BASIC{\1c&H00FFFFFF&}

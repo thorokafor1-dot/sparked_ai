@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "ask": [
+      "Bash(rm *)",
+      "Bash(rmdir *)",
+      "Bash(find *)",
+      "Bash(git clean *)"
+    ]
+  }
+}

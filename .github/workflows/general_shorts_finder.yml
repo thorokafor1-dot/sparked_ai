@@ -2,6 +2,10 @@ name: General shorts finder
 
 on:
   workflow_dispatch:
+  schedule:
+    # 8AM Central (CDT, UTC-5) every Wednesday. During CST (UTC-6, roughly
+    # Nov-Mar) this actually fires at 7AM Central since cron has no DST.
+    - cron: '0 13 * * 3'
 
 jobs:
   find-candidates:
@@ -22,4 +26,4 @@ jobs:
       - name: Scan for ultra-viral cross-niche shorts
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
-        run: python shorts-hook-research/general_shorts_finder.py
+        run: python outlier-tracking/general-short-form/general_shorts_finder.py

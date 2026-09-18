@@ -6,6 +6,8 @@ on:
 jobs:
   write-swipe-file:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
@@ -19,9 +21,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Write General Outlier Models tab
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
-          GENERAL_OUTLIER_SHEET_NAME: 'General Outlier Models'
-        run: python outlier-tracking/general_outlier_swipe_file.py
+      - name: Write General Long Form Outliers data
+        run: python outlier-tracking/general-long-form/general_outlier_swipe_file.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outlier-tracking/general-long-form/data.json
+          git diff --cached --quiet || git commit -m "Update general long form outlier data [skip ci]"
+          git push

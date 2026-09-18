@@ -1,6 +1,7 @@
-"""One-off writer for the "General Outlier Models" tab: a curated swipe file of viral
-YouTube packaging (title + thumbnail psychology) from outside the cold-approach niche,
-each translated into a cold-approach-ready title and thumbnail concept.
+"""One-off writer for the "General Long Form Outliers" output
+(outlier-tracking/general-long-form/data.json): a curated swipe file of viral YouTube
+packaging (title + thumbnail psychology) from outside the cold-approach niche, each
+translated into a cold-approach-ready title and thumbnail concept.
 
 Entries here must be real, statistically verified outliers found by
 general_outlier_finder.py (run via GitHub Actions, since computing view/subscriber/
@@ -18,38 +19,17 @@ a cold-approach idea — both the title AND the thumbnail concept — and writin
 analysis below is a manual step. Cold-approach thumbnail concepts should put a woman
 front and center as the visual star (per the channel's packaging convention), regardless
 of whether the original video's thumbnail did. Entries must also be in English — a
-language filter (is_english_title in youtube_outliers.py) now screens the finder's
+language filter (is_english_title in common.py) now screens the finder's
 output, but it only catches non-Latin scripts, not other Latin-script languages, so
 still verify by eye. This file is not a live API pull itself — run it manually whenever
 new entries are added.
 """
 import os
+import re
+import sys
 
-import gspread
-
-from youtube_outliers import GOOGLE_SPREADSHEET_ID, build_google_sheets_client
-
-SHEET_NAME = os.getenv("GENERAL_OUTLIER_SHEET_NAME", "General Outlier Models")
-
-HEADERS = [
-    "Original Video Title",
-    "Original Channel",
-    "Video URL",
-    "Original Niche",
-    "Views",
-    "Subscribers",
-    "Outlier Score",
-    "Core Packaging Pattern",
-    "Psychological Trigger",
-    "Thumbnail Breakdown",
-    "Title Formula",
-    "Why It Worked",
-    "Cold Approach Translation (Concept)",
-    "Cold Approach Title",
-    "Cold Approach Thumbnail Concept",
-    "Notes",
-    "Status",
-]
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common import write_rows_to_json
 
 SWIPE_FILE = [
     {
@@ -855,37 +835,55 @@ SWIPE_FILE = [
 ]
 
 
-def main() -> None:
-    client = build_google_sheets_client()
-    if not client:
-        print("No Google Sheets output was created.")
-        return
-
-    if GOOGLE_SPREADSHEET_ID:
-        spreadsheet = client.open_by_key(GOOGLE_SPREADSHEET_ID)
-    else:
-        spreadsheet = client.create("YouTube Outlier Tracker")
-
+def _score_num(score_str: str) -> float:
+    """Pull the leading numeric multiplier out of a display string like '115.4x channel
+    average views' or '114.8x subs' so the dashboard can sort by it."""
+    match = re.match(r'[\d,.]+', score_str or "")
+    if not match:
+        return 0.0
     try:
-        worksheet = spreadsheet.worksheet(SHEET_NAME)
-    except gspread.exceptions.WorksheetNotFound:
-        worksheet = spreadsheet.add_worksheet(title=SHEET_NAME, rows=100, cols=20)
+        return float(match.group().replace(",", ""))
+    except ValueError:
+        return 0.0
 
-    worksheet.clear()
-    worksheet.append_row(HEADERS)
 
-    values = [
-        [
-            row["title"], row["channel"], row["url"], row["niche"], row["views"], row.get("subscribers") or "", row["score"],
-            row["pattern"], row["trigger"], row["thumbnail"], row["formula"], row["why"],
-            row["translation"], row["ca_title"], row["ca_thumbnail"], row["notes"], row["status"],
-        ]
-        for row in SWIPE_FILE
-    ]
-    worksheet.append_rows(values, value_input_option="USER_ENTERED")
-    worksheet.set_basic_filter()
+def _video_id(url: str) -> str:
+    """Extract the video ID from a youtube.com/watch?v=... URL, for building a static
+    thumbnail CDN URL (i.ytimg.com/vi/<id>/...) without needing an API key."""
+    match = re.search(r'[?&]v=([\w-]{6,})', url or "")
+    return match.group(1) if match else ""
 
-    print(f"Wrote {len(SWIPE_FILE)} swipe file entries to {spreadsheet.url} ({SHEET_NAME})")
+
+def to_dashboard_row(row: dict) -> dict:
+    """Map a SWIPE_FILE entry's field names to the shape the dashboard's data.json
+    expects for General Long/Short Form Outliers cards."""
+    vid = _video_id(row["url"])
+    return {
+        "title": row["title"],
+        "channel": row["channel"],
+        "videoUrl": row["url"],
+        "vid": vid,
+        "thumbnailUrl": f"https://i.ytimg.com/vi/{vid}/mqdefault.jpg" if vid else "",
+        "niche": row["niche"],
+        "views": row.get("views_num", 0),
+        "viewsRaw": row["views"],
+        "scoreRaw": row["score"],
+        "scoreNum": _score_num(row["score"]),
+        "pattern": row["pattern"],
+        "trigger": row["trigger"],
+        "titleFormula": row["formula"],
+        "translation": row["translation"],
+        "coldTitle": row["ca_title"],
+        "coldThumbnail": row["ca_thumbnail"],
+        "notes": row["notes"],
+        "status": row["status"],
+    }
+
+
+def main() -> None:
+    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data.json")
+    write_rows_to_json(path, [to_dashboard_row(row) for row in SWIPE_FILE])
+    print(f"Wrote {len(SWIPE_FILE)} swipe file entries to {path}")
 
 
 if __name__ == "__main__":

@@ -6,6 +6,8 @@ on:
 jobs:
   write-swipe-file:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Check out repository
@@ -19,9 +21,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Write General Shorts Outliers tab
-        env:
-          GOOGLE_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_SERVICE_ACCOUNT_JSON }}
-          GOOGLE_SPREADSHEET_ID: ${{ vars.GOOGLE_SPREADSHEET_ID }}
-          GENERAL_SHORTS_SHEET_NAME: 'General Shorts Outliers'
-        run: python shorts-hook-research/general_shorts_swipe_file.py
+      - name: Write General Short Form Outliers data
+        run: python outlier-tracking/general-short-form/general_shorts_swipe_file.py
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outlier-tracking/general-short-form/data.json
+          git diff --cached --quiet || git commit -m "Update general short form outlier data [skip ci]"
+          git push

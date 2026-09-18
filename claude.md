@@ -89,3 +89,18 @@ Before finalizing any content, check:
 
 ## Final Rule
 The best flirting-style content should feel elegant, magnetic, and emotionally intelligent. It should make the audience smile, lean in, and feel intrigued by the chemistry and confidence.
+
+## Formatting Rules
+- Never use an em dash (—) in any text: chat replies, scripts, docs, file content, commit messages, everything. Use a comma, period, parentheses, or rewrite the sentence instead.
+
+## Token Efficiency Rules
+- Don't re-read files you've already viewed in this session unless they may have changed (e.g. after an edit).
+- When exploring the codebase, use Grep/Glob to find specific lines instead of viewing whole files.
+- Don't print full file contents back to me after editing — just summarize what changed.
+- Prefer targeted str_replace edits over rewriting entire files.
+- Batch related bash commands into a single call instead of many small sequential ones.
+- Don't run verbose/debug logging commands unless something failed and you need to diagnose it.
+- Keep reasoning brief. Don't restate the plan before every step — just act, then report results concisely.
+- When a task is done, stop. Don't keep re-verifying successful steps.
+- If this conversation is getting long, proactively suggest running /compact or starting a fresh session for the next task.
+- Only run the ffmpeg contact-sheet/reframe-review workflow when I explicitly ask for a review — don't run it as a default step.

@@ -31,10 +31,12 @@ content is excluded from the keyword list for that reason.
 """
 import json
 import os
+import sys
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List
 
-from youtube_outliers import (
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from common import (
     build_youtube_client,
     execute_request,
     get_video_stats,

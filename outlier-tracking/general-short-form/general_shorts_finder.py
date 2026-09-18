@@ -19,16 +19,22 @@ is a manual/Claude curation step, done afterward in general_shorts_swipe_file.py
 """
 import json
 import os
+import sys
 from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List
 
-from youtube_outliers import (
+_THIS_DIR = os.path.dirname(os.path.abspath(__file__))
+_TRACKER_ROOT = os.path.dirname(_THIS_DIR)
+sys.path.insert(0, _TRACKER_ROOT)
+sys.path.insert(0, os.path.join(_TRACKER_ROOT, "general-long-form"))
+from common import (
     build_youtube_client,
     execute_request,
     get_video_stats,
     get_channel_stats,
     is_short_video,
     is_english_title,
+    pick_thumbnail,
 )
 from general_outlier_finder import KEYWORDS as LONG_FORM_KEYWORDS
 
@@ -172,16 +178,16 @@ def main() -> None:
 
             tags = stats.get("snippet", {}).get("tags", []) or []
             duration = stats.get("contentDetails", {}).get("duration", "")
-            medium_thumbnail = (stats.get("snippet", {}).get("thumbnails", {}) or {}).get("medium", {}) or {}
-            thumbnail_width = medium_thumbnail.get("width")
-            thumbnail_height = medium_thumbnail.get("height")
+            thumbnail = pick_thumbnail(stats.get("snippet", {}).get("thumbnails", {}))
+            thumbnail_width = thumbnail.get("width")
+            thumbnail_height = thumbnail.get("height")
 
             if not is_short_video(duration, title, tags, thumbnail_width, thumbnail_height):
                 continue
 
             channel_id = stats.get("snippet", {}).get("channelId")
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
-            thumbnail_url = medium_thumbnail.get("url", "")
+            thumbnail_url = thumbnail.get("url", "")
             published_at = stats.get("snippet", {}).get("publishedAt", "")
 
             if not channel_id:

@@ -1,13 +1,10 @@
 # Shorts Hook Research
 
-Single job of this folder: research what makes Shorts go viral — hooks, openers, thumbnails — and collect it as reference material, separate from the long-form outlier tracker.
+Single job of this folder: research what makes Shorts go viral — hooks, openers, thumbnails — and collect it as reference material, separate from outlier tracking.
 
 ## Contents
-- `general_shorts_finder.py` — scans for ultra-viral cross-niche Shorts candidates. Reads `YOUTUBE_API_KEY` from env.
-- `general_shorts_swipe_file.py` — writes the "General Shorts Outliers" tab from candidates found above.
-- `ideation_10_openers.md` — hook/opener ideation notes.
-- `thumbnail_comparison.png` — thumbnail research reference image.
+- (currently empty — pattern-analysis notes for Shorts hooks/openers/thumbnails go here, mirroring `long-form-hook-research/hook_patterns.md`)
 
 ## Scope rules
-- This folder is research/ideation for Shorts hooks and thumbnails — it doesn't post anything and doesn't track long-form outliers. Posting lives in `ig-automation/`, long-form tracking in `outlier-tracking/`.
-- The corresponding CI workflows (`general_shorts_finder.yml`, `general_shorts_swipe_file.yml`) invoke these scripts by path from the repo root — update the workflow's `run:` line if a script here is renamed or moved.
+- This folder is pure research/ideation notes on hook *patterns* for Shorts — it doesn't post anything, doesn't track outliers, and doesn't run any scripts of its own. The Shorts outlier finder/writer that used to live here (`general_shorts_finder.py`, `general_shorts_swipe_file.py`) moved to `outlier-tracking/general-short-form/`, alongside the other 3 outlier-tracking categories. Posting lives in `posting-automation/`.
+- Full video-concept docs (title, thumbnail, pacing plan for one specific video) — e.g. the former `ideation_10_openers.md` — live in `video-ideation/`, not here. This folder is for reusable pattern research, not single-video planning.

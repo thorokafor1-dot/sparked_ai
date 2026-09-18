@@ -4,3 +4,12 @@ __pycache__/
 .venv/
 .env
 .claude/settings.local.json
+posting-automation/tiktok-posting-automation/tokens.json
+thumbnail-creation/models/
+thumbnail-creation/gfpgan/
+thumbnail-creation/input/
+thumbnail-creation/work/
+thumbnail-creation/output/
+long-form-hook-research/*/audio/
+long-form-to-shorts-video-editing/*/input/
+long-form-to-shorts-video-editing/*/output/
