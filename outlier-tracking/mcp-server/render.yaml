@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: outlier-tracker-mcp
+    runtime: python
+    plan: free
+    rootDir: outlier-tracking/mcp-server
+    buildCommand: pip install -r requirements.txt
+    startCommand: python server.py
+    healthCheckPath: /health
+    envVars:
+      - key: MCP_BEARER_TOKEN
+        generateValue: true
