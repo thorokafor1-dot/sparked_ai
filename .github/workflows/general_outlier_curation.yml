@@ -1,0 +1,48 @@
+name: General outlier weekly curation
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 9AM Central (CDT, UTC-5) every Wednesday -- an hour after the niche tracker's
+    # 8AM run, so there's no resource contention, though the two are independent.
+    # During CST (UTC-6, roughly Nov-Mar) this actually fires at 8AM Central since
+    # cron has no DST.
+    - cron: '0 14 * * 3'
+
+jobs:
+  curate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    strategy:
+      matrix:
+        tab: [long-form, short-form]
+      max-parallel: 1  # sequential, so the two matrix jobs' commits/pushes never race each other
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Curate general ${{ matrix.tab }} outliers
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python outlier-tracking/curate_general_with_claude.py --tab ${{ matrix.tab }}
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add outlier-tracking/general-long-form/data.json outlier-tracking/general-long-form/general_outlier_swipe_file.py
+          git add outlier-tracking/general-short-form/data.json outlier-tracking/general-short-form/general_shorts_swipe_file.py
+          git diff --cached --quiet || git commit -m "Weekly general outlier curation refresh (${{ matrix.tab }}) [skip ci]"
+          git pull --rebase
+          git push

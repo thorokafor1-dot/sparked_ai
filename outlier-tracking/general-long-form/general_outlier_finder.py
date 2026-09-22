@@ -17,6 +17,11 @@ three independent signals are used instead, any one of which qualifies:
      100x based on real data: the highest multipliers actually found in two scans
      were 115x and 44x — 100x is right at the edge of what occurs at all.)
 
+Shorts (under 3 minutes, via common.is_short_video) are filtered out here since this
+finder is long-form only — the sibling general-short-form/general_shorts_finder.py
+covers Shorts. An earlier batch let Shorts through unfiltered and they ended up
+curated into this folder's swipe file by mistake; those were moved out by hand.
+
 This only surfaces candidates — it does not judge whether a video's packaging
 cleanly translates into a cold-approach video idea. That curation step happens
 afterward: a human (or Claude) reviews the printed CANDIDATE lines in this run's
@@ -42,10 +47,16 @@ from common import (
     get_video_stats,
     get_channel_stats,
     is_english_title,
+    is_short_video,
 )
 
 LOOKBACK_DAYS = int(os.getenv("GENERAL_LOOKBACK_DAYS", "90"))
 ABSOLUTE_VIEW_THRESHOLD = int(os.getenv("GENERAL_ABSOLUTE_VIEW_THRESHOLD", "1000000"))
+# 1M+ views only counts as a signal on a small channel, where it's remarkable -- a mega
+# channel (MrBeast, Stokes Twins, ...) clearing 1M views is just a normal upload for
+# them, not an outlier. Without this cap those channels kept re-qualifying on raw views
+# alone despite the module docstring already documenting this as the intended rule.
+ABSOLUTE_VIEW_SUBSCRIBER_CAP = int(os.getenv("GENERAL_ABSOLUTE_VIEW_SUBSCRIBER_CAP", "100000"))
 SUBSCRIBER_MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_SUBSCRIBER_MULTIPLIER_THRESHOLD", "5"))
 AVERAGE_MULTIPLIER_THRESHOLD = float(os.getenv("GENERAL_AVERAGE_MULTIPLIER_THRESHOLD", "20"))
 MIN_VIEW_THRESHOLD = int(os.getenv("GENERAL_MIN_VIEW_THRESHOLD", "100000"))
@@ -180,6 +191,11 @@ def main() -> None:
 
             title = stats.get("snippet", {}).get("title", "")
             if not is_english_title(title):
+                continue
+
+            duration = stats.get("contentDetails", {}).get("duration", "")
+            tags = stats.get("snippet", {}).get("tags", [])
+            if is_short_video(duration, title, tags):
                 continue
 
             channel_id = stats.get("snippet", {}).get("channelId")

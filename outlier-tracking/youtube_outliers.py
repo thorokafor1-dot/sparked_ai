@@ -57,7 +57,7 @@ def main() -> None:
     search_targets = (
         [(k, "In-Person") for k in common.KEYWORDS]
         + [(k, "Video Chat") for k in common.VIDEO_CHAT_KEYWORDS]
-        + [(k, "Explainer") for k in common.EXPLAINER_KEYWORDS]
+        + [(k, "Explainer Video") for k in common.EXPLAINER_KEYWORDS]
     )
 
     for keyword, format_label in search_targets:
