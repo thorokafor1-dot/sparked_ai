@@ -2,10 +2,9 @@ name: General shorts finder
 
 on:
   workflow_dispatch:
-  schedule:
-    # 8AM Central (CDT, UTC-5) every Wednesday. During CST (UTC-6, roughly
-    # Nov-Mar) this actually fires at 7AM Central since cron has no DST.
-    - cron: '0 13 * * 3'
+  # No schedule: this is the manual-discovery tool (prints SHORTCANDIDATE log
+  # lines for a human/Claude to review by hand). curate_general_with_claude.py,
+  # run via general_outlier_curation.yml, is the automated weekly path now.
 
 jobs:
   find-candidates:

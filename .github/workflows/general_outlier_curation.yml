@@ -3,11 +3,11 @@ name: General outlier weekly curation
 on:
   workflow_dispatch:
   schedule:
-    # 9AM Central (CDT, UTC-5) every Wednesday -- an hour after the niche tracker's
-    # 8AM run, so there's no resource contention, though the two are independent.
-    # During CST (UTC-6, roughly Nov-Mar) this actually fires at 8AM Central since
+    # 7AM Central (CDT, UTC-5) every Sunday -- an hour after the niche tracker's
+    # 6AM run, so there's no resource contention, though the two are independent.
+    # During CST (UTC-6, roughly Nov-Mar) this actually fires at 6AM Central since
     # cron has no DST.
-    - cron: '0 14 * * 3'
+    - cron: '0 12 * * 0'
 
 jobs:
   curate:
