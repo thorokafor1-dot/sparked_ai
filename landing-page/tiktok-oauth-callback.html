@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sparked | Connecting to TikTok</title>
+<meta name="robots" content="noindex">
+</head>
+<body style="font-family: system-ui, sans-serif; background: #0f0705; color: #f6ece3; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0;">
+<p>Connecting&hellip; you can close this tab if it doesn't redirect automatically.</p>
+<script>
+  // TikTok's OAuth redirect_uri must be HTTPS, but the posting-automation
+  // script's local callback server only listens on http://localhost -- this
+  // page exists purely to satisfy TikTok's HTTPS requirement, then hands the
+  // authorization code/state straight to that local listener unchanged.
+  window.location.replace("http://localhost:8722/callback" + window.location.search);
+</script>
+</body>
+</html>
