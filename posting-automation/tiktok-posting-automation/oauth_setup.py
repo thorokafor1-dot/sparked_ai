@@ -101,7 +101,7 @@ def main() -> None:
     parser.add_argument("--client-secret", default=os.getenv("TIKTOK_CLIENT_SECRET"), help="TikTok app client secret")
     parser.add_argument(
         "--redirect-uri",
-        default=os.getenv("TIKTOK_REDIRECT_URI", "https://sparked.thorokafor.com/tiktok-oauth-callback"),
+        default=os.getenv("TIKTOK_REDIRECT_URI", "https://sparked.thorokafor.com/tiktok-oauth-callback.html"),
         help="Must exactly match a Redirect URI registered on the app in the TikTok Developer Portal. TikTok "
         "requires HTTPS, so this points at a static page (landing-page/tiktok-oauth-callback.html) that "
         "immediately forwards the browser to the local callback server below with the same query string.",
