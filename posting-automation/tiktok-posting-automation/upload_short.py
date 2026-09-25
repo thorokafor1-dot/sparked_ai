@@ -1,39 +1,56 @@
-"""Uploads a short video to TikTok through a real, visible Chrome window driven
-by Playwright, using a dedicated, isolated Chrome profile directory (set up
-once via login_chrome_profile.py) -- no passwords handled by this script, and
-no conflict with your everyday browsing Chrome window or with the Instagram/
-Facebook automations, since each uses a completely separate profile directory
-(Chrome's single-instance lock applies per user-data directory, not per named
-profile).
+"""Publishes a short video to TikTok via the official Content Posting API
+(Direct Post) -- no browser automation, unlike the Facebook/Instagram
+automations in this repo. Downloads the video from a Google Drive link, then
+runs TikTok's documented three-step flow: query creator info, init the
+publish (chunked FILE_UPLOAD), upload the video bytes, poll publish status.
 
-Like the Facebook automation, TikTok's upload-composer selectors here are
-best-effort guesses, not verified against the live site. Every automated step
-falls back to "pause and ask you to do it by hand in the visible browser
-window" if its guessed selector doesn't match. A screenshot is saved after
-every step (see --debug-dir) so selectors can get fixed against reality
-instead of guessed at. Nothing here ever clicks the final Post button -- that
-part is always yours, and the script simply waits for you to close the tab
-once you're done.
+Requires a one-time login via oauth_setup.py first (see that file), which
+saves an access/refresh token pair to tokens.json next to this script. This
+script always refreshes the access token before use, since TikTok's access
+tokens are short-lived.
+
+Until the TikTok app has passed audit for the `video.publish` scope, the API
+only accepts privacy_level=SELF_ONLY (post is visible only to your own
+account) -- this is TikTok's restriction, not something this script can work
+around. Pass --privacy-level PUBLIC_TO_EVERYONE once the app is audited and
+the account's creator_info confirms that option is available.
+
+Nothing publishes without an explicit confirmation step: by default the
+script prints the final caption and chosen cover frame, then requires typing
+"y" before calling the publish API (running non-interactively with no stdin
+counts as "not confirmed", same reasoning as the Facebook/Instagram browser
+automations' final manual Publish click). Pass --yes to skip the prompt once
+you've already reviewed everything.
+
+Cover frame selection is a two-step flow, same shape as the Facebook
+automation's frame-scrubbing cover picker:
+    1. python upload_short.py --drive-link "..." --caption "..." --preview-covers
+       -- downloads the video, saves several candidate cover frames to
+       cover_previews/, and exits without posting.
+    2. Look at the saved frames, then re-run with
+       --cover-timestamp-ms <ms> --yes (or without --yes to still confirm)
+       to actually publish using that frame.
 
 Usage:
     python upload_short.py --drive-link "https://drive.google.com/file/d/XXXX/view" --caption "some caption"
-
-Before running: log in once via login_chrome_profile.py (see that file), using
-the Sparked Thor TikTok account. After that, this script reuses the saved
-session automatically -- no repeated logins.
 """
 import argparse
-import os
-import re
+import json
+import subprocess
 import tempfile
+import textwrap
+import time
+import re
 from pathlib import Path
 
-from playwright.sync_api import Page, sync_playwright
+import requests
 
-DEFAULT_CHROME_USER_DATA_DIR = str(
-    Path(os.environ.get("USERPROFILE", "")) / "ChromeAutomationProfiles" / "sparked_thor_tiktok"
-)
-UPLOAD_URL = "https://www.tiktok.com/tiktokstudio/upload?from=upload"
+TOKEN_URL = "https://open.tiktokapis.com/v2/oauth/token/"
+CREATOR_INFO_URL = "https://open.tiktokapis.com/v2/post/publish/creator_info/query/"
+INIT_URL = "https://open.tiktokapis.com/v2/post/publish/video/init/"
+STATUS_URL = "https://open.tiktokapis.com/v2/post/publish/status/fetch/"
+DEFAULT_TOKENS_PATH = Path(__file__).parent / "tokens.json"
+MAX_CHUNK_SIZE = 64 * 1024 * 1024
 
 
 def resolve_drive_file_id(url_or_id: str) -> str:
@@ -58,257 +75,186 @@ def download_from_drive(drive_link: str, dest_dir: Path) -> Path:
     return dest_path
 
 
-def human_click(page: Page, locator) -> None:
-    """Click with a rough approximation of human movement instead of Playwright's
-    instant jump-to-center -- move toward the element in a couple of steps, pause
-    briefly, then press and release with a small hold time.
+def load_tokens(tokens_path: Path) -> dict:
+    if not tokens_path.exists():
+        raise SystemExit(f"No tokens file at {tokens_path}. Run oauth_setup.py first.")
+    return json.loads(tokens_path.read_text(encoding="utf-8"))
 
-    Scrolls the element into view first -- unlike Playwright's own .click(), which
-    does this automatically, driving the mouse to raw bounding_box() coordinates
-    does not (see the same bug documented in the Facebook automation's version of
-    this function).
+
+def refresh_access_token(tokens_path: Path) -> str:
+    """Always refreshes rather than tracking expiry locally -- simpler, and
+    avoids posting with a token that expired seconds ago. TikTok may rotate
+    the refresh_token itself on use, so the response is always written back.
     """
-    import random
-    import time
-
-    try:
-        locator.scroll_into_view_if_needed(timeout=5_000)
-    except Exception:
-        pass
-    box = locator.bounding_box()
-    if not box:
-        locator.click()
-        return
-    target_x = box["x"] + box["width"] * random.uniform(0.35, 0.65)
-    target_y = box["y"] + box["height"] * random.uniform(0.35, 0.65)
-    page.mouse.move(target_x + random.uniform(-40, 40), target_y + random.uniform(-40, 40), steps=3)
-    time.sleep(random.uniform(0.05, 0.15))
-    page.mouse.move(target_x, target_y, steps=random.randint(4, 8))
-    time.sleep(random.uniform(0.05, 0.2))
-    page.mouse.down()
-    time.sleep(random.uniform(0.03, 0.09))
-    page.mouse.up()
-
-
-def click_first_match(page: Page, step_name: str, selectors: list[str], timeout_ms: int = 120_000) -> bool:
-    """Try each selector in turn and click the first one that becomes visible.
-
-    Only the LAST selector in the list gets the full timeout_ms wait (long enough
-    for a human to notice and do the step by hand in the visible window) -- earlier
-    candidates get a short wait, since if one of several guessed selectors is right,
-    it's normally present almost immediately. Returns True if an automated click
-    succeeded, False if none matched in time -- selectors here are best-effort
-    guesses at TikTok's current markup and may not match after a UI change.
-    """
-    for i, selector in enumerate(selectors):
-        is_last = i == len(selectors) - 1
-        per_try_timeout = timeout_ms if is_last else min(timeout_ms, 8_000)
-        locator = page.locator(selector).first
-        try:
-            locator.wait_for(state="visible", timeout=per_try_timeout)
-            human_click(page, locator)
-            print(f"  [ok] {step_name} (matched: {selector})", flush=True)
-            return True
-        except Exception:
-            continue
-    return False
-
-
-def note_needs_manual_action(step_name: str, extra: str = "") -> None:
-    print(f"  [needs manual action] Couldn't do '{step_name}' automatically. {extra}".rstrip(), flush=True)
-
-
-def debug_screenshot(page: Page, debug_dir: Path, name: str) -> None:
-    """Save a full-page screenshot for later inspection while iterating on
-    selectors -- this is how selectors get fixed against the real site instead
-    of guessed at, without needing someone to click through the UI by hand.
-    """
-    try:
-        debug_dir.mkdir(parents=True, exist_ok=True)
-        out_path = debug_dir / f"{name}.png"
-        page.screenshot(path=str(out_path), full_page=False)
-        print(f"  [debug] screenshot saved: {out_path}", flush=True)
-    except Exception as exc:
-        print(f"  [debug] screenshot failed for {name}: {exc}", flush=True)
-
-
-def select_cover_photo(page: Page, cover_image_path: Path, debug_dir: Path) -> bool:
-    """Upload a specific local image as the cover/thumbnail.
-
-    Unverified guess: TikTok's upload page shows a cover thumbnail with an
-    "Edit cover" / "Select cover" control that opens a second picker dialog
-    (with its own upload tab), rather than a native file chooser directly --
-    same two-step shape as the Facebook automation's cover picker. This tries
-    the direct case first, then falls back to hunting for an upload trigger
-    inside whatever opened, and takes a debug screenshot either way so the
-    real control can be identified if this guess is wrong.
-    """
-    def _find_upload_trigger():
-        for text in ("Upload", "Upload cover", "Upload from computer", "Choose from computer", "Select from computer"):
-            candidate = page.get_by_text(text, exact=False).first
-            try:
-                candidate.wait_for(state="visible", timeout=3_000)
-                return candidate
-            except Exception:
-                continue
-        return None
-
-    try:
-        cover_trigger = None
-        for selector in (
-            '[data-testid="cover_edit_photo"]',
-            'div:has-text("Select cover")',
-            'div:has-text("Edit cover")',
-            '[aria-label*="cover" i]',
-        ):
-            candidate = page.locator(selector).first
-            try:
-                candidate.wait_for(state="visible", timeout=5_000)
-                cover_trigger = candidate
-                break
-            except Exception:
-                continue
-
-        if cover_trigger is None:
-            raise RuntimeError("no cover picker control found")
-
-        try:
-            with page.expect_file_chooser(timeout=6_000) as fc_info:
-                human_click(page, cover_trigger)
-            fc_info.value.set_files(str(cover_image_path))
-            page.wait_for_timeout(2_500)
-            print(f"  [ok] cover photo uploaded directly ({cover_image_path.name})", flush=True)
-            return True
-        except Exception:
-            pass
-
-        debug_screenshot(page, debug_dir, "cover_picker_opened")
-        upload_trigger = _find_upload_trigger()
-        if upload_trigger is None:
-            raise RuntimeError("cover picker opened but no upload trigger found in it")
-
-        with page.expect_file_chooser(timeout=10_000) as fc_info:
-            human_click(page, upload_trigger)
-        fc_info.value.set_files(str(cover_image_path))
-        page.wait_for_timeout(2_500)
-        print(f"  [ok] cover photo uploaded via secondary picker ({cover_image_path.name})", flush=True)
-        return True
-    except Exception as exc:
-        note_needs_manual_action(
-            "upload the custom cover photo",
-            f"Find the cover/thumbnail picker and pick: {cover_image_path}  [{exc}]",
-        )
-        return False
-
-
-def fill_caption(page: Page, caption: str) -> bool:
-    import random
-    import time
-
-    selectors = [
-        'div[data-testid="editor"][contenteditable="true"]',
-        'div.public-DraftEditor-content[contenteditable="true"]',
-        'div[aria-label*="caption" i][contenteditable="true"]',
-        'div[role="dialog"] div[contenteditable="true"]',
-    ]
-    for i, selector in enumerate(selectors):
-        per_try_timeout = 8_000 if i < len(selectors) - 1 else 60_000
-        locator = page.locator(selector).first
-        try:
-            locator.wait_for(state="visible", timeout=per_try_timeout)
-            human_click(page, locator)
-            time.sleep(random.uniform(0.1, 0.3))
-            # TikTok's caption box is a rich-text editor (Draft.js-style), not a
-            # plain textarea/contenteditable that accepts .fill() reliably -- type
-            # via simulated keystrokes instead, same fallback approach used for
-            # both Facebook's and Instagram's rich-text caption boxes.
-            page.keyboard.type(caption, delay=random.randint(15, 45))
-            print(f"  [ok] caption filled (matched: {selector})", flush=True)
-            return True
-        except Exception:
-            continue
-    return False
-
-
-def upload_to_tiktok(page: Page, video_path: Path, caption: str, cover_image_path: Path | None, debug_dir: Path) -> None:
-    print(f"Opening TikTok upload page: {UPLOAD_URL}", flush=True)
-    page.goto(UPLOAD_URL, wait_until="domcontentloaded")
-    debug_screenshot(page, debug_dir, "01_upload_page_opened")
-
-    print("Step 1/4: selecting the video file", flush=True)
-    selected = False
-    file_input_selectors = ['input[type="file"][accept*="video" i]', 'input[type="file"]']
-    for i, selector in enumerate(file_input_selectors):
-        per_try_timeout = 10_000 if i < len(file_input_selectors) - 1 else 60_000
-        file_input = page.locator(selector).first
-        try:
-            file_input.wait_for(state="attached", timeout=per_try_timeout)
-            file_input.set_input_files(str(video_path))
-            print(f"  [ok] selected {video_path.name} (matched: {selector})", flush=True)
-            selected = True
-            break
-        except Exception:
-            continue
-    if not selected:
-        note_needs_manual_action(
-            "select the video file",
-            f"On the upload page, choose 'Select video' and pick: {video_path}",
-        )
-    debug_screenshot(page, debug_dir, "02_after_video_selected")
-
-    print("Step 2/4: waiting for the video to upload and process", flush=True)
-    # TikTok's processing step (transcoding + generating the caption/cover panel)
-    # is typically slower than Facebook's or Instagram's -- wait for something that
-    # only renders once processing is done (the caption editor) rather than a fixed
-    # short sleep, with a generous timeout since this varies a lot with video length.
-    processed = False
-    for selector in (
-        'div[data-testid="editor"][contenteditable="true"]',
-        'div.public-DraftEditor-content[contenteditable="true"]',
-    ):
-        try:
-            page.locator(selector).first.wait_for(state="visible", timeout=180_000)
-            processed = True
-            break
-        except Exception:
-            continue
-    if not processed:
-        note_needs_manual_action(
-            "confirm the video finished processing",
-            "The caption editor never appeared -- check the browser; processing may still be running.",
-        )
-    debug_screenshot(page, debug_dir, "03_after_processing")
-
-    print("Step 3/4: cover -- selecting cover photo", flush=True)
-    if cover_image_path is not None:
-        select_cover_photo(page, cover_image_path, debug_dir)
-    else:
-        print("  skipped (no --cover-image given)", flush=True)
-    debug_screenshot(page, debug_dir, "04_after_cover_photo")
-
-    print("Step 4/4: filling in the caption", flush=True)
-    if not fill_caption(page, caption):
-        note_needs_manual_action("enter the caption", f"Paste this yourself:\n\n{caption}\n")
-    debug_screenshot(page, debug_dir, "05_after_caption")
-
-    print(
-        "\nReady to publish. The post is filled in but NOT posted yet -- switch to the "
-        "browser window, double check everything (including the account it's posting as, "
-        "and the cover frame), and click Post yourself when ready.\n"
-        "This script does not click Post and never will. It's now just waiting for you "
-        "to close this browser tab (whenever you're done, whether you posted it or "
-        "decided not to) so it can exit cleanly.",
-        flush=True,
+    tokens = load_tokens(tokens_path)
+    resp = requests.post(
+        TOKEN_URL,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        data={
+            "client_key": tokens["client_key"],
+            "client_secret": tokens["client_secret"],
+            "grant_type": "refresh_token",
+            "refresh_token": tokens["refresh_token"],
+        },
+        timeout=30,
     )
-    try:
-        page.wait_for_event("close", timeout=0)
-    except Exception:
-        pass
-    print("Tab closed. Done.", flush=True)
+    data = resp.json()
+    if resp.status_code != 200 or "access_token" not in data:
+        raise RuntimeError(f"Token refresh failed ({resp.status_code}): {data}. Re-run oauth_setup.py.")
+    tokens.update(data)
+    tokens_path.write_text(json.dumps(tokens, indent=2), encoding="utf-8")
+    return tokens["access_token"]
+
+
+def query_creator_info(access_token: str) -> dict:
+    resp = requests.post(
+        CREATOR_INFO_URL,
+        headers={"Authorization": f"Bearer {access_token}", "Content-Type": "application/json; charset=UTF-8"},
+        timeout=30,
+    )
+    data = resp.json()
+    error = data.get("error", {})
+    if resp.status_code != 200 or error.get("code") not in (None, "ok"):
+        raise RuntimeError(f"creator_info query failed ({resp.status_code}): {data}")
+    return data["data"]
+
+
+def get_video_duration_s(video_path: Path) -> float:
+    result = subprocess.run(
+        [
+            "ffprobe", "-v", "error", "-show_entries", "format=duration",
+            "-of", "default=noprint_wrappers=1:nokey=1", str(video_path),
+        ],
+        capture_output=True, text=True, check=True,
+    )
+    return float(result.stdout.strip())
+
+
+def extract_cover_candidates(video_path: Path, out_dir: Path, count: int) -> list[tuple[int, Path]]:
+    """Save `count` evenly-spaced candidate cover-frame images so one can be
+    picked visually before posting -- same idea as the Facebook automation's
+    frame-scrubbing cover picker, just done as a separate preview pass here
+    since the Content Posting API only takes a millisecond timestamp
+    (video_cover_timestamp_ms), not an uploaded image. Skips the first/last 5%
+    of the video, where cold-approach clips are usually still on a title card
+    or a blurry transition rather than a representative frame.
+    """
+    out_dir.mkdir(parents=True, exist_ok=True)
+    for old in out_dir.glob("cover_*.png"):
+        old.unlink()
+    duration_s = get_video_duration_s(video_path)
+    start, end = duration_s * 0.05, duration_s * 0.95
+    candidates = []
+    for i in range(count):
+        t = start + (end - start) * i / max(count - 1, 1)
+        ms = int(t * 1000)
+        out_path = out_dir / f"cover_{i}_{ms}ms.png"
+        subprocess.run(
+            ["ffmpeg", "-y", "-ss", str(t), "-i", str(video_path), "-frames:v", "1", str(out_path)],
+            capture_output=True, check=True,
+        )
+        candidates.append((ms, out_path))
+    return candidates
+
+
+def plan_chunks(video_size: int) -> tuple[int, int]:
+    """TikTok's FILE_UPLOAD source requires chunk_size between 5MB and 64MB
+    except for videos small enough to send as a single chunk. Short-form
+    videos here are almost always well under 64MB, so this only actually
+    splits for the rare oversized file.
+    """
+    if video_size <= MAX_CHUNK_SIZE:
+        return video_size, 1
+    total_chunk_count = -(-video_size // MAX_CHUNK_SIZE)  # ceil division
+    return MAX_CHUNK_SIZE, total_chunk_count
+
+
+def init_video_publish(
+    access_token: str,
+    video_size: int,
+    chunk_size: int,
+    total_chunk_count: int,
+    caption: str,
+    privacy_level: str,
+    cover_timestamp_ms: int | None,
+) -> tuple[str, str]:
+    post_info = {
+        "title": caption,
+        "privacy_level": privacy_level,
+        "disable_duet": False,
+        "disable_comment": False,
+        "disable_stitch": False,
+    }
+    if cover_timestamp_ms is not None:
+        post_info["video_cover_timestamp_ms"] = cover_timestamp_ms
+    body = {
+        "post_info": post_info,
+        "source_info": {
+            "source": "FILE_UPLOAD",
+            "video_size": video_size,
+            "chunk_size": chunk_size,
+            "total_chunk_count": total_chunk_count,
+        },
+    }
+    resp = requests.post(
+        INIT_URL,
+        headers={"Authorization": f"Bearer {access_token}", "Content-Type": "application/json; charset=UTF-8"},
+        json=body,
+        timeout=30,
+    )
+    data = resp.json()
+    error = data.get("error", {})
+    if resp.status_code != 200 or error.get("code") not in (None, "ok"):
+        raise RuntimeError(f"publish/video/init failed ({resp.status_code}): {data}")
+    return data["data"]["publish_id"], data["data"]["upload_url"]
+
+
+def upload_video_chunks(upload_url: str, video_path: Path, video_size: int, chunk_size: int, total_chunk_count: int) -> None:
+    with open(video_path, "rb") as f:
+        for i in range(total_chunk_count):
+            start = i * chunk_size
+            end = min(start + chunk_size, video_size) - 1
+            f.seek(start)
+            chunk = f.read(end - start + 1)
+            resp = requests.put(
+                upload_url,
+                headers={
+                    "Content-Range": f"bytes {start}-{end}/{video_size}",
+                    "Content-Type": "video/mp4",
+                },
+                data=chunk,
+                timeout=180,
+            )
+            if resp.status_code not in (200, 201):
+                raise RuntimeError(f"Chunk {i + 1}/{total_chunk_count} upload failed ({resp.status_code}): {resp.text}")
+            print(f"  [ok] uploaded chunk {i + 1}/{total_chunk_count}", flush=True)
+
+
+def poll_publish_status(access_token: str, publish_id: str, timeout_s: int = 300, interval_s: int = 5) -> dict:
+    deadline = time.time() + timeout_s
+    while time.time() < deadline:
+        resp = requests.post(
+            STATUS_URL,
+            headers={"Authorization": f"Bearer {access_token}", "Content-Type": "application/json; charset=UTF-8"},
+            json={"publish_id": publish_id},
+            timeout=30,
+        )
+        data = resp.json()
+        error = data.get("error", {})
+        if resp.status_code != 200 or error.get("code") not in (None, "ok"):
+            raise RuntimeError(f"status/fetch failed ({resp.status_code}): {data}")
+        status = data["data"].get("status")
+        print(f"  [status] {status}", flush=True)
+        if status == "PUBLISH_COMPLETE":
+            return data["data"]
+        if status == "FAILED":
+            raise RuntimeError(f"TikTok publish failed: {data['data']}")
+        time.sleep(interval_s)
+    raise TimeoutError(f"Timed out after {timeout_s}s waiting for publish_id={publish_id} to complete")
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Upload a short video to TikTok via browser automation.")
+    parser = argparse.ArgumentParser(description="Publish a short video to TikTok via the Content Posting API.")
     parser.add_argument("--drive-link", required=True, help="Google Drive share link (or file ID) for the video")
     caption_group = parser.add_mutually_exclusive_group(required=True)
     caption_group.add_argument("--caption", help="Caption text for the post")
@@ -316,49 +262,106 @@ def main() -> None:
         "--caption-file", help="Path to a text file containing the caption (avoids shell-quoting multi-line captions)"
     )
     parser.add_argument(
-        "--chrome-user-data-dir",
-        default=os.getenv("CHROME_USER_DATA_DIR", DEFAULT_CHROME_USER_DATA_DIR),
-        help="Path to your Chrome 'User Data' directory",
+        "--privacy-level",
+        default="SELF_ONLY",
+        choices=["SELF_ONLY", "PUBLIC_TO_EVERYONE", "MUTUAL_FOLLOW_FRIENDS", "FOLLOWER_OF_CREATOR"],
+        help="Defaults to SELF_ONLY (private) -- the only option TikTok accepts before the app passes audit "
+        "for the video.publish scope. Must also be present in creator_info's privacy_level_options.",
     )
     parser.add_argument(
-        "--profile-directory",
-        default=os.getenv("CHROME_PROFILE_DIRECTORY", "Default"),
-        help="Chrome profile folder name inside User Data (e.g. 'Default', 'Profile 1')",
-    )
-    parser.add_argument(
-        "--cover-image",
+        "--preview-covers",
+        type=int,
+        nargs="?",
+        const=6,
         default=None,
-        help="Path to a local image file to upload as the cover/thumbnail photo",
+        metavar="COUNT",
+        help="Download the video, save COUNT (default 6) evenly-spaced candidate cover-frame images to "
+        "cover_previews/ next to this script, print their timestamps, then exit without posting.",
     )
     parser.add_argument(
-        "--debug-dir",
+        "--cover-timestamp-ms",
+        type=int,
         default=None,
-        help="Directory to save a screenshot after each step (for fixing selectors against the live site). "
-        "Defaults to a 'debug_screenshots' folder next to this script.",
+        help="Timestamp in milliseconds to use as the cover/thumbnail frame, picked from a --preview-covers run. "
+        "Omit to let TikTok auto-select a frame.",
     )
+    parser.add_argument(
+        "--yes", "-y",
+        action="store_true",
+        help="Skip the final confirmation prompt (use once the caption and cover frame have already been reviewed).",
+    )
+    parser.add_argument("--tokens-path", default=str(DEFAULT_TOKENS_PATH), help="Path to tokens.json from oauth_setup.py")
     args = parser.parse_args()
     caption = args.caption if args.caption is not None else Path(args.caption_file).read_text(encoding="utf-8")
-    cover_image_path = Path(args.cover_image) if args.cover_image else None
-    debug_dir = Path(args.debug_dir) if args.debug_dir else Path(__file__).parent / "debug_screenshots"
+    tokens_path = Path(args.tokens_path)
 
     with tempfile.TemporaryDirectory(prefix="upload_short_") as tmp_dir:
         video_path = download_from_drive(args.drive_link, Path(tmp_dir))
 
-        with sync_playwright() as p:
-            context = p.chromium.launch_persistent_context(
-                user_data_dir=args.chrome_user_data_dir,
-                channel="chrome",
-                headless=False,
-                args=[f"--profile-directory={args.profile_directory}"],
+        if args.preview_covers:
+            preview_dir = Path(__file__).parent / "cover_previews"
+            print(f"Extracting {args.preview_covers} candidate cover frames to {preview_dir} ...", flush=True)
+            candidates = extract_cover_candidates(video_path, preview_dir, args.preview_covers)
+            for ms, path in candidates:
+                print(f"  {ms}ms -> {path}", flush=True)
+            print(
+                "\nNothing was posted. Look at the frames above, then re-run with "
+                "--cover-timestamp-ms <ms> to publish using that one.",
+                flush=True,
             )
+            return
+
+        video_size = video_path.stat().st_size
+        chunk_size, total_chunk_count = plan_chunks(video_size)
+
+        print("Refreshing access token...", flush=True)
+        access_token = refresh_access_token(tokens_path)
+
+        print("Querying creator info...", flush=True)
+        creator_info = query_creator_info(access_token)
+        print(f"  [info] posting as {creator_info.get('creator_username')}", flush=True)
+        allowed_privacy = creator_info.get("privacy_level_options", [])
+        if allowed_privacy and args.privacy_level not in allowed_privacy:
+            raise SystemExit(
+                f"--privacy-level {args.privacy_level} isn't available for this account/app right now. "
+                f"Allowed options: {allowed_privacy}"
+            )
+
+        cover_desc = f"{args.cover_timestamp_ms}ms (from cover_previews/)" if args.cover_timestamp_ms is not None else "auto (TikTok default -- no --cover-timestamp-ms given)"
+        print("\n" + "=" * 60, flush=True)
+        print("READY TO POST", flush=True)
+        print(f"  Account:     {creator_info.get('creator_username')}", flush=True)
+        print(f"  Privacy:     {args.privacy_level}", flush=True)
+        print(f"  Cover frame: {cover_desc}", flush=True)
+        print("  Caption:", flush=True)
+        print(textwrap.indent(caption.strip(), "    "), flush=True)
+        print("=" * 60, flush=True)
+
+        if not args.yes:
             try:
-                page = context.new_page()
-                upload_to_tiktok(page, video_path, caption, cover_image_path, debug_dir)
-            finally:
-                try:
-                    context.close()
-                except Exception:
-                    pass
+                confirm = input("Post this now? [y/N]: ").strip().lower()
+            except EOFError:
+                confirm = ""
+            if confirm != "y":
+                print(
+                    "Not confirmed (or running non-interactively without --yes) -- nothing was posted. "
+                    "Re-run with --yes once the caption and cover frame above look right.",
+                    flush=True,
+                )
+                return
+
+        print(f"Initializing publish ({video_size} bytes, {total_chunk_count} chunk(s))...", flush=True)
+        publish_id, upload_url = init_video_publish(
+            access_token, video_size, chunk_size, total_chunk_count, caption, args.privacy_level, args.cover_timestamp_ms
+        )
+        print(f"  [ok] publish_id={publish_id}", flush=True)
+
+        print("Uploading video...", flush=True)
+        upload_video_chunks(upload_url, video_path, video_size, chunk_size, total_chunk_count)
+
+        print("Waiting for TikTok to finish processing...", flush=True)
+        result = poll_publish_status(access_token, publish_id)
+        print(f"Done. {result}", flush=True)
 
 
 if __name__ == "__main__":

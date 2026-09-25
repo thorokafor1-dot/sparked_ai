@@ -5,6 +5,9 @@ __pycache__/
 .env
 .claude/settings.local.json
 posting-automation/tiktok-posting-automation/tokens.json
+posting-automation/tiktok-posting-automation/cover_previews/
+posting-automation/youtube-posting-automation/client_secret.json
+posting-automation/youtube-posting-automation/token.json
 thumbnail-creation/models/
 thumbnail-creation/gfpgan/
 thumbnail-creation/input/
@@ -13,3 +16,5 @@ thumbnail-creation/output/
 long-form-hook-research/*/audio/
 long-form-to-shorts-video-editing/*/input/
 long-form-to-shorts-video-editing/*/output/
+long-form-to-shorts-video-editing/*/models/
+outlier-tracking/grok-swipe-pack/
