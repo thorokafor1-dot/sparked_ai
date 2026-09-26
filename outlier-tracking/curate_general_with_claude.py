@@ -41,6 +41,25 @@ sys.path.insert(0, _THIS_DIR)
 sys.path.insert(0, os.path.join(_THIS_DIR, "general-long-form"))
 sys.path.insert(0, os.path.join(_THIS_DIR, "general-short-form"))
 
+
+def _load_local_env() -> None:
+    """Local-run convenience only -- CI sets these as real env vars via secrets.
+    Must run before `import common` below, since common.py reads YOUTUBE_API_KEY
+    into a module-level constant at import time -- setting the env var any later
+    (e.g. inside main()) is too late for that already-executed read."""
+    env_path = os.path.join(_THIS_DIR, ".env")
+    if not os.path.exists(env_path):
+        return
+    for line in open(env_path, encoding="utf-8"):
+        line = line.strip()
+        if not line or line.startswith("#") or "=" not in line:
+            continue
+        key, _, value = line.partition("=")
+        os.environ.setdefault(key.strip(), value.strip())
+
+
+_load_local_env()
+
 from common import (  # noqa: E402
     build_youtube_client,
     execute_request,
@@ -55,6 +74,10 @@ LOOKBACK_DAYS = 90
 MIN_VIEWS = 500_000
 MAX_CANDIDATES_TO_CLAUDE = 40
 MAX_NEW_ENTRIES_PER_RUN = 8
+# YouTube API data (view counts especially) must not be held/displayed indefinitely
+# without re-verifying it -- entries older than this get their stats re-fetched (or
+# dropped if the video's gone) on the next run, rather than sitting cached forever.
+CACHE_MAX_AGE_DAYS = 30
 
 SPAM_CHANNEL_HINTS = [
     "drama", "story tv", "theater", "heartthrob", "heartbeat", "pureberry",
@@ -65,19 +88,6 @@ REQUIRED_FIELDS = [
     "niche", "pattern", "trigger", "thumbnail", "formula", "why",
     "translation", "ca_title", "ca_thumbnail", "notes",
 ]
-
-
-def _load_local_env() -> None:
-    """Local-run convenience only -- CI sets these as real env vars via secrets."""
-    env_path = os.path.join(_THIS_DIR, ".env")
-    if not os.path.exists(env_path):
-        return
-    for line in open(env_path, encoding="utf-8"):
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        key, _, value = line.partition("=")
-        os.environ.setdefault(key.strip(), value.strip())
 
 
 def _is_spam_channel(channel: str) -> bool:
@@ -215,7 +225,69 @@ def prune_stale(entries: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return kept
 
 
-def curate_with_claude(candidates: List[Dict[str, Any]], label: str) -> List[Dict[str, Any]]:
+def _extract_vid(url: str) -> str:
+    m = re.search(r"[?&]v=([\w-]{6,})", url or "")
+    return m.group(1) if m else ""
+
+
+def refresh_stale_cache(entries: List[Dict[str, Any]], youtube) -> List[Dict[str, Any]]:
+    """Re-verify any entry whose cached stats are older than CACHE_MAX_AGE_DAYS (or
+    have no scanned_at at all, e.g. pre-existing entries from before this was added).
+    Re-fetches current view/subscriber counts and refreshes scanned_at; drops the
+    entry if the video is no longer available. Entries refreshed within the window
+    are left untouched. Without a youtube client (no key / quota exhausted), stale
+    entries are left as-is rather than dropped -- a temporary inability to verify
+    isn't grounds to delete real curated entries."""
+    if not youtube:
+        print("No YouTube client available -- skipping cache-age refresh this run.")
+        return entries
+
+    now = datetime.now(timezone.utc)
+    refreshed = []
+    for e in entries:
+        scanned_at = e.get("scanned_at")
+        needs_refresh = True
+        if scanned_at:
+            try:
+                scanned_dt = datetime.strptime(scanned_at, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                needs_refresh = (now - scanned_dt).days > CACHE_MAX_AGE_DAYS
+            except ValueError:
+                needs_refresh = True
+
+        if not needs_refresh:
+            refreshed.append(e)
+            continue
+
+        vid = _extract_vid(e.get("url", ""))
+        stats = get_video_stats(youtube, vid) if vid else {}
+        if not stats:
+            print(f"Dropping (video unavailable on refresh): {e.get('title', '')[:60]}")
+            continue
+
+        view_count = int(stats.get("statistics", {}).get("viewCount", 0) or 0)
+        channel_id = stats.get("snippet", {}).get("channelId")
+        subscriber_count = 0
+        if channel_id:
+            channel_stats = get_channel_stats(youtube, channel_id)
+            subscriber_count = int(channel_stats.get("statistics", {}).get("subscriberCount", 0) or 0)
+
+        e = dict(e)
+        e["views"] = (
+            f"{view_count:,} views ({subscriber_count:,} subscribers) -- a real, high-reach "
+            f"video used here as a proven thumbnail/title/retention example regardless of "
+            f"channel size."
+        )
+        e["views_num"] = view_count
+        e["subscribers"] = subscriber_count
+        e["score"] = f"{view_count:,} views"
+        e["scanned_at"] = now.strftime("%Y-%m-%d")
+        refreshed.append(e)
+        print(f"Refreshed cache for: {e.get('title', '')[:60]} ({view_count:,} views)")
+
+    return refreshed
+
+
+def curate_with_claude(candidates: List[Dict[str, Any]], label: str, tab: str = "long-form") -> List[Dict[str, Any]]:
     if not candidates:
         return []
 
@@ -223,6 +295,20 @@ def curate_with_claude(candidates: List[Dict[str, Any]], label: str) -> List[Dic
     if not api_key:
         print("No ANTHROPIC_API_KEY found. Skipping curation, no new entries this run.")
         return []
+
+    # Thumbnail composition requirement only applies to Long Form -- per explicit user
+    # feedback (2026-09-24), Short Form thumbnail composition doesn't matter at all, so
+    # this criterion must not be applied there.
+    woman_reaction_criterion = ""
+    if tab == "long-form":
+        woman_reaction_criterion = """- The creator's own long-form thumbnails always feature a woman with a visible
+  reaction/expression, or a clear man-and-woman dynamic/interaction (flirting, close
+  interaction, one reacting to the other) -- the man is often also in frame. STRONGLY
+  prefer candidates whose thumbnail composition matches that. Judge this from the image
+  itself. Deprioritize thumbnails that are solo-male, text-only, object/product shots, a
+  woman shown alone with no visible reaction, or otherwise lack a woman's visible
+  reaction or a man-woman dynamic -- those don't transfer to this creator's actual
+  thumbnail format even if the underlying title hook is strong."""
 
     intro_text = f"""You are curating the "{label}" tab of a research dashboard for a YouTube channel in the \
 cold-approach/dating advice niche (brand name "Sparked"). This tab collects viral video packaging \
@@ -243,6 +329,7 @@ Selection criteria (be strict):
   visually reference real thumbnail composition. REJECT thumbnails that are gaming footage, rendered
   3D/animation, illustrated "horror story" slideshow art, movie posters, or generic stock-photo collage
   text cards -- these have little value as a visual reference even if the title/hook is clever.
+{woman_reaction_criterion}
 - AVOID dark, violent, politically charged, or tragedy-referencing content (no true crime about violent
   offenders, no references to real mass-casualty events, nothing that would read as tasteless next to a
   playful dating-advice brand).
@@ -291,7 +378,7 @@ CANDIDATES (image followed by its data, in order):
 
     body = json.dumps({
         "model": "claude-sonnet-5",
-        "max_tokens": 8000,
+        "max_tokens": 16000,
         "messages": [{"role": "user", "content": content_blocks}],
     }).encode("utf-8")
 
@@ -305,7 +392,7 @@ CANDIDATES (image followed by its data, in order):
         },
     )
     try:
-        with urllib.request.urlopen(req, timeout=120) as resp:
+        with urllib.request.urlopen(req, timeout=300) as resp:
             result = json.load(resp)
     except Exception as e:
         print(f"Claude API call failed: {e}")
@@ -358,6 +445,7 @@ CANDIDATES (image followed by its data, in order):
             "ca_thumbnail": p["ca_thumbnail"],
             "notes": p["notes"],
             "status": "Not Adapted",
+            "scanned_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
         }
         final_entries.append(entry)
         print(f"Curated: {c['title'][:60]}")
@@ -398,7 +486,6 @@ def main() -> None:
     parser.add_argument("--tab", required=True, choices=["long-form", "short-form"])
     args = parser.parse_args()
 
-    _load_local_env()
     cfg = _tab_config(args.tab)
 
     import importlib.util
@@ -413,10 +500,14 @@ def main() -> None:
     kept_entries = prune_stale(existing_entries)
     print(f"After pruning stale (>{LOOKBACK_DAYS}d old): {len(kept_entries)}")
 
+    youtube = build_youtube_client()
+    kept_entries = refresh_stale_cache(kept_entries, youtube)
+    print(f"After refreshing cache (>{CACHE_MAX_AGE_DAYS}d since last verified): {len(kept_entries)}")
+
     candidates = scan_candidates(cfg, existing_vids)
     print(f"Fresh candidates found (>= {MIN_VIEWS:,} views, not already in file): {len(candidates)}")
 
-    new_entries = curate_with_claude(candidates, cfg["label"])
+    new_entries = curate_with_claude(candidates, cfg["label"], args.tab)
     print(f"New entries curated by Claude: {len(new_entries)}")
 
     final_entries = kept_entries + new_entries

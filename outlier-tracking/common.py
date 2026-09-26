@@ -2,10 +2,10 @@
 the niche long-form/short-form tracker (via niche-long-form/, niche-short-form/) and
 the general long-form/short-form finders and writers (via general-long-form/,
 general-short-form/). Format-specific thresholds live in their own subfolder instead
-of here — this module only holds what's genuinely shared.
+of here, this module only holds what's genuinely shared.
 
 Each script writes its own data.json into its own subfolder (committed to the repo by
-its GitHub Actions workflow) rather than to Google Sheets — YOUTUBE_API_KEY is the only
+its GitHub Actions workflow) rather than to Google Sheets, YOUTUBE_API_KEY is the only
 credential this pipeline needs.
 """
 import json
@@ -19,7 +19,7 @@ from googleapiclient.discovery import build
 # Windows' default console encoding (cp1252) can't represent some characters that show
 # up in real video titles (emoji, uncommon symbols), which crashed the whole scan
 # mid-run on a plain print(). Reconfigure to UTF-8 with a safe fallback instead of
-# raising — GitHub Actions' Ubuntu runners already default to UTF-8, so this only
+# raising, GitHub Actions' Ubuntu runners already default to UTF-8, so this only
 # matters for local runs, but should never crash either way.
 for _stream in (sys.stdout, sys.stderr):
     if hasattr(_stream, "reconfigure"):
@@ -36,7 +36,7 @@ KEYWORDS = [k.strip() for k in os.getenv(
     "picking up girls,cold approach,approach women,daygame,street approach,"
     "street flirting,rizz in public,asking for her number,asking for instagram,"
     "handling rejection,mall approach,campus approach,girl reaction to approach,"
-    # Widened for volume in the Shorts Outliers tab — the original 13 terms
+    # Widened for volume in the Shorts Outliers tab, the original 13 terms
     # only surfaced 21 qualifying shorts; these add more niche-specific phrasing
     # rather than broadening into ambiguous terms that could dilute relevance.
     "cold approach shorts,daygame shorts,street approach shorts,"
@@ -52,7 +52,17 @@ KEYWORDS = [k.strip() for k in os.getenv(
     "social experiment flirting,her reaction to being approached,"
     "approaching girls at the beach,approaching girls downtown,night game approach,"
     "bar approach women,club approach women,"
-    # Second widening pass — the first widening (13 -> 48 terms) plus a direct
+    # Bar/nightgame widening 2026-09, the original 3 terms above barely surface
+    # bar/club content since the rest of KEYWORDS skews toward daygame/street
+    # vocabulary; the user specifically films weekly bar approaches and needs
+    # In-Person reference material from that venue, not just daygame.
+    "bar game infield,nightclub approach,night game infield,bar pickup,"
+    "approaching women at bars,approaching women at the club,bar flirting,"
+    "club flirting,night game breakdown,bar approach infield,"
+    "picking up girls at the bar,picking up girls at the club,night game tips,"
+    "approaching her at the bar,cold approach at night,nightlife approach,"
+    "bar approach compilation,club approach infield,night game rejection,"
+    # Second widening pass, the first widening (13 -> 48 terms) plus a direct
     # channel-name exclusion for Kiriakos Spanos/Always Abroad still left the
     # count short of 40 once that channel's entries were removed.
     "approaching strangers experiment,flirting infield,girl reaction compilation,"
@@ -64,7 +74,7 @@ KEYWORDS = [k.strip() for k in os.getenv(
     "cold approach tips shorts,daygame tips shorts,street approach compilation,"
     "she gave me her number shorts,approaching her at the coffee shop"
 ).split(",") if k.strip()]
-# Video chat is a related but distinct format the user also uploads — different
+# Video chat is a related but distinct format the user also uploads, different
 # vocabulary/keywords than in-person infield, tracked separately via the Format column.
 VIDEO_CHAT_KEYWORDS = [k.strip() for k in os.getenv(
     "YOUTUBE_VIDEO_CHAT_KEYWORDS",
@@ -72,7 +82,11 @@ VIDEO_CHAT_KEYWORDS = [k.strip() for k in os.getenv(
     "random video chat girls,azar app flirting,holla app flirting,"
     "emerald chat flirting,video chat rizz,getting numbers on video chat,"
     "video chat approach,omegle rizz,monkey app girls,video call with strangers,"
-    "stranger video chat girls,flirting on video chat,video chat pickup"
+    "stranger video chat girls,flirting on video chat,video chat pickup,"
+    # Added 2026-09-26 -- "baddie" is this genre's actual vocabulary (Jameer, Jay
+    # Throck, ItsMP3 etc all use it) and wasn't covered before.
+    "monkey app baddies,rizzing up baddies monkey app,monkey app best moments,"
+    "making girls fold monkey app"
 ).split(",") if k.strip()]
 # Explainer/analysis is a third format the user also uploads (talking-head, no footage,
 # e.g. "signs she likes you" or attraction-psychology breakdowns), distinct vocabulary
@@ -86,7 +100,20 @@ EXPLAINER_KEYWORDS = [k.strip() for k in os.getenv(
     "female attraction triggers,why women like confident men,how women test men,"
     "dating psychology explained,what women want explained,signs a girl is interested,"
     "female body language signs,how to know if she likes you,attraction signs from women,"
-    "psychology of attraction women,why she's testing you,dating advice for men explained"
+    "psychology of attraction women,why she's testing you,dating advice for men explained,"
+    # Widened 2026-09, the original 18 terms yielded only 8 qualifying long-form
+    # outliers (vs. 58 for In-Person on a smaller keyword list), well short of the
+    # ~30 needed for real hook research. Paired with the PRECISE_SEARCH_KEYWORDS
+    # fix below (these terms were previously getting silently rejected by the
+    # relevance filter unless a title happened to match one of 9 fixed phrases).
+    "she's attracted to you signs,female interest signals,psychology of female attraction,"
+    "hidden signs she likes you,female flirting signals explained,reading women's interest level,"
+    "signs she wants you to approach,female body language flirting,how women flirt without saying it,"
+    "subconscious attraction signals,signs she's into you body language,female dating psychology explained,"
+    "understanding women attraction,why she acts distant test,decoding female body language,"
+    "attraction triggers in women explained,hidden attraction signals women,"
+    "female psychology dating advice,signs she's flirting with you,"
+    "how to read a woman's body language,why is she testing me,signs of female interest"
 ).split(",") if k.strip()]
 # Governs the search's publishedAfter cutoff for both In-Person and Video Chat keywords
 # (one shared scan). Shorts get an additional, separately-bounded post-filter via
@@ -96,7 +123,7 @@ EXPLAINER_KEYWORDS = [k.strip() for k in os.getenv(
 LOOKBACK_DAYS = int(os.getenv("LOOKBACK_DAYS", "200"))
 MAX_RESULTS_PER_KEYWORD = int(os.getenv("MAX_RESULTS_PER_KEYWORD", "50"))
 
-# Video chat platform names — a video mentioning one of these in its title/tags is video
+# Video chat platform names, a video mentioning one of these in its title/tags is video
 # chat content regardless of which keyword LIST (in-person vs. video-chat) actually found
 # it during search (a video chat video can surface via a shared/ambiguous in-person term).
 # Used both as part of the relevance filter below and to override the Format tag in
@@ -107,7 +134,7 @@ VIDEO_CHAT_PLATFORM_TERMS = [
 ]
 
 # YouTube category IDs that are never dating/pickup content, regardless of how a video
-# is worded — a much more reliable signal than keyword-guessing (e.g. blocks song uploads
+# is worded, a much more reliable signal than keyword-guessing (e.g. blocks song uploads
 # like "Pinky Up" that a fuzzy search match let through).
 EXCLUDED_CATEGORY_IDS = {"10", "20", "17"}  # Music, Gaming, Sports
 
@@ -116,7 +143,27 @@ EXCLUDED_CATEGORY_IDS = {"10", "20", "17"}  # Music, Gaming, Sports
 # YouTube's fuzzy search matching can surface unrelated content for them (e.g.
 # "picking up girls" surfacing a video about picking up kids from school, or
 # "street approach" surfacing street photography videos).
-PRECISE_SEARCH_KEYWORDS = {"cold approach", "daygame", "day game", "infield"}
+#
+# EXPLAINER_KEYWORDS is deliberately NOT folded in here (tried once, reverted),
+# unlike "cold approach"/"daygame"/"infield", generic-sounding explainer phrases
+# like "signs she likes you" pull in a lot of fuzzy-matched noise from YouTube's
+# search (ASMR roleplay, prank/reaction channels reusing the same surface
+# vocabulary for a completely different genre). Trusting the search query alone
+# let those through wholesale. The real fix for explainer's low yield is below:
+# relevant_keywords now covers the full EXPLAINER_KEYWORDS list, so a video still
+# needs an actual on-topic phrase in its own title/tags, a content-based check
+# that isn't fooled by fuzzy search matching the way query-origin trust is.
+PRECISE_SEARCH_KEYWORDS = {
+    "cold approach", "daygame", "day game", "infield",
+    # Bar/nightgame terms are just as specific/unambiguous as "daygame", "bar
+    # approach women", "night game approach" etc. don't collide with unrelated
+    # content the way a bare "approach women" would.
+    "night game approach", "bar approach women", "club approach women",
+    "bar game infield", "nightclub approach", "night game infield", "bar pickup",
+    "bar approach infield", "night game tips", "cold approach at night",
+    "nightlife approach", "bar approach compilation", "club approach infield",
+    "night game rejection",
+}
 
 
 def build_youtube_client():
@@ -170,7 +217,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
 
 def pick_thumbnail(thumbnails: Dict[str, Any]) -> Dict[str, Any]:
     """Pick the best available thumbnail size, falling back through the list instead of
-    only trying "medium" — some videos (older uploads, certain Shorts) don't have every
+    only trying "medium", some videos (older uploads, certain Shorts) don't have every
     size, and requesting/reading just "medium" left those rows with a blank thumbnail."""
     thumbnails = thumbnails or {}
     for size in ("medium", "high", "default", "standard", "maxres"):
@@ -225,7 +272,7 @@ def format_duration(duration_str: str) -> str:
 def is_short_video(duration_str: str, title: str = "", tags: list = None,
                     thumbnail_width: int = None, thumbnail_height: int = None) -> bool:
     """Check if a video is a Short. Duration is authoritative whenever known (under 3
-    minutes — YouTube's current Shorts length cap, older code assumed 60s): a #shorts
+    minutes, YouTube's current Shorts length cap, older code assumed 60s): a #shorts
     hashtag or vertical thumbnail used to be treated as an override that could mark a
     video Short regardless of length, which let long videos with either signal (a
     leftover #shorts tag, or just a portrait thumbnail image) slip into the Shorts
@@ -234,7 +281,7 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None,
     if duration_str:
         return parse_duration_seconds(duration_str) < 180
 
-    # No duration available — fall back to the weaker signals.
+    # No duration available, fall back to the weaker signals.
     if title and "#shorts" in title.lower():
         return True
     if tags:
@@ -249,11 +296,11 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None,
 def confirm_is_short(video_id: str) -> Any:
     """Confirm a duration-based Short classification against YouTube's own routing:
     youtube.com/shorts/<id> stays on that URL (200) if YouTube itself treats the video
-    as a Short, or redirects to /watch if not — catches a video under 3 minutes that
+    as a Short, or redirects to /watch if not, catches a video under 3 minutes that
     YouTube doesn't actually classify as a Short. Not part of the documented Data API,
     so treat it as a confirmation signal only (call it for videos is_short_video()
     already flagged True, not as a standalone classifier), and only every override
-    that flag to False on a confirmed non-Short — never fail the pipeline on it.
+    that flag to False on a confirmed non-Short, never fail the pipeline on it.
     Returns True/False when the check succeeds, or None on any request failure so the
     caller can fall back to trusting the duration-based signal."""
     import urllib.request
@@ -267,22 +314,22 @@ def confirm_is_short(video_id: str) -> Any:
     return "/shorts/" in final_url
 
 
-# Unicode ranges for scripts that are unambiguously non-English when present in a title —
-# catches Arabic, Hebrew, Korean, CJK, Devanagari (Hindi), Thai, Cyrillic — plus accented
+# Unicode ranges for scripts that are unambiguously non-English when present in a title,
+# catches Arabic, Hebrew, Korean, CJK, Devanagari (Hindi), Thai, Cyrillic, plus accented
 # Latin script (Latin-1 Supplement + Latin Extended-A/B: U+00C0-024F), which catches Polish,
 # French, German, Spanish, Portuguese, Czech, Turkish, Vietnamese, Scandinavian languages,
 # etc. without a real language-detection model. A statistical model (langdetect) was tried
-# and rejected — it misclassified short, slang-heavy niche titles with high false confidence
+# and rejected, it misclassified short, slang-heavy niche titles with high false confidence
 # (e.g. "rizz in public compilation" -> Italian, "AI glasses on Omegle! | Panki" -> Estonian,
 # both >99.99% confidence), which would have blocked genuine English content. This diacritic
 # range is a narrower but far more precise signal for this niche's short titles. Still doesn't
 # catch a non-English language written in plain, unaccented Latin script (e.g. Indonesian,
-# Malay) — that still needs a human read during curation.
+# Malay), that still needs a human read during curation.
 _NON_ENGLISH_SCRIPT_PATTERN = None
 
 
 def is_english_title(title: str) -> bool:
-    """Reject titles containing non-Latin script or accented Latin characters — a cheap
+    """Reject titles containing non-Latin script or accented Latin characters, a cheap
     first-pass language filter for the niche/cross-niche finders, which have no other
     signal to scope results to English."""
     global _NON_ENGLISH_SCRIPT_PATTERN
@@ -298,7 +345,7 @@ def is_english_title(title: str) -> bool:
     return not _NON_ENGLISH_SCRIPT_PATTERN.search(title)
 
 
-# Channels excluded by name rather than keyword — these produce content that keeps
+# Channels excluded by name rather than keyword, these produce content that keeps
 # resurfacing through the niche's shared vocabulary (e.g. "street flirting") but isn't
 # the target niche (male-approaching-women): Kiriakos Spanos is a woman interviewing/
 # flirting with men on the street (gender-reversed format, no LGBT/ladyboy keywords to
@@ -309,7 +356,7 @@ EXCLUDED_CHANNELS = {"kiriakos spanos", "always abroad"}
 
 
 def is_video_chat_content(title: str, tags: list = None) -> bool:
-    """Content-based check for whether a title/tags mention a video-chat platform —
+    """Content-based check for whether a title/tags mention a video-chat platform,
     used to override the Format tag when a video-chat video surfaces via an ambiguous
     in-person search term, so the platform mentioned in the video wins over which
     keyword list happened to find it."""
@@ -329,16 +376,16 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
     if channel_title and channel_title.strip().lower() in EXCLUDED_CHANNELS:
         return False
 
-    # Hard category exclusion — catches things keyword-matching can't, like songs
+    # Hard category exclusion, catches things keyword-matching can't, like songs
     # or gameplay videos that a fuzzy search match let through.
     if category_id in EXCLUDED_CATEGORY_IDS:
         return False
 
-    # Hard exclusions — whole-word match against title and tags
+    # Hard exclusions, whole-word match against title and tags
     # Only include terms that are UNAMBIGUOUSLY non-dating content
     exclusion_keywords = [
         # Baseball specific
-        # Note: "infield" and "outfield" are deliberately NOT excluded here —
+        # Note: "infield" and "outfield" are deliberately NOT excluded here,
         # "infield" is core cold-approach/pickup terminology (live footage of
         # street approaches), not a baseball reference in this niche.
         "baseball", "softball", "pitcher", "batter", "batting",
@@ -351,21 +398,21 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         "minecraft", "fortnite", "roblox", "call of duty", "warzone", "valorant",
         "video game", "gameplay", "game world",
         # "day game"/"daygame" is trusted niche terminology (see PRECISE_SEARCH_KEYWORDS),
-        # but it's also a substring of unrelated phrases YouTube's fuzzy search surfaces —
+        # but it's also a substring of unrelated phrases YouTube's fuzzy search surfaces,
         # a safari "game drive" and a Roblox-style "Game World" fashion video both slipped
         # through on this exact keyword per explicit user report.
         "game drive", "safari", "wildlife",
         # Unambiguous dev/tech
         "programming", "javascript", "python tutorial", "react.js", "machine learning",
-        # Photography — "street" overlaps with cold-approach vocabulary, but street/candid
+        # Photography, "street" overlaps with cold-approach vocabulary, but street/candid
         # photography content is unambiguously not dating/pickup content
         "photography", "photographer", "photo walk",
-        # Niche mismatch — this tracker is for male-approaching-women content; "street
+        # Niche mismatch, this tracker is for male-approaching-women content; "street
         # flirting"/"street approach" search terms also surface LGBT and ladyboy content
         # that shares the same vocabulary but isn't the target niche (e.g. Kiriakos Spanos,
         # Always Abroad's "Ladyboy Street Approach" videos).
         "lgbt", "ladyboy",
-        # Scripted drama/edit clips — matching on "flirt"/"flirting" alone (see
+        # Scripted drama/edit clips, matching on "flirt"/"flirting" alone (see
         # relevant_keywords below) lets K-drama and similar scripted-romance clip
         # compilations through, since that match short-circuits the PRECISE_SEARCH_KEYWORDS
         # gate regardless of which search term actually found the video.
@@ -373,8 +420,14 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         "thai drama", "japanese drama", "jdrama", "j-drama", "drama edit", "drama scene",
         "kiss scene", "drama clip", "movie scene", "film scene", "webtoon", "manhwa",
         "eng sub", "engsub", "eng dub", "engdub",
+        # Roleplay/fantasy audio content, widening EXPLAINER_KEYWORDS (2026-09) to catch
+        # more genuine attraction-psychology content also let in a flood of ASMR roleplay
+        # ("Your New Neighbor Is a Demon... and She Likes You") that shares surface
+        # vocabulary ("she likes you") with real explainer titles but is a completely
+        # different, non-analytical genre with no hook-research value for this niche.
+        "asmr", "roleplay", "role play",
         # Scripted micro-drama apps (ReelShort/DramaBox/GoodShort-style vertical episodic
-        # romance) — not channel-name based (per explicit user feedback), since the giveaway
+        # romance), not channel-name based (per explicit user feedback), since the giveaway
         # is the title's stacked-trope setup instead: an over-the-top status/identity reveal
         # ("Demon CEO", "Secret Billionaire", "Alpha", "Luna", "Mafia Boss") paired with a
         # "yet/but she adorably..." twist structure. These slip past the relevance check
@@ -393,7 +446,7 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         if re.search(r'\b' + re.escape(term) + r'\b', combined_text):
             return False
 
-    # Specific dating/pickup phrases only — deliberately excludes generic standalone
+    # Specific dating/pickup phrases only, deliberately excludes generic standalone
     # words like "girls", "women", "date", "relationship", "confidence", "approach"
     # that are common enough in off-topic content (e.g. a video about picking up
     # kids from school, or an unrelated self-help video) to produce false positives.
@@ -407,11 +460,18 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         "talking to girls", "talking to women", "meeting women", "meet women",
         "talk to women", "get a girlfriend",
         "andrew tate",
-        # Explainer/analysis phrasing — talking-head content about attraction/psychology
-        # rather than footage of an approach, distinct vocabulary from the action terms above.
-        "signs she likes you", "signs of attraction", "female psychology",
-        "attraction psychology", "body language attraction", "female attraction",
-        "signs a girl is interested", "dating psychology", "attraction signs",
+        # Bar/nightgame vocabulary, content-based check so a bar/club video found
+        # via a broader search term still passes even without an exact PRECISE_
+        # SEARCH_KEYWORDS match.
+        "bar game", "night game", "nightgame", "bar approach", "club approach",
+        "nightclub", "bar pickup", "night approach",
+        # Explainer/analysis phrasing, talking-head content about attraction/psychology
+        # rather than footage of an approach, distinct vocabulary from the action terms
+        # above. Deliberately kept as a content-based check (title/tags must actually
+        # contain one of these) rather than trusting search-query origin the way
+        # cold approach/daygame/infield are, see PRECISE_SEARCH_KEYWORDS above for why.
+    ] + EXPLAINER_KEYWORDS + [
+        "attraction signs", "female interest", "interested in you signs",
     ] + VIDEO_CHAT_PLATFORM_TERMS
 
     # Check tags
@@ -438,7 +498,7 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
 
 def write_rows_to_json(path: str, rows: List[Dict[str, Any]]) -> str:
     """Write rows as pretty-printed JSON to path (creating parent directories as needed).
-    Replaces the old Google Sheets writer — each script's own data.json is committed to
+    Replaces the old Google Sheets writer, each script's own data.json is committed to
     the repo by its GitHub Actions workflow, so the dashboard can read it directly."""
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", encoding="utf-8") as f:
