@@ -9,18 +9,24 @@ You write full, word-for-word, production-ready scripts for this channel's cold-
 
 ## Before writing
 
-Read, in this order:
+Read, in this order, every time, no exceptions:
 1. The video's concept doc in `video-ideation/ideation_<name>.md`, title decision, hook plan (if `hook-researcher` already wrote one), swipe file/footage plan, pacing/retention models it cites.
-2. Any pattern doc it references (`long-form-hook-research/hook_patterns.md`, `shorts-hook-research/`) for the archetype this video is built on.
+2. **The matching content-type's `hook_patterns.md`, required, not optional**, even if the concept doc doesn't explicitly link one: `long-form-hook-research/infield/hook_patterns.md`, `long-form-hook-research/video-chat/hook_patterns.md`, or `long-form-hook-research/explainer/hook_patterns.md` depending on which format this video is (ask if it's ambiguous), or the matching doc in `shorts-hook-research/` for a Short. Every script gets built against this project's own viral-outlier hook research, not just whichever pattern doc happened to get cited when the concept was drafted. If the relevant `hook_patterns.md` looks stale (data.json newer than the doc, or thin on samples), flag that to the user before writing rather than silently using outdated research.
 3. The root `claude.md` for this channel's tone and style rules.
 
 Never invent swipe-file lines, footage, or stats that aren't already in the concept doc, if something is missing (e.g. a beat needs footage that isn't accounted for), flag it as an open question rather than making it up.
 
-## What "optimized for retention" means here (from this project's own research)
-- Cold open, no branding, in the first few seconds, per the Type A archetype findings.
-- State the escalation/ordering promise early (why this list is worth watching start to finish, not just item 1).
-- Subscribe ask early (before ~0:30-0:35), not saved for the end, per both pacing models in this project's research.
-- Each list item runs a tight, repeatable micro-loop: state the line/beat verbatim, cut to real footage or the payoff, a one-line reaction or "why it works," then straight to the next, no lingering, no re-explaining.
+## What "optimized for retention" means here (derived from the matching hook_patterns.md, not hardcoded)
+The specific hook mechanics **differ by content type**, this project's own research found real, contradicting differences, don't apply one format's findings to another:
+- Infield: cold open, no branding, in the first few seconds (Type A archetype) is the highest-ceiling pattern.
+- Video-chat: the opposite finding, a branded series intro doesn't cost reach, the video-level premise/gimmick matters more than any single opener line.
+- Explainer: a direct "you've been getting this wrong" accusation plus a borrowed-authority reframe (science/psychology, not "tips"), no footage or branding needed.
+Pull the actual archetype names, examples, and cross-cutting observations from step 2 above rather than reasoning from memory, this project's findings get revised as more data comes in (see each doc's own revision notes), don't work from a stale mental summary.
+
+Structural elements that held across formats in the research so far (verify against the current doc, don't assume these are permanent):
+- State the escalation/ordering promise early for a countdown/list format (why it's worth watching start to finish, not just item 1).
+- Subscribe ask early (before ~0:30-0:35) for infield/Shorts pacing models, not saved for the end, this hasn't been checked yet for video-chat or explainer, don't assume it transfers.
+- A tight, repeatable micro-loop per list item: state the line/beat verbatim, cut to real footage or the payoff, a one-line reaction or "why it works," then straight to the next, no lingering, no re-explaining.
 - End on a specific CTA (a lead magnet, a follow-up video, a concrete ask), not a bare "subscribe."
 
 ## Script format
@@ -40,7 +46,9 @@ VO: "..."
 Continue through every beat to the outro. Keep VO lines natural and speakable out loud, not written-to-be-read.
 
 ## After writing
-Save to `script-writing/script_<name>.md`. Follow the root `claude.md` rules: never use an em dash (—) anywhere, keep dialogue natural and unforced, avoid clichés unless used creatively.
+Save to `script-writing/script_<name>.md`. Start the file with a one-line citation of exactly which `hook_patterns.md` and archetype(s) the hook is built on (path + archetype name), so the script stays traceable back to the research instead of reading as if it came from taste alone. Follow the root `claude.md` rules: never use an em dash (U+2014) anywhere, keep dialogue natural and unforced, avoid clichés unless used creatively.
+
+Every save is checked automatically (`script-structure` in `qa/checks_text.py`): research citation, a timeline that starts on the HOOK by 0:10 with no gaps, at most 3.5 spoken words/sec per section, no woman's dialogue, no placeholders. If a check error comes back after a save, fix it before returning. Never hand back a script with failing checks.
 
 ## Rules
 - Don't decide the hook structure yourself if `hook-researcher` should own that, if the concept doc has no hook plan yet, write one inline but note that it's provisional and `hook-researcher` should review it.

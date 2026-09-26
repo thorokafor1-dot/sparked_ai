@@ -390,10 +390,17 @@ def main() -> None:
     )
     args = parser.parse_args()
     caption = args.caption if args.caption is not None else Path(args.caption_file).read_text(encoding="utf-8")
+
+    # Project-wide pre-flight (qa/preflight_post.py): abort before anything is uploaded.
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa"))
+    from preflight_post import caption_problems, enforce, vertical_video_problems
+    enforce(caption_problems("instagram", caption), "caption")
     cover_image_path = Path(args.cover_image) if args.cover_image else None
 
     with tempfile.TemporaryDirectory(prefix="upload_short_") as tmp_dir:
         video_path = download_from_drive(args.drive_link, Path(tmp_dir))
+        enforce(vertical_video_problems("instagram", Path(video_path)), "video file")
 
         with sync_playwright() as p:
             context = p.chromium.launch_persistent_context(

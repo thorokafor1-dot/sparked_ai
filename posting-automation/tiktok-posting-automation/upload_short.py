@@ -293,10 +293,17 @@ def main() -> None:
     parser.add_argument("--tokens-path", default=str(DEFAULT_TOKENS_PATH), help="Path to tokens.json from oauth_setup.py")
     args = parser.parse_args()
     caption = args.caption if args.caption is not None else Path(args.caption_file).read_text(encoding="utf-8")
+
+    # Project-wide pre-flight (qa/preflight_post.py): abort before anything is uploaded.
+    import sys
+    sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa"))
+    from preflight_post import caption_problems, enforce, vertical_video_problems
+    enforce(caption_problems("tiktok", caption), "caption")
     tokens_path = Path(args.tokens_path)
 
     with tempfile.TemporaryDirectory(prefix="upload_short_") as tmp_dir:
         video_path = download_from_drive(args.drive_link, Path(tmp_dir))
+        enforce(vertical_video_problems("tiktok", Path(video_path)), "video file")
 
         if args.preview_covers:
             preview_dir = Path(__file__).parent / "cover_previews"

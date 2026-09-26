@@ -29,7 +29,7 @@ jobs:
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           # YOUTUBE_KEYWORDS intentionally omitted so this falls through to the
-          # widened default keyword list in common.py — a hardcoded
+          # widened default keyword list in common.py, a hardcoded
           # 13-term override here silently discarded every later widening of
           # that default (13 -> 48 -> 71 terms never actually ran).
           LOOKBACK_DAYS: '200'
@@ -43,3 +43,6 @@ jobs:
           git add outlier-tracking/*/data.json
           git diff --cached --quiet || git commit -m "Update niche outlier data [skip ci]"
           git push
+
+      - name: Validate data (qa gates; fails the run loudly, after the commit so a refresh still lands)
+        run: python qa/run_checks.py outlier-tracking/niche-long-form/data.json outlier-tracking/niche-short-form/data.json

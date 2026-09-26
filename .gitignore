@@ -18,3 +18,16 @@ long-form-to-shorts-video-editing/*/input/
 long-form-to-shorts-video-editing/*/output/
 long-form-to-shorts-video-editing/*/models/
 outlier-tracking/grok-swipe-pack/
+long-form-video-editing/*/input/
+
+# Long-form editing media
+long-form-video-editing/*/raw/
+long-form-video-editing/*/work/
+long-form-video-editing/*/out/
+
+# QA hook per-session state
+.claude/qa_state/
+
+# Cold-approach review: private recordings of real people, never commit
+cold-approach-review/input/
+cold-approach-review/work/

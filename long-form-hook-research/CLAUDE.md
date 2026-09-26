@@ -19,6 +19,10 @@ Each subfolder has its own `pull_hook_transcripts.py` (filters `outlier-tracking
 ## Discovery note
 The niche keyword lists in `outlier-tracking/common.py` (`KEYWORDS`, `VIDEO_CHAT_KEYWORDS`, `EXPLAINER_KEYWORDS`) are what determine whether a format even gets found. Explainer content was almost invisible in niche tracking until `EXPLAINER_KEYWORDS` was added, the original list was tuned for action/footage terms and barely matched talking-head/analysis phrasing. If a future content type undersamples the same way, the fix is a new keyword bucket in `common.py`, not a new scoring metric, the view-floor/channel-average/subscriber-multiplier scoring in `long_form_tracker.py` already applies the same way across all formats.
 
+## Quality gates (automatic, see `qa/checks_text.py`, `qa/checks_data.py`)
+- `hook-transcripts`: flags transcripts that aren't English (dubbed or foreign audio under an English title) or are empty. Exclude flagged entries from pattern research rather than reading patterns into them.
+- `hook-patterns-doc`: `hook_patterns.md` must name archetypes, with no placeholders.
+
 ## Scope rules
 - Pure research/ideation notes, doesn't post anything, doesn't score/track outliers itself (reads `outlier-tracking/niche-long-form/data.json` as its source of candidates, doesn't duplicate that logic).
 - To refresh a subfolder: rerun its `pull_hook_transcripts.py` after `outlier-tracking`'s niche-long-form data updates, then have Claude (or the `hook-researcher` subagent) regenerate that subfolder's `hook_patterns.md` from the new transcripts.
