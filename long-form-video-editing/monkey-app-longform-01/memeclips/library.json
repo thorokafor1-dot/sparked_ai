@@ -1,0 +1,113 @@
+{
+ "khaled_you_smart": {
+  "dur": 3.94,
+  "says": "Sir, you smart, you very smart."
+ },
+ "suit_thats_it": {
+  "dur": 0.61,
+  "says": "Thank you. Thank you."
+ },
+ "kid_reaction": {
+  "dur": 1.51,
+  "says": "Hahaha"
+ },
+ "face_in_hands": {
+  "dur": 1.94,
+  "says": "I'm up to no good."
+ },
+ "lying_down": {
+  "dur": 1.24,
+  "says": "(silent confused look back)"
+ },
+ "law_and_order": {
+  "dur": 0.74,
+  "says": "You"
+ },
+ "goofy_face": {
+  "dur": 1.37,
+  "says": ""
+ },
+ "simpsons_boring": {
+  "dur": 1.14,
+  "says": "Boring!"
+ },
+ "chicago_cap_guy": {
+  "dur": 2.81,
+  "says": "You are a loser. Simple."
+ },
+ "idris_laugh": {
+  "dur": 4.27,
+  "says": "What the fuck is going on? Oh shit!"
+ },
+ "boys_in_park": {
+  "dur": 1.41,
+  "says": "(silent)"
+ },
+ "doctor_youre_dying": {
+  "dur": 2.38,
+  "says": "COUGH COUGH COUGH COUGH"
+ },
+ "studio_laugh": {
+  "dur": 1.17,
+  "says": "Hahahahaha"
+ },
+ "club_clip": {
+  "dur": 2.34,
+  "says": "Never use what to do"
+ },
+ "hand_clip": {
+  "dur": 5.2,
+  "says": "Who's laughing right now? Ain't nobody laughing but you, man. Shit is not..."
+ },
+ "athlete_facepalm": {
+  "dur": 1.5,
+  "says": "Oh my God."
+ },
+ "red_hoodie": {
+  "dur": 3.9,
+  "says": "(silent stare)"
+ },
+ "el_risitas_laugh": {
+  "dur": 2.87,
+  "says": "It's up!"
+ },
+ "tv_glitch": {
+  "dur": 0.37,
+  "says": "Thank you."
+ },
+ "denzel_my_man": {
+  "dur": 3.0,
+  "says": "",
+  "source": "ref/yt/denzel_washington_my_man_meme.mp4"
+ },
+ "michael_scott_no": {
+  "dur": 2.0,
+  "says": "",
+  "source": "ref/yt/michael_scott_no_god_please_no.mp4"
+ },
+ "steve_harvey_shocked": {
+  "dur": 2.8,
+  "says": "",
+  "source": "ref/yt/steve_harvey_shocked_meme.mp4"
+ },
+ "kevin_hart_stare": {
+  "dur": 2.6,
+  "says": "",
+  "source": "ref/yt/kevin_hart_what_meme.mp4"
+ },
+ "why_are_you_running": {
+  "dur": 1.6,
+  "says": "",
+  "source": "ref/yt/why_are_you_running_meme.mp4"
+ },
+ "dicaprio_laugh": {
+  "dur": 2.0,
+  "says": "",
+  "source": "ref/yt/leonardo_dicaprio_laughing_dja.mp4"
+ },
+ "imma_head_out": {
+  "dur": 4.5,
+  "says": "",
+  "source": "ref/yt/ight_imma_head_out_meme.mp4"
+ }
+}

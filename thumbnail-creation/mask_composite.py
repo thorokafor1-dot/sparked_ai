@@ -27,7 +27,14 @@ from PIL import Image, ImageFilter
 FACE = cv2.CascadeClassifier(cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
 
 
-def _person_columns_mask(img_bgr: np.ndarray, feather: int = 40, pad_factor: float = 1.0, face_pad: float = 0.25, text_band: float = 0.0) -> Image.Image:
+def _person_columns_mask(
+    img_bgr: np.ndarray,
+    feather: int = 40,
+    pad_factor: float = 1.0,
+    face_pad: float = 0.25,
+    text_band: float = 0.0,
+    extra_rects: list[tuple[float, float, float, float]] | None = None,
+) -> Image.Image:
     """Protects two different things for two different reasons, not one blanket
     column: a TIGHT box around the actual face (identity -- must never be
     altered) and a separately-shaped column below the chin (body/clothing --
@@ -64,8 +71,6 @@ def _person_columns_mask(img_bgr: np.ndarray, feather: int = 40, pad_factor: flo
             x0 = max(0, int(cx - fw / 2 - row_pad))
             x1 = min(w, int(cx + fw / 2 + row_pad))
             mask[row_y, x0:x1] = 255
-    if not len(faces) and text_band <= 0:
-        return Image.new("L", (w, h), 0)
     if text_band > 0:
         # Real burned-in captions (actual spoken dialogue) live in a
         # predictable top band in this footage's style. A generative pass
@@ -73,14 +78,34 @@ def _person_columns_mask(img_bgr: np.ndarray, feather: int = 40, pad_factor: flo
         # problem as altering a face, just for words instead of a person, so
         # it needs the same unconditional protection regardless of face size.
         mask[: int(h * text_band), :] = 255
+    for (rx0, ry0, rx1, ry1) in extra_rects or []:
+        # Manual protection for a real person/object that isn't anchored to a
+        # detected face -- e.g. the camera holder's own arm, visible in frame
+        # but with no face to build a column from. Without this, that limb was
+        # never protected at all and a strong regeneration pass can render it
+        # as an anatomically wrong blob (confirmed: a deformed elbow/forearm).
+        mask[int(h * ry0):int(h * ry1), int(w * rx0):int(w * rx1)] = 255
+    if not len(faces) and text_band <= 0 and not extra_rects:
+        return Image.new("L", (w, h), 0)
     mask_img = Image.fromarray(mask).filter(ImageFilter.GaussianBlur(feather))
     return mask_img
 
 
-def composite(original_path: str, regenerated_path: str, out_path: str, pad_factor: float = 1.0, face_pad: float = 0.25, text_band: float = 0.0) -> Path:
+def composite(
+    original_path: str,
+    regenerated_path: str,
+    out_path: str,
+    pad_factor: float = 1.0,
+    face_pad: float = 0.25,
+    text_band: float = 0.0,
+    extra_rects: list[tuple[float, float, float, float]] | None = None,
+) -> Path:
     orig = Image.open(original_path).convert("RGB")
     regen = Image.open(regenerated_path).convert("RGB").resize(orig.size, Image.LANCZOS)
-    mask = _person_columns_mask(cv2.cvtColor(np.asarray(orig), cv2.COLOR_RGB2BGR), pad_factor=pad_factor, face_pad=face_pad, text_band=text_band)
+    mask = _person_columns_mask(
+        cv2.cvtColor(np.asarray(orig), cv2.COLOR_RGB2BGR),
+        pad_factor=pad_factor, face_pad=face_pad, text_band=text_band, extra_rects=extra_rects,
+    )
     result = Image.composite(orig, regen, mask)
     out = Path(out_path)
     out.parent.mkdir(parents=True, exist_ok=True)
@@ -96,8 +121,10 @@ def main() -> None:
     parser.add_argument("--pad-factor", type=float, default=1.0, help="Body-column padding as a multiple of face width -- wider avoids seam ghosting, narrower preserves more background to regenerate")
     parser.add_argument("--face-pad", type=float, default=0.25, help="Tight face-box padding as a fraction of face size")
     parser.add_argument("--text-band", type=float, default=0.0, help="Protect the top fraction of the frame (e.g. 0.2) to preserve real burned-in caption text")
+    parser.add_argument("--extra-rect", action="append", default=[], help="x0,y0,x1,y1 as fractions of image size (0-1) -- protect a real person/object not anchored to a detected face. Repeatable.")
     args = parser.parse_args()
-    result = composite(args.original, args.regenerated, args.out, args.pad_factor, args.face_pad, args.text_band)
+    extra_rects = [tuple(float(v) for v in r.split(",")) for r in args.extra_rect]
+    result = composite(args.original, args.regenerated, args.out, args.pad_factor, args.face_pad, args.text_band, extra_rects)
     print(f"Saved: {result}")
 
 

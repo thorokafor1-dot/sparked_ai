@@ -31,3 +31,7 @@ long-form-video-editing/*/out/
 # Cold-approach review: private recordings of real people, never commit
 cold-approach-review/input/
 cold-approach-review/work/
+long-form-video-editing/*/output/
+long-form-video-editing/*/ref/
+# Raw call cuts of real people, never commit
+long-form-video-editing/*/clips_raw/

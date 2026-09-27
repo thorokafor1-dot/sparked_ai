@@ -28,7 +28,7 @@ OUT_PATH = os.path.join(HERE, "hook_transcripts.json")
 def load_candidates():
     with open(DATA_PATH, encoding="utf-8") as f:
         rows = json.load(f)
-    explainer = [r for r in rows if r.get("format") == "Explainer"]
+    explainer = [r for r in rows if r.get("format") == "Explainer Video"]
     explainer.sort(key=lambda r: r.get("score", 0), reverse=True)
     return explainer[:TOP_N]
 

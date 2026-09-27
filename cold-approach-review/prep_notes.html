@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Approach Prep</title>
+<meta charset="UTF-8">
+<style>
+:root{
+  --bg:#14161b;
+  --surface:#1c1f26;
+  --surface-2:#232732;
+  --border:#2e333f;
+  --text:#eef0f3;
+  --text-dim:#9aa0ac;
+  --text-faint:#6b7180;
+  --accent:#e8a33d;
+  --accent-dim:#3a2f1c;
+  --good:#4fae7c;
+  --good-dim:#1c2e26;
+  --watch:#5b8def;
+  --watch-dim:#1c2436;
+  --critical:#e2574c;
+  --critical-dim:#33201e;
+}
+
+*{box-sizing:border-box;}
+
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:'Source Sans 3', system-ui, -apple-system, sans-serif;
+  font-size:16px;
+  line-height:1.5;
+  padding:0 18px;
+  padding-block:28px 60px;
+  max-width:640px;
+  margin:0 auto;
+}
+
+h1,h2,h3{
+  font-family:'Bricolage Grotesque', system-ui, sans-serif;
+  text-wrap:balance;
+  margin:0;
+}
+
+.eyebrow{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--text-faint);
+}
+
+header{
+  padding-bottom:22px;
+  border-bottom:1px solid var(--border);
+  margin-bottom:26px;
+}
+header h1{
+  font-size:28px;
+  font-weight:700;
+  color:var(--accent);
+  margin-top:6px;
+}
+header p{
+  color:var(--text-dim);
+  margin:10px 0 0;
+  font-size:15px;
+}
+
+section{margin-bottom:40px;}
+
+.section-head{
+  display:flex;
+  align-items:baseline;
+  gap:10px;
+  margin-bottom:14px;
+}
+.section-head h2{
+  font-size:19px;
+  font-weight:700;
+}
+.section-count{
+  font-family:'JetBrains Mono', monospace;
+  font-size:12px;
+  color:var(--text-faint);
+}
+
+/* Hero fix card */
+.fix-card{
+  background:linear-gradient(180deg, var(--critical-dim), var(--surface));
+  border:1px solid #4a2f2c;
+  border-radius:14px;
+  padding:20px;
+}
+.fix-card .tag{
+  display:inline-block;
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--critical);
+  background:rgba(226,87,76,0.12);
+  padding:3px 8px;
+  border-radius:5px;
+  margin-bottom:10px;
+}
+.fix-card h3{
+  font-size:20px;
+  margin-bottom:8px;
+}
+.fix-card .context{
+  color:var(--text-dim);
+  font-size:14px;
+  margin-bottom:16px;
+}
+.line-list{
+  list-style:none;
+  padding:0;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+.line-list li{
+  background:var(--surface-2);
+  border:1px solid var(--border);
+  border-radius:9px;
+  padding:11px 13px;
+  font-size:15px;
+}
+.line-list li::before{
+  content:"\201C";
+  color:var(--accent);
+  font-weight:700;
+  margin-right:2px;
+}
+
+/* Objection cards */
+.objection{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px 18px;
+  margin-bottom:14px;
+}
+.objection h3{
+  font-size:16px;
+  margin-bottom:3px;
+}
+.objection .heard{
+  font-size:13px;
+  color:var(--text-faint);
+  font-style:italic;
+  margin-bottom:10px;
+}
+.objection .status{
+  display:inline-block;
+  font-family:'JetBrains Mono', monospace;
+  font-size:10px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  padding:2px 7px;
+  border-radius:4px;
+  margin-bottom:10px;
+}
+.status.gap{background:var(--critical-dim);color:var(--critical);}
+.status.working{background:var(--good-dim);color:var(--good);}
+.status.watch{background:var(--watch-dim);color:var(--watch);}
+
+/* pattern grid */
+.pattern{
+  border-left:3px solid var(--watch);
+  background:var(--surface);
+  border-radius:0 10px 10px 0;
+  padding:12px 16px;
+  margin-bottom:10px;
+}
+.pattern .num{
+  font-family:'JetBrains Mono', monospace;
+  font-size:11px;
+  color:var(--watch);
+}
+.pattern p{margin:4px 0 0;font-size:14.5px;color:var(--text-dim);}
+.pattern strong{color:var(--text);}
+
+/* working list */
+.working{
+  border-left:3px solid var(--good);
+  background:var(--surface);
+  border-radius:0 10px 10px 0;
+  padding:11px 16px;
+  margin-bottom:8px;
+  font-size:14.5px;
+}
+.working strong{color:var(--good);}
+
+footer{
+  border-top:1px solid var(--border);
+  padding-top:18px;
+  color:var(--text-faint);
+  font-size:12.5px;
+  text-align:center;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="eyebrow">Field notes · sessions reviewed: 2</div>
+  <h1>Tonight's Approach Prep</h1>
+  <p>Pulled from transcripts of your last two outings with Nikos. Real quotes, real stalls, what already works. Read the top fix twice, skim the rest.</p>
+</header>
+
+<section>
+  <div class="fix-card">
+    <span class="tag">Fix this first</span>
+    <h3>"I always make the first move myself"</h3>
+    <p class="context">Hit at least 3 times across both sessions. You named this gap out loud on the recording, no branch ready for it, and the line dies right there every time.</p>
+    <ul class="line-list">
+      <li>See, that's what I love to hear. Means when it actually matters, you'll go for it. I just saved you the trip today.</li>
+      <li>Good. Then consider this me saving you the trouble of doing it later.</li>
+      <li>That's rare, most people just talk about it. Respect. Consider this your one exception.</li>
+      <li>Then today's your day off. I've got it from here.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Objections, by type</h2>
+    <span class="section-count">what you've actually heard</span>
+  </div>
+
+  <div class="objection">
+    <h3>"I have a boyfriend"</h3>
+    <div class="heard">Dominix, Angelica, others</div>
+    <span class="status working">Already working, use it every time</span>
+    <ul class="line-list">
+      <li>Oh, that's perfect. That's exactly why I came to talk to you.</li>
+      <li>That tells me you're probably a keeper, aren't you?</li>
+      <li>Good, low pressure then. I'm just here doing quality control on the taken ones.</li>
+    </ul>
+  </div>
+
+  <div class="objection">
+    <h3>Testing the frame ("Is this an interview?")</h3>
+    <div class="heard">Interview-style opener, second approach in 00014</div>
+    <span class="status gap">You shut it down yourself, don't</span>
+    <ul class="line-list">
+      <li>Kind of, just a fun one. Thirty seconds, promise.</li>
+      <li>Only if you want it to be. Otherwise it's just me being nosy.</li>
+      <li>Yeah, but the good kind. No clipboard, no name tag.</li>
+    </ul>
+  </div>
+
+  <div class="objection">
+    <h3>Vague or flat answers ("I guess both")</h3>
+    <div class="heard">First-move poll, multiple approaches</div>
+    <span class="status working">You've got a move that works, use it more</span>
+    <ul class="line-list">
+      <li>Sure, but in your own opinion, what actually happens?</li>
+      <li>Okay but if you had to pick right now, which one?</li>
+      <li>Both's the safe answer. Give me the real one.</li>
+    </ul>
+  </div>
+
+  <div class="objection">
+    <h3>Camera-shy / "don't put me in it"</h3>
+    <div class="heard">Group approach, 00035; friend group, 00012</div>
+    <span class="status watch">You back off instantly, hold the frame instead</span>
+    <ul class="line-list">
+      <li>No worries, mystery cameo, no tags, no names.</li>
+      <li>Fair. I'll keep you anonymous, legend status only.</li>
+    </ul>
+  </div>
+
+  <div class="objection">
+    <h3>Cultural / "no dating before marriage, no touching"</h3>
+    <div class="heard">Algerian approach, 00035</div>
+    <span class="status gap">You tested it physically, talk to it instead</span>
+    <ul class="line-list">
+      <li>Okay, walk me through it then, what does dating actually look like where you're from?</li>
+      <li>Respect. So how does someone actually earn a date then?</li>
+    </ul>
+  </div>
+
+  <div class="objection">
+    <h3>Clean blowouts ("Not today," "I'm on the phone")</h3>
+    <div class="heard">Multiple, both sessions</div>
+    <span class="status working">You handle these well already, no change needed</span>
+    <ul class="line-list">
+      <li>All good, catch you on a better day.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Patterns to watch tonight</h2>
+    <span class="section-count">the same ones kept showing up</span>
+  </div>
+
+  <div class="pattern">
+    <span class="num">01</span>
+    <p><strong>You close the interaction yourself the second it gets skeptical or flat.</strong> "Have a good day" is your default exit even when there was somewhere to take it. Reframe or ask a curiosity follow-up before you bail.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">02</span>
+    <p><strong>You ask for the number after the energy already dropped, not at the peak.</strong> Belina in 00036: good rapport on "where are you from," then it went flat, then you asked for Instagram into dead air. Ask right when it's warm.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">03</span>
+    <p><strong>You're avoiding the close itself, not just fumbling it.</strong> On tape: "I keep my phone far away so it's not recording," and "I never put her Instagram in my phone, because then they can just ignore me." That's the fear talking before the ask even happens. Ask anyway.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">04</span>
+    <p><strong>You run out of material for the second girl in a group.</strong> Good with the first, then admit on tape you're "stuck," "it's boring," nothing left to say. Have one dedicated question ready just for the friend before you need it.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">05</span>
+    <p><strong>Names don't survive the day.</strong> You flagged this yourself as a real problem. Voice memo the name right after you walk away, every time.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">06</span>
+    <p><strong>Indirect bits land flat.</strong> The fortune-teller / lifesaver line confused more than it charmed, Nikos's own note was "you have to make it obvious." Cut the setup, land the point sooner.</p>
+  </div>
+  <div class="pattern">
+    <span class="num">07</span>
+    <p><strong>Age-check early in group approaches.</strong> One case where you didn't clock a 16 year old in the group until after. Build it into the first ten seconds.</p>
+  </div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>What's already working</h2>
+    <span class="section-count">keep doing this</span>
+  </div>
+  <div class="working"><strong>The first-move poll opener</strong> gets a conversation started reliably, every single time it was used.</div>
+  <div class="working"><strong>The guessing game</strong> ("where are you from... Algeria?") turns a flat opener into a real back and forth.</div>
+  <div class="working"><strong>Self-deprecating age jokes</strong> land well and disarm fast.</div>
+  <div class="working"><strong>Pushing past a hedge</strong> with "but in your own opinion" consistently gets a real answer.</div>
+  <div class="working"><strong>Graceful exits on clean blowouts,</strong> no awkward over-pushing, no chasing. Correct instinct, keep it.</div>
+</section>
+
+<section>
+  <div class="section-head">
+    <h2>Not hit yet, but worth having ready</h2>
+  </div>
+  <div class="objection">
+    <h3>"I'm not interested"</h3>
+    <ul class="line-list">
+      <li>Fair enough, that's what makes it a real answer. Take care.</li>
+    </ul>
+  </div>
+  <div class="objection">
+    <h3>Walking away mid-sentence</h3>
+    <ul class="line-list">
+      <li>Let her go, no chasing. Light and to her back, not shouted: "all good, take care."</li>
+    </ul>
+  </div>
+  <div class="objection">
+    <h3>"I don't talk to strangers"</h3>
+    <ul class="line-list">
+      <li>Smart rule. I'm Thor now, we're not strangers anymore.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  Built from your own recordings, session 1 and session 2. Nothing here left this device.
+</footer>
+
+</body>
+</html>

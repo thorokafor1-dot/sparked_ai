@@ -25,7 +25,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 
 OUTPUT_DIR = Path(__file__).parent / "output"
-TARGET_SIZE = (1280, 720)
+TARGET_SIZE = (1920, 1080)  # true 1080p, not YouTube's 1280x720 minimum
 # Below this mean luminance (0-255), a source frame reads as "dark" (night infield
 # footage) and needs an exposure lift before anything else, or it composites to
 # near-black.

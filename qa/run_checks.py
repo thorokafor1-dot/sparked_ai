@@ -62,6 +62,11 @@ def main() -> int:
     if args.changed:
         paths += git_changed_files()
     results = checks.run(paths, args.level)
+    # an explicitly named file that doesn't exist is a failure, not a silent pass
+    # (a crashed render once "passed" QA because its output was never written)
+    for p in paths[:len(args.paths)]:
+        if not p.exists():
+            results.setdefault(str(p), []).append("file does not exist (did the render/script fail?)")
     if results:
         print(format_report(results))
         return 1

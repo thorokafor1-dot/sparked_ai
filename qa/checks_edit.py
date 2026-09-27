@@ -76,6 +76,45 @@ def edl_openers(path: Path) -> list[str]:
     return problems
 
 
+MAX_LEAD_IN_SECS = 0.1  # a talking-head piece may open this long before the voice, no more (else: audible inhale)
+
+
+@check("talking-head-no-breath-starts", level="full", exts={".py"}, paths=EDL_GLOB)
+def talking_head_no_breath_starts(path: Path) -> list[str]:
+    """Every talking-head cut must open on the voice, not on the inhale before it (user heard breaths)."""
+    render_py = path.parent / "render.py"
+    text = read_text(render_py) or ""
+    if "def voice_onset" not in text or "def split_on_pauses" not in text:
+        return []  # not a mic-synced talking-head project
+    sys.path.insert(0, str(path.parent))
+    try:
+        import importlib
+        for mod in ("edl", "render"):
+            sys.modules.pop(mod, None)
+        edl, render = importlib.import_module("edl"), importlib.import_module("render")
+        sil = render.talking_head_silences()
+        problems = []
+        for seg in edl.EDL:
+            if seg.get("src") != "th":
+                continue
+            pieces = render.split_on_pauses(seg["start"], seg["end"], sil,
+                                             seg.get("exact_start", False), seg.get("exact_end", False))
+            for s, e in pieces:
+                i = int(render.cam_to_mic(s) / 0.02)
+                on = render.voice_onset(i, i + 75)
+                lead = None if on is None else (on - i) * 0.02
+                if lead is None or lead > MAX_LEAD_IN_SECS:
+                    problems.append(f"talking-head piece at {s:.2f}s opens "
+                                    f"{'with no voice' if lead is None else f'{lead:.2f}s before the voice'} "
+                                    f"(audible inhale/dead air); trim to the voice onset")
+        problems += [f"cut warning: {w}" for w in render.CUT_WARNINGS]
+        return problems
+    finally:
+        sys.path.remove(str(path.parent))
+        for mod in ("edl", "render", "brand_graphics"):
+            sys.modules.pop(mod, None)
+
+
 @check("render-mic-and-outro", level="fast", exts={".py"}, paths=RENDER_GLOB)
 def render_mic_and_outro(path: Path) -> list[str]:
     text = read_text(path) or ""
@@ -85,4 +124,8 @@ def render_mic_and_outro(path: Path) -> list[str]:
         problems.append(f"ENDSCREEN_SECS = {m.group(1)}; keep it {ENDSCREEN_RANGE[0]:.0f}-{ENDSCREEN_RANGE[1]:.0f}s for retention")
     if "TALKING_HEAD" in text and "MIC" in text and not re.search(r'"-i",\s*str\(MIC\)', text):
         problems.append("talking-head audio must come from the synced external mic (MIC input), never the camera track")
+    if "TALKING_HEAD" in text and "subtitles=" not in text:
+        problems.append("talking-head long-form must burn in captions for the talking-head parts (user: 'it's missing captions')")
+    if re.search(r"crop=iw/\{?PUNCH", text):
+        problems.append("hard punch-in zooms on jump cuts; Sparked brand uses smooth eased push-ins")
     return problems

@@ -41,7 +41,7 @@ def analyze(path: Path) -> dict:
     """
     has_audio = bool(streams(path, "audio"))
     vf = "[0:v]scale=320:-2,blackdetect=d=0.5:pix_th=0.10,freezedetect=n=0.003:d=3[v]"
-    af = ";[0:a]silencedetect=n=-50dB:d=2,ebur128=peak=true:framelog=verbose[a]" if has_audio else ""
+    af = ";[0:a]silencedetect=n=-50dB:d=2,ebur128=peak=true:framelog=info[a]" if has_audio else ""
     cmd = ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-filter_complex", vf + af,
            "-map", "[v]"] + (["-map", "[a]"] if has_audio else []) + ["-f", "null", "-"]
     err = subprocess.run(cmd, capture_output=True, text=True, encoding="utf-8", errors="replace").stderr
@@ -58,7 +58,10 @@ def analyze(path: Path) -> dict:
     summary = err[err.rfind("Summary:"):] if "Summary:" in err else ""
     lufs = re.search(r"I:\s+(-?[\d.]+) LUFS", summary)
     peak = re.search(r"Peak:\s+(-?[\d.]+|-inf) dBFS", summary)
+    # momentary (400ms) loudness per 100ms frame, for spotting sudden spikes (e.g. an SFX far above the voice)
+    momentary = [(float(t), float(v)) for t, v in re.findall(r"t:\s*([\d.]+)\s+TARGET:.*?M:\s*(-?[\d.]+)", err)]
     return {
+        "momentary": momentary,
         "black": black,
         "frozen": frozen,
         "silent": silent,

@@ -230,6 +230,17 @@ def load_all() -> None:
 LOAD_ERRORS: list[str] = []
 
 
+def _src_hash(fn: Callable) -> str:
+    import hashlib
+    import inspect
+    # whole module + the shared media helpers, so constants (thresholds) and analyze() changes count too
+    try:
+        src = Path(inspect.getsourcefile(fn)).read_bytes() + (Path(__file__).parent / "media.py").read_bytes()
+        return hashlib.md5(src).hexdigest()[:8]
+    except (OSError, TypeError):
+        return "nosrc"
+
+
 def run(paths: list[Path], level: str = "fast") -> dict[str, list[str]]:
     """Return {repo-relative path: [problem, ...]} for every path with problems."""
     levels = {"fast"} if level == "fast" else {"fast", "full"}
@@ -248,13 +259,16 @@ def run(paths: list[Path], level: str = "fast") -> dict[str, list[str]]:
                 key = None
                 if c.cache:
                     st = path.stat()
-                    key = f"{c.name}|{rel_path(path)}|{st.st_mtime_ns}|{st.st_size}"
+                    # the check's own source is part of the key, so editing a check re-runs it
+                    key = f"{c.name}|{_src_hash(c.fn)}|{rel_path(path)}|{st.st_mtime_ns}|{st.st_size}"
                     if key in cache:
                         problems += [f"[{c.name}] {p}" for p in cache[key]]
                         continue
                 try:
                     found = c.fn(path)
-                    if key:
+                    # never cache a verdict on a file that was still settling: checks skip in-progress
+                    # renders, and caching that skip once let a broken render (v8, 18s of audio lost) pass
+                    if key and __import__("time").time() - st.st_mtime > 30:
                         cache[key] = found
                         cache_dirty = True
                     problems += [f"[{c.name}] {p}" for p in found]

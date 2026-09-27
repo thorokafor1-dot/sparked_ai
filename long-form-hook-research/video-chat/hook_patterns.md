@@ -1,6 +1,11 @@
 # Video Chat (Omegle/Monkey App) Hook Patterns
 
-Source: opening ~90 seconds of the 14 highest-scoring `Video Chat`-format outliers in `outlier-tracking/niche-long-form/data.json`, pulled via `pull_hook_transcripts.py` (`hook_transcripts.json` has the full raw text). 21 of 35 candidates had no captions available, mostly low-effort farm/reaction channels, a real signal about this bucket's overall quality, not just a transcription gap.
+Source: opening ~90 seconds of the highest-scoring `Video Chat`-format outliers in `outlier-tracking/niche-long-form/data.json`, pulled via `pull_hook_transcripts.py`. The archetypes below are from the first pass (14 candidates, YouTube captions, mostly English channels: Marlon, CAM, Kazu Languages, etc.), still the clearest read. A second pass with the local yt-dlp/whisper fallback pulled 16 more against a refreshed, larger data pool, see Data quality notes below before trusting anything from that second batch at face value.
+
+## Data quality notes (second pass)
+The refreshed pool skews heavily toward Hindi/Urdu/Spanish/Japanese Omegle content (`Monkey Chats`, `Panki Streams`, `Hisanlo`, etc.), non-English, excluded from the archetypes below same as elsewhere in this project. Two more are outright mistagged: `HYPEMANPRINCE`'s "Venezuela blind man rizz prank" is in-person infield content (approaching someone on a bus/plane), not Omegle/video-chat at all, and `HealthyGamerGG`'s "Dr. K Breaks Down The Science of Flirting" is explainer/analysis content (a psychology talking-head breakdown), not video-chat footage either. `Techy Bindass`'s "Top 3 Free Video Call Apps" is an app-listicle that matched on "video chat" as a keyword, unrelated to flirting/dating content, a relevance-filter false positive. Same lesson as `../infield/`: eyeball every fresh pull, don't trust the Format tag blindly.
+
+Two usable English entries from the second pass, both reinforcing existing archetypes rather than adding new ones: Mia Mellor's "FLIRTING ON OMEGLE (bad idea)" opens with a full personal-vlog intro talking to camera before cutting to the Omegle footage, a soft variant of Archetype A below (branded/personal intro doesn't cost reach here), though at a much lower score (5.9x) than Marlon's version. CaseOhs Orbit's video is a reaction/commentary video *about* someone else's flirting content, a distinct meta-genre (reacting to video-chat clips rather than filming them) worth flagging but not elevated to its own archetype on one example.
 
 ## Four hook archetypes found
 
@@ -37,5 +42,6 @@ Kazu Languages (*15 Languages to Strangers*, *14 Languages to Strangers*), "Usin
 - A punchy, title-matching first line still works for reach on a small/new channel, keep that route available for one-off videos not tied to an existing series.
 
 ## Open questions / next steps
-- [ ] Re-run `pull_hook_transcripts.py` after `outlier-tracking/niche-long-form/data.json` refreshes, current pool skews toward large established channels (Marlon 1.55M subs, Kazu Languages 1.64M, MarcusT 2.4M) rather than small/adjacent creators, worth checking if smaller-channel patterns differ once more data exists.
-- [ ] The 21 caption-less skips were mostly low-effort farm content, consider whether that's worth a manual watch-and-transcribe pass at all, or whether it confirms this sub-bucket isn't worth chasing further.
+- [x] Re-ran `pull_hook_transcripts.py` after a data refresh, the refreshed pool skewed non-English and mistagged rather than surfacing new small/adjacent-creator English examples, see Data quality notes above.
+- [ ] Consider an audio-language check (same idea as `../explainer/`'s open item) so non-English candidates get bucketed correctly instead of silently inflating a sample that then reads as "mostly unusable."
+- [ ] Investigate whether `HYPEMANPRINCE`/`HealthyGamerGG`-style mistagging is common enough in the Video Chat bucket to warrant a content-based override like `is_video_chat_content`, but in the other direction (catching non-video-chat content that slipped in).

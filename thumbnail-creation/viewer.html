@@ -1,0 +1,97 @@
+<title>Meet9 Thumbnail Check</title>
+<style>
+  :root{
+    --ground:#f4f3f0;
+    --surface:#ffffff;
+    --ink:#1a1816;
+    --ink-soft:#5c5850;
+    --line:#e2ded6;
+    --accent:#c46a2e;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ground:#151412;
+      --surface:#1e1c19;
+      --ink:#f1efe9;
+      --ink-soft:#a89e8f;
+      --line:#332f29;
+      --accent:#e08a45;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ground:#151412;
+    --surface:#1e1c19;
+    --ink:#f1efe9;
+    --ink-soft:#a89e8f;
+    --line:#332f29;
+    --accent:#e08a45;
+  }
+  *{box-sizing:border-box;}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+    padding:0 16px;
+  }
+  .wrap{max-width:1040px;margin:0 auto;padding-block:28px 60px;}
+  header{margin-bottom:18px;}
+  .eyebrow{
+    font:600 11px/1 ui-monospace,SFMono-Regular,Menlo,monospace;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--accent);
+  }
+  h1{font-size:clamp(20px,3.5vw,28px);margin:6px 0 4px;text-wrap:balance;}
+  p.sub{color:var(--ink-soft);font-size:14px;margin:0;max-width:60ch;line-height:1.5;}
+  .frame{
+    margin-top:22px;border:1px solid var(--line);border-radius:10px;
+    overflow:hidden;background:var(--surface);
+  }
+  .frame img{display:block;width:100%;height:auto;}
+  .meta{
+    display:flex;flex-wrap:wrap;gap:16px;margin-top:14px;
+    font:12px ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink-soft);
+  }
+  .meta b{color:var(--ink);font-weight:600;}
+  .zoombtn{
+    margin-top:16px;display:inline-block;font-size:13px;font-weight:600;
+    color:var(--surface);background:var(--ink);border:none;border-radius:7px;
+    padding:9px 16px;cursor:pointer;
+  }
+  .zoombtn:hover{opacity:.9;}
+  #zoomview{
+    position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:50;
+    display:flex;align-items:center;justify-content:center;overflow:auto;padding:20px;
+  }
+  #zoomview img{max-width:none;width:1920px;}
+  #zoomview .close{
+    position:fixed;top:16px;right:16px;background:var(--surface);color:var(--ink);
+    border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;cursor:pointer;
+  }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Base draft &middot; real frames, no AI recreation yet</div>
+    <h1>meet9_reference_v2.png</h1>
+    <p class="sub">Two real frame shots, no AI regeneration applied: girl 2's laugh (left, unchanged) and a stronger, bigger-laugh reaction for the right panel. This is the base to approve before spending on the AI recreation/upscale pass. Click the image (or the button below) to inspect it at full native resolution, pixel for pixel.</p>
+  </header>
+
+  <div class="frame">
+    <img src="meet9_reference_v2.png" alt="Base draft, two real frame shots" onclick="document.getElementById('zoomview').hidden=false">
+  </div>
+
+  <div class="meta">
+    <span><b>1920 &times; 1080</b> native</span>
+    <span>rendered <b><span id="stamp"></span></b></span>
+  </div>
+
+  <button class="zoombtn" onclick="document.getElementById('zoomview').hidden=false">View at 100% (native pixels)</button>
+</div>
+
+<div id="zoomview" hidden>
+  <button class="close" onclick="document.getElementById('zoomview').hidden=true">Close</button>
+  <img src="meet9_reference_v2.png" alt="Full resolution">
+</div>
+
+<script>
+  document.getElementById('stamp').textContent = new Date().toLocaleTimeString();
+</script>

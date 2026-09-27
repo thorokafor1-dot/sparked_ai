@@ -103,6 +103,23 @@ def ideation_sections(path: Path) -> list[str]:
     return problems
 
 
+OVERCLAIM = re.compile(r"\b(every (girl|woman|one|time|single)|everyone|all of them|all (the )?girls|always|never fails)\b", re.I)
+
+
+@check("title-overclaim", paths=["video-ideation/ideation_*.md", "long-form-video-editing/*/package.md"], exts={".md"})
+def title_overclaim(path: Path) -> list[str]:
+    """Titles promising 'every girl' etc. when the cut only shows it a couple of times (critic catch, 2026-09-26).
+    Mark a title line '(verified)' once the count in the edit has been checked."""
+    problems = []
+    for line in (read_text(path) or "").splitlines():
+        if re.search(r"\btitle", line, re.I) or line.lstrip().startswith(("-", "*", "1", "2", "3")):
+            m = OVERCLAIM.search(line)
+            if m and "(verified)" not in line.lower():
+                problems.append(f"title claims '{m.group(0)}': count it in the edit, then fix the claim "
+                                f"or mark the line (verified): {line.strip()[:80]}")
+    return problems
+
+
 def _ass_time(t: str) -> float:
     h, m, s = t.split(":")
     return int(h) * 3600 + int(m) * 60 + float(s)

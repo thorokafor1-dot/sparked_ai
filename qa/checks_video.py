@@ -19,6 +19,7 @@ VIDEO_EXTS = {".mp4", ".mov"}
 
 LUFS_RANGE = (-18.0, -10.0)   # YouTube/TikTok/IG normalise around -14; outside this sounds too quiet or crushed
 MAX_TRUE_PEAK = -0.5          # dBFS; above this the platform encode is likely to clip
+SPIKE_LU = 8.0               # momentary (400ms) loudness this far above integrated = jarring spike
 EDGE_GRACE = 1.5              # seconds at the very end where a fade to black/silence is intentional
 
 
@@ -46,7 +47,12 @@ def being_written(path: Path) -> bool:
             except (psutil.NoSuchProcess, psutil.AccessDenied):
                 continue
     import time
-    return time.time() - path.stat().st_mtime < 20  # still being flushed
+    # no writer process: the file is finished or just flushing. Wait for it to settle, then check it for real
+    # (returning True here used to make a freshly written render silently "pass").
+    age = time.time() - path.stat().st_mtime
+    if age < 20:
+        time.sleep(20 - age)
+    return False
 
 
 @check("video-specs", level="full", exts=VIDEO_EXTS, paths=ALL_RENDERS, cache=True)
@@ -82,6 +88,15 @@ def video_specs(path: Path) -> list[str]:
         if vd and ad and abs(vd - ad) > 0.3:
             problems.append(f"audio ({ad:.2f}s) and video ({vd:.2f}s) lengths differ by {abs(vd - ad):.2f}s, "
                             f"check for a silent or frozen tail / sync drift")
+        # Declared durations can hide drift: concatenating AAC pieces keeps every piece's encoder
+        # priming, so the real sample count grows past the video (monkey_longform_v1 was +4.3s,
+        # audio seconds late by the end). Frames x 1024 is the true decoded length.
+        nf, sr = int(a.get("nb_frames", 0) or 0), int(a.get("sample_rate", 0) or 0)
+        if vd and nf and sr and a.get("codec_name") == "aac":
+            real = nf * 1024 / sr
+            if abs(real - vd) > 0.5:
+                problems.append(f"audio holds {real:.2f}s of samples vs {vd:.2f}s of video ({real - vd:+.2f}s): "
+                                f"A/V sync drift, likely AAC pieces concatenated with -c copy (use PCM pieces)")
     d = media.duration(path)
     if is_short and not 5 <= d <= 180:
         problems.append(f"short is {d:.1f}s, must be 5-180s")
@@ -108,6 +123,20 @@ def video_content(path: Path) -> list[str]:
     if r["lufs"] is not None and not LUFS_RANGE[0] <= r["lufs"] <= LUFS_RANGE[1]:
         problems.append(f"integrated loudness {r['lufs']:.1f} LUFS, target about -14 "
                         f"(allowed {LUFS_RANGE[0]:.0f} to {LUFS_RANGE[1]:.0f}); add loudnorm=I=-14:TP=-1")
+    # Sudden spikes read as "ear rape" even when the average is fine (user feedback on monkey_longform_v2:
+    # SFX far louder than the voice). Flag momentary loudness well above the integrated level.
+    if r["lufs"] is not None:
+        hot = [t for t, m in r.get("momentary", []) if m > r["lufs"] + SPIKE_LU]
+        spans, cur = [], None
+        for t in hot:
+            if cur and t - cur[1] <= 0.5:
+                cur[1] = t
+            else:
+                cur = [t, t]
+                spans.append(cur)
+        for s, e in spans[:8]:
+            problems.append(f"loudness spike {_fmt(max(s - 0.4, 0))}-{_fmt(e)}: momentary loudness over "
+                            f"{SPIKE_LU:.0f} LU above the average, an SFX or music hit is too loud for the voice")
     if r["true_peak"] is not None and r["true_peak"] > MAX_TRUE_PEAK:
         problems.append(f"true peak {r['true_peak']:.1f} dBFS, will clip after platform re-encode; "
                         f"limit to -1 dBTP")
