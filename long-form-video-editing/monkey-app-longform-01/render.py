@@ -617,7 +617,8 @@ def main():
     # ~18s of audio (v7/v8 went out of sync in places); a finished PCM track can't be starved that way.
     voice = level_voice(pieces)   # creator's quieter mic lifted to her level
     audio_fl = [
-        "[2:a]asplit[voice][key]",
+        # gentle dialogue compression: tames loud laughs/shouts in the calls (a spike at 0:28 in v9)
+        "[2:a]acompressor=threshold=-20dB:ratio=3:attack=5:release=200:makeup=1,asplit[voice][key]",
         f"[1:a]volume={music_db:.1f}dB[mus]",
         "[mus][key]sidechaincompress=threshold=0.02:ratio=10:attack=15:release=450[duck]",
         "[voice][0:a][duck]amix=inputs=3:normalize=0,apad=pad_dur=4,"

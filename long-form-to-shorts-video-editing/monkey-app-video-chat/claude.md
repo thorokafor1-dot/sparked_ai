@@ -15,7 +15,8 @@ This editing style (the two-pane reframe logic specifically) only applies to thi
   - When neither is found, a color-histogram comparison against frames already confirmed to be the call layout decides whether this is still the same room (undetected angle -- composite as `split`) or genuinely different content (a meme/reaction cutaway -- `none`, shown full-frame untouched).
   - Each pane's x-position is tracked continuously across the whole clip (a momentary miss holds the nearest real detection rather than a blind static guess) and every crop is bounded to its own pane's actual width, so a half-stack crop can never bleed into the other person's side.
 - `render_short.py`, builds the dynamic reframe + burns in captions via ffmpeg's `ass` filter, in one encode pass.
-- `run_pipeline.py`, orchestrates all of the above for one or more `--segment start:end` windows.
+- `find_moments.py`, Claude scores the whole transcript in overlapping windows against a fixed 0-100 rubric (hook, payoff, flirt priority, stands alone), then takes the global top N, dedupes overlaps and snaps edges to word boundaries. Mechanics borrowed from OpenShorts (github.com/mutonby/openshorts).
+- `run_pipeline.py`, orchestrates all of the above, either for `--segment start:end` windows or `--auto N` (Claude's N best moments).
 
 ## Storage
 Downloaded source videos are temporary. `run_pipeline.py` deletes the source video from `input/` once it's finished rendering the requested shorts (pass `--keep-source` to retain it) -- these Drive downloads run to ~1GB and shouldn't pile up on disk. Only `work/*_transcript.json` (small) and the finished clips in `output/` persist.
@@ -25,7 +26,7 @@ Testing on the first 2 "girl" segments only. Segment boundaries (which portion o
 
 ## Not yet built (Phase 2)
 - Reaction/cutaway clip splicing (like the WWE/anime meme inserts in the reference) and the ID-card-style prop insert, need a local library of the user's own reaction clips, since the reference's clips can't be reused directly.
-- Automatic segment/speaker boundary detection.
+- Automatic speaker boundary detection (moment selection is automated via `--auto`, but the transcript still has no speaker labels).
 - The reference's zoom/blur punch transition between caption phrases.
 - The reframe pane split (`main_frac=0.72` in `reframe.py`) is a hardcoded estimate of where the source's main/host video tiles divide -- works for this source's layout but may need adjusting for a differently-composed source.
 - Face detection is Haar-cascade based (OpenCV, no extra model download) -- it's not identity-aware, so it can't distinguish "this pane-sized face is her" from "this pane-sized face is him" by appearance, only by which pane/position it's in. Good enough for this source's layout but a real limitation if a future source doesn't follow the same left/right convention consistently.

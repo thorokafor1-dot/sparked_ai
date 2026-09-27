@@ -1,0 +1,88 @@
+{
+  "generated": "2026-09-27",
+  "source": "outlier-tracking/niche-long-form + general-long-form, scored via extract_patterns.py",
+  "headline_finding": "Explainer/psychology content scores dramatically higher than infield/POV content in the tracked niche data (top scores 572.6 / 399.6 / 176.1 vs. bar's top of 142.0 and street's top of 67.3). This channel is on-camera and does real infield work already, which most competing explainer channels lack as proof, that is a real differentiation angle worth testing, not just a volume play.",
+  "categories": {
+    "explainer": {
+      "coverage": "38 tracked entries, strongest category by score",
+      "ideas": [
+        {
+          "title": "7 Signs She Wants You To Approach Her (Explained With Real Footage)",
+          "thumbnail_scenario": "Medium/wide shot, on camera, confident talking-head pose, small real infield clip inset in the corner as proof, natural lighting, minimal caption text",
+          "source": "Iron Mindset, 7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained, score 572.6",
+          "why": "Direct lift of the highest-scoring title formula in the whole dataset, differentiated by backing the claims with real footage instead of stock/AI voiceover, which most channels in this bucket use"
+        },
+        {
+          "title": "The Psychology Of Why Women Test Men (And How I Respond On Camera)",
+          "thumbnail_scenario": "On camera, mid-explanation gesture, natural lighting, no vignette",
+          "source": "Silent Mastery, The Psychology of Making Them Crave You, score 176.1; keyword bucket 'how women test men'",
+          "why": "Psychology-explainer framing with a first-person real-response angle this channel can uniquely deliver"
+        },
+        {
+          "title": "How To Make Her Want You Before You Even Approach",
+          "thumbnail_scenario": "On camera, confident/relaxed expression, medium/wide framing",
+          "source": "Feminine Connection, How to Make Her WANT You, Even When She's Not Interested, score 399.6",
+          "why": "Second-highest scoring title formula in the dataset, adapted to a pre-approach framing that fits an in-person cold-approach channel better than a texting/relationship angle"
+        }
+      ]
+    },
+    "bar": {
+      "coverage": "41 tracked entries",
+      "ideas": [
+        {
+          "title": "I Tried Cold Approaching Women At The Bar For 30 Days (Here's What Changed)",
+          "thumbnail_scenario": "Medium/wide, real bar setting, natural lighting, candid mid-conversation moment",
+          "source": "Dylan McKnight, I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible), score 142.0, and I tried to 'Cold Approach' 100 girls without any experience, score 80.0",
+          "why": "Highest-scoring real infield precedent in the bar/nightlife bucket, time-boxed challenge structure"
+        },
+        {
+          "title": "I Said This At The Bar... Her Reaction",
+          "thumbnail_scenario": "Medium/wide, candid reaction moment, man and woman both visible, natural lighting",
+          "source": "Already promoted, see video-ideas/bar/bar_line_testing_format.md, cites NanoBaiter (8,816,745) and Real Princess Sophia (3,761,183)",
+          "why": "Strongest cross-niche lineage found this session, two convergent outliers on the same structure"
+        }
+      ],
+      "note": "Full title/lineage detail already lives in video-ideation/video-ideas/bar/, not duplicated here."
+    },
+    "street-daytime-pov": {
+      "coverage": "50 tracked entries",
+      "ideas": [
+        {
+          "title": "How I Create Attraction In The First 10 Seconds (Infield Breakdown)",
+          "thumbnail_scenario": "Medium/wide, street setting, natural lighting, real approach moment",
+          "source": "ApproachCraft, How To Create Sexual Tension During Cold Approach (Infield Breakdown), score 30.3",
+          "why": "Bridges the high-scoring explainer format into infield content by teaching through real footage instead of pure theory"
+        },
+        {
+          "title": "POV: I Approached Her In 10 Seconds. Real Infield (Uncut)",
+          "thumbnail_scenario": "Medium/wide, street setting, candid moment",
+          "source": "Empathic Pickup Artist, POV: She Invited Me Home, Best Nightgame Pickup Ever, Real Infield (Uncut), score 58.6",
+          "why": "POV framing plus 'Real Infield (Uncut)' trust tag, the top-scoring pattern in this category"
+        }
+      ],
+      "note": "Best Places to Cold Approach in Public (TIER LIST) already promoted and scripted, see ideation_best_places_tier_list.md."
+    },
+    "monkey-app-video-chat": {
+      "coverage": "133 tracked entries, largest single category by volume, but the top-scoring titles lean drama/persona/meme-heavy (confrontation clips, character bits like 'BANDANA MAN', emoji-heavy titles), which does not fit this channel's documented cool/smooth/mature brand vibe. Ideas below adapt the underlying mechanics, not the raw aesthetic.",
+      "ideas": [
+        {
+          "title": "Ranking Every Girl I've Talked To On Monkey App (TIER LIST)",
+          "thumbnail_scenario": "Tier-board graphic style, matches the existing tier-list thumbnail convention, not the man-and-woman chemistry pattern",
+          "source": "Tier-list format study (Coach Knox), applied to this channel's large existing Monkey App footage library",
+          "why": "Reuses the proven tier-list mechanic on the single largest real footage pool this channel already has"
+        },
+        {
+          "title": "I Tested Pickup Lines On Monkey App. Her Reactions Ranked",
+          "thumbnail_scenario": "Screen-recording style split frame, real reaction visible, minimal caption",
+          "source": "Adapted from the bar line-testing format (video-ideas/bar/bar_line_testing_format.md) applied to video-chat medium",
+          "why": "Same proven structure as the bar line-testing series, different medium, doubles the format's output without new research"
+        }
+      ]
+    }
+  },
+  "next_steps": [
+    "Pick 3-5 ideas to generate AI concept thumbnail mockups for (needs a self-reference photo, pending)",
+    "Promote a chosen idea into a full ideation_<name>.md concept doc via the existing hook-researcher -> script-writer pipeline",
+    "Publish/refresh the Claude Artifact dashboard once mockups exist"
+  ]
+}

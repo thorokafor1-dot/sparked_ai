@@ -13,10 +13,17 @@ thumbnail-creation/gfpgan/
 thumbnail-creation/input/
 thumbnail-creation/work/
 thumbnail-creation/output/
+thumbnail-creation/client_secret.json
+thumbnail-creation/token.json
+# Personal identity reference photos, never commit
+thumbnail-creation/reference/self/
 long-form-hook-research/*/audio/
 long-form-to-shorts-video-editing/*/input/
 long-form-to-shorts-video-editing/*/output/
 long-form-to-shorts-video-editing/*/models/
+# Raw transcripts of real people's conversations, never commit (same policy as
+# cold-approach-review/ and long-form-video-editing/*/clips_raw/ below)
+long-form-to-shorts-video-editing/*/work/
 outlier-tracking/grok-swipe-pack/
 long-form-video-editing/*/input/
 
@@ -35,3 +42,8 @@ long-form-video-editing/*/output/
 long-form-video-editing/*/ref/
 # Raw call cuts of real people, never commit
 long-form-video-editing/*/clips_raw/
+
+# DeepFilterNet binary (tools/denoise.py downloads it on first use)
+tools/bin/
+# Channel analytics OAuth token, never commit
+channel-analytics/token.json

@@ -4,7 +4,7 @@ Single job: render finished 16:9 long-form YouTube edits. Each video gets its ow
 
 ## Subfolders
 - `talking-head-infield/`: talking head plus spliced infield clips (e.g. "10 Conversation Starters").
-  - The edit lives in `edl.py` (edit decision list). `render.py --out output/<name>_vN.mp4` jump-cuts pauses, normalises every segment to 1080p30 / 48k, concatenates, then runs one loudnorm pass.
+  - The edit lives in `edl.py` (edit decision list). `render.py --out output/<name>_vN.mp4` jump-cuts pauses, normalises every segment to 1080p30 / 48k, concatenates, then runs one loudnorm pass. Infield clip audio is street-noise cleaned by DeepFilterNet first (`tools/denoise.py`, 18 dB max reduction, cached in `work/denoised/`); `--no-denoise` uses the raw audio, `--denoise-atten` sets the strength.
   - Timestamps come from `work/*.txt` transcripts (`transcribe.py`). Script timestamps have been wrong before (see the `edl.py` docstring), so always verify against the transcript.
 - `monkey-app-longform-01/`: Monkey App long-form. `render.py` builds from `edit.json` (crop, name-badge blur, punch-ins, SFX and a ducked music bed). Pieces are cached by their parameters, so re-renders only redo what changed.
 

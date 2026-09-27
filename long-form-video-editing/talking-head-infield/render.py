@@ -22,10 +22,14 @@ import numpy as np
 from brand_graphics import SUB_BELL_AT, SUB_CLICK_AT, SUB_SECS
 from edl import CLIPS_DIR, EDL, MIC, SUBSCRIBE_AT, TALKING_HEAD
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "tools"))
+from denoise import denoised_wav  # noqa: E402  DeepFilterNet street-noise removal for the infield clips
+
 HERE = Path(__file__).parent
 WORK = HERE / "work"
 SEG_DIR = WORK / "segments"
 TXT_DIR = WORK / "txt"
+CLEAN_AUDIO: dict[Path, Path] = {}  # infield clip -> its denoised wav (filled in main unless --no-denoise)
 BRAND = WORK / "brand"  # Sparked graphics from brand_graphics.py
 CAPTION_FONT = "work/fonts/grotesk_600.ttf"  # Space Grotesk, the landing page body font
 
@@ -378,6 +382,10 @@ def render_segment(seg: dict, idx: int, start: float, end: float, src: Path, gai
         mic_start = cam_to_mic(start)
         cmd += ["-ss", f"{mic_start:.3f}", "-t", f"{dur:.3f}", "-i", str(MIC)]
         audio_in = 1
+    elif src in CLEAN_AUDIO:
+        # denoised wav is sample-aligned with the clip (deep-filter -D), so the same seek applies
+        cmd += ["-ss", f"{start:.3f}", "-t", f"{dur:.3f}", "-i", str(CLEAN_AUDIO[src])]
+        audio_in = 1
     fc = [f"[0:v]{','.join(vf)}[b0]"]
     for k, img in enumerate(images):
         n = audio_in + 1 + k
@@ -394,7 +402,13 @@ def render_segment(seg: dict, idx: int, start: float, end: float, src: Path, gai
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default="output/ten_openers_v1.mp4")
+    parser.add_argument("--no-denoise", action="store_true", help="Use the infield clips' raw street audio")
+    parser.add_argument("--denoise-atten", type=float, default=18.0, help="Max street-noise reduction in dB")
     args = parser.parse_args()
+    if not args.no_denoise:
+        for clip in sorted({CLIPS_DIR / f"{seg['src']}.mp4" for seg in EDL if seg["src"] not in ("th", "endscreen")}):
+            print(f"denoise {clip.name}", flush=True)
+            CLEAN_AUDIO[clip] = denoised_wav(clip, WORK / "denoised", args.denoise_atten)
 
     shutil.rmtree(SEG_DIR, ignore_errors=True)
     SEG_DIR.mkdir(parents=True)
@@ -419,7 +433,7 @@ def main() -> None:
                                                        seg.get("exact_start", False), seg.get("exact_end", False))
         else:
             src, ranges = CLIPS_DIR / f"{seg['src']}.mp4", [(seg["start"], seg["end"])]
-        gain = source_gain(MIC if src == TALKING_HEAD else src, gains)
+        gain = source_gain(MIC if src == TALKING_HEAD else CLEAN_AUDIO.get(src, src), gains)
         # a card starts on the item's first line and carries across short talking-head segments
         # ("Number nine." is under a second); an infield clip always ends it
         if seg.get("card"):

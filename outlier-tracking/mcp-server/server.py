@@ -1,11 +1,13 @@
-"""Remote MCP server exposing the outlier tracker's data.json files as live tools for
-Grok's custom connector (grok.com/connectors -> New Connector -> Custom -> this
-server's URL). Replaces the manual grok_swipe_pack.py export/drag-and-drop flow with
-Grok querying the data directly, on demand, in chat.
+"""Remote MCP server exposing the outlier tracker's data.json files, plus the video
+idea strategist's output, as live tools for Grok's custom connector (grok.com/connectors
+-> New Connector -> Custom -> this server's URL). Replaces the manual grok_swipe_pack.py
+export/drag-and-drop flow with Grok querying the data directly, on demand, in chat.
 
-Reads the same 4 data.json files the dashboard reads (see ../claude.md) straight off
-this deployment's filesystem -- Render redeploys automatically whenever main updates,
-so this stays in sync with the weekly tracker refresh without any extra wiring.
+Reads the same 4 data.json files the dashboard reads (see ../claude.md), plus
+video-ideation/strategist/ideas.json and report.json (see the video-idea-dashboard
+skill), straight off this deployment's filesystem -- Render redeploys automatically
+whenever main updates, so this stays in sync with the weekly tracker refresh and any
+ideation refresh without any extra wiring.
 
 Protected by GitHub OAuth (via FastMCP's GitHubProvider) rather than a static bearer
 token -- Grok's Custom Connector does manual OAuth client registration and won't accept
@@ -27,6 +29,8 @@ from starlette.responses import PlainTextResponse
 OWNER_GITHUB_LOGIN = os.environ.get("OWNER_GITHUB_LOGIN", "thorokafor1-dot")
 
 OUTLIER_TRACKING_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+REPO_ROOT = os.path.dirname(OUTLIER_TRACKING_DIR)
+STRATEGIST_DIR = os.path.join(REPO_ROOT, "video-ideation", "strategist")
 
 TABS = {
     "outliers": {
@@ -159,6 +163,80 @@ def get_video_details(tab: str, vid: str) -> dict:
         if r.get("vid") == vid:
             return r
     return {"error": f"No video with id '{vid}' found in tab '{tab}'."}
+
+
+def _load_ideas() -> dict:
+    path = os.path.join(STRATEGIST_DIR, "ideas.json")
+    if not os.path.exists(path):
+        raise ToolError(
+            "No ideas.json yet -- run the video-idea-dashboard skill locally to "
+            "generate one, then push, before querying it here."
+        )
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+@mcp.tool
+def list_idea_categories() -> dict:
+    """List this channel's video-idea categories (bar, monkey-app-video-chat,
+    street-daytime-pov, explainer, general), each with its idea count, real
+    outlier-tracker coverage note, and the headline strategic finding."""
+    _require_owner()
+    data = _load_ideas()
+    return {
+        "generated": data.get("generated"),
+        "headline_finding": data.get("headline_finding"),
+        "categories": {
+            cat: {"count": len(v.get("ideas", [])), "coverage": v.get("coverage", "")}
+            for cat, v in data.get("categories", {}).items()
+        },
+    }
+
+
+@mcp.tool
+def get_ideas(category: str = "") -> list:
+    """Get the ranked video idea proposals for one category, or every category if
+    none is given. Each idea has a title, a thumbnail scenario description ready to
+    turn into an image-gen prompt, the specific outlier it's sourced from, and why.
+
+    Args:
+        category: One of "bar", "monkey-app-video-chat", "street-daytime-pov",
+            "explainer", "general". Omit to get all categories at once.
+    """
+    _require_owner()
+    data = _load_ideas()
+    categories = data.get("categories", {})
+    if category:
+        if category not in categories:
+            raise ToolError(f"Unknown category '{category}'. Valid: {', '.join(categories)}")
+        return categories[category].get("ideas", [])
+    return [
+        {"category": cat, **idea}
+        for cat, v in categories.items()
+        for idea in v.get("ideas", [])
+    ]
+
+
+@mcp.tool
+def get_title_patterns(min_count: int = 1) -> list:
+    """Get the mechanical title-structure patterns (TIER LIST, "I Tested X", "Her
+    Reaction", POV:, numbered list, etc.) extracted straight from real outlier data,
+    each with how often it's shown up and its strongest real example. This is the
+    evidence behind get_ideas' proposals, not proposals itself.
+
+    Args:
+        min_count: Only return patterns seen at least this many times (default 1).
+    """
+    _require_owner()
+    path = os.path.join(STRATEGIST_DIR, "report.json")
+    if not os.path.exists(path):
+        raise ToolError(
+            "No report.json yet -- run extract_patterns.py --json locally, then "
+            "push, before querying it here."
+        )
+    with open(path, encoding="utf-8") as f:
+        report = json.load(f)
+    return [p for p in report.get("patterns_ranked", []) if p["count"] >= min_count]
 
 
 if __name__ == "__main__":

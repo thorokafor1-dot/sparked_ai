@@ -2,12 +2,26 @@
 
 Single job of this folder: produce a finished YouTube thumbnail for a long-form video, built from real frames in that video plus packaging cues pulled from the genuine in-person cold-approach outliers in `outlier-tracking/`.
 
+## One-time setup: pulling reference photos from Google Photos
+`pull_google_photos.py` needs its own OAuth client (Google Photos Picker API), separate from any other Google API credentials elsewhere in this repo. Credentials live in `.env` (gitignored), not a downloaded `client_secret.json` file, so the raw client secret never sits in a file that gets read back into a conversation:
+1. In Google Cloud Console, create/reuse a project, enable the **Google Photos Picker API**, then under APIs & Services > Credentials create an **OAuth client ID** of type **Web application** with `http://localhost:8080/` as an Authorized redirect URI.
+2. Add its Client ID and Client Secret to `thumbnail-creation/.env` yourself (same file `OPENAI_API_KEY` already lives in):
+   ```
+   GOOGLE_OAUTH_CLIENT_ID=...
+   GOOGLE_OAUTH_CLIENT_SECRET=...
+   ```
+3. If the OAuth consent screen is in **Testing** mode, add the account as a test user (Console > OAuth consent screen > Test users).
+4. Run `python pull_google_photos.py --setup` once, a real browser opens for you to log in and approve access, saves `token.json` here (gitignored, only a short-lived token pair, not the client secret). Needs an actual human login, can't be scripted.
+5. Run `python pull_google_photos.py --out reference/self/`, it opens a picker session and prints a URL, open that URL and select 1-3 clear, well-lit, full-face photos, the script waits, then downloads whatever was picked.
+
 ## Contents
 - `download_source.py`, same gdown pattern as `long-form-to-shorts-video-editing/download_source.py`, pulls the long-form source from a Drive link into `input/`.
 - `extract_candidates.py`, samples frames across a source video (or a bounded window of it) and scores them on face presence/size + a smile-detection bonus, writing top candidates to `work/frames/`. For a long source, bound the scan (`--start`/window) to the segment you actually need instead of scanning the whole file.
 - `restore_faces.py`, runs GFPGAN face restoration on one frame. Reach for this when a frame is the *right* moment (best/strongest reaction) but too motion-blurred or low-quality to use as-is, sharpening/denoising in `make_thumbnail.py` can't recover detail a blurry source never captured, but GFPGAN's learned face prior actually reconstructs plausible sharp detail (eyes, teeth, skin texture). Slow on CPU (~10-30s/frame); don't run it on frames that are already sharp. Needs `models/GFPGANv1.4.pth` (auto-downloaded on first use, ~350MB, gitignored).
 - `make_thumbnail.py`, composites a chosen frame (or two, side by side) into a finished thumbnail: exposure lift for dark footage, a light natural touch-up (or `--produced-grade` for the heavier vignette/warm-cast look), optional caption. See its module docstring for the full option set (`--frame2` for a two-panel layout, `--fit1/--fit2 contain` to letterbox a frame instead of cropping into it, `--focus-x/-y` to aim the crop).
 - `openai_regenerate.py` / `regenerate_scene.py` / `mask_composite.py`, heavier AI-regeneration path (OpenAI `gpt-image-1` edit endpoint, or local Stable Diffusion img2img) for when a frame's real problem is genuine motion blur/noise no amount of restoration can fix. See "Getting AI remakes right" below before reaching for these, the elaborate per-panel masking they implement is usually the wrong first move.
+- `generate_concept_mockup.py`, same masked-edit approach as `openai_regenerate.py`, generalized for a video idea that has no footage shot yet: takes a real reference photo of the creator (`reference/self/`) and a text scenario instead of an existing frame, so the AI only invents the background/setting, never the creator's actual likeness. Feeds `video-ideation/strategist/`'s idea-dashboard pipeline.
+- `pull_google_photos.py`, one-time-setup OAuth script that pulls the creator's chosen reference photo(s) out of their personal Google Photos library via the Photos Picker API, see setup steps above.
 
 ## Getting AI remakes right
 The simple approach beats the elaborate one: composite the full two-panel image first (real frames, `make_thumbnail.py`), then send that *whole* finished image to ChatGPT/`gpt-image-1` with a plain "make this higher quality/photorealistic" prompt -- no manual face-detection masking, no per-panel protect-columns, no moderation-workaround cropping. That one-shot approach produced a cleaner, artifact-free result (no ghosting, no deformed limbs, identity preserved) than the hand-built masking pipeline in `mask_composite.py` did across many attempts. The masking pipeline exists because it's the more *controllable* path when the simple one fails (e.g. moderation blocks a specific frame, or a real person's likeness gets altered and needs to be forced back) -- but reach for it second, not first.
