@@ -18,3 +18,4 @@ Single job: read our OWN channel's performance (not competitors', that's `outlie
 ## Gotchas
 - Quota: caption quotes cost about 250 units per long-form video (daily limit 10,000). Use `--no-quotes` on big runs.
 - Testing-mode OAuth consent tokens expire after 7 days. Re-run `oauth_setup.py` if refresh fails.
+- `oauth_setup.py` prints the consent URL instead of opening a browser, so it can be pasted into the Thor Chrome profile. It must listen on port 8080: the posting client is a Web application client and only `http://localhost:8080/` is registered, so any other port fails with `redirect_uri_mismatch`. If 8080 is busy, a stale `oauth_setup.py` is usually holding it. Kill that process rather than changing the port.

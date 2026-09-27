@@ -176,11 +176,50 @@ def _load_ideas() -> dict:
         return json.load(f)
 
 
+STYLE_RULES = {
+    "thumbnail_composition": (
+        "A woman is the thumbnail's main draw, not the creator solo, every "
+        "thumbnail needs a woman as the clear focal subject. Exception: a "
+        "tier-list format thumbnail uses an S-F tier board graphic instead, "
+        "that's not a person shot at all."
+    ),
+    "thumbnail_style": (
+        "Natural lighting, no vignette, no heavy color grade. Medium/wide "
+        "framing that keeps body language and context in frame, not a tight "
+        "face crop. Minimal or no caption text, a single word or short stat "
+        "at most."
+    ),
+    "no_dance_angle": "Never frame a title or thumbnail around a dance-request/payoff angle.",
+    "no_fabricated_dialogue": (
+        "Never invent or quote what a woman in real footage says. Her "
+        "reaction can only be described directionally (e.g. 'she lights up', "
+        "'she keeps walking'), the real footage carries the specific moment."
+    ),
+    "on_camera_creator": (
+        "The creator is on-camera, not faceless. Never propose or imply a "
+        "faceless/voiceover-only production format for this channel."
+    ),
+    "brand_vibe": "Cool, smooth, mature. Not chaotic, meme-heavy, or drama/persona-bait, even when a data category's top real outliers lean that way (e.g. monkey-app-video-chat), adapt the underlying mechanic, don't copy that aesthetic.",
+}
+
+
+@mcp.tool
+def get_style_rules() -> dict:
+    """Get this channel's standing content/style rules (thumbnail composition,
+    title framing, dialogue, brand vibe). Call this before proposing or writing
+    any title, thumbnail prompt, or script beat, these rules aren't optional
+    style preferences, they're hard constraints the owner has set."""
+    _require_owner()
+    return STYLE_RULES
+
+
 @mcp.tool
 def list_idea_categories() -> dict:
     """List this channel's video-idea categories (bar, monkey-app-video-chat,
     street-daytime-pov, explainer, general), each with its idea count, real
-    outlier-tracker coverage note, and the headline strategic finding."""
+    outlier-tracker coverage note, and the headline strategic finding. Call
+    get_style_rules first if you haven't this session, those rules govern how
+    to actually use anything returned here."""
     _require_owner()
     data = _load_ideas()
     return {

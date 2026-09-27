@@ -22,7 +22,11 @@ TOKEN_PATH = HERE / "token.json"
 
 def main() -> None:
     flow = InstalledAppFlow.from_client_secrets_file(str(CLIENT_SECRETS_PATH), SCOPES)
-    creds = flow.run_local_server(port=8080)
+    # Port 8080: the posting client is a "Web application" OAuth client, which only accepts its
+    # registered redirect URI (http://localhost:8080/), so any other port fails with redirect_uri_mismatch.
+    # open_browser=False: auto-opening launches whatever Chrome profile is currently default, which may
+    # not be the Thor profile signed into this channel. The printed URL gets pasted into the right one.
+    creds = flow.run_local_server(port=8080, open_browser=False)
     TOKEN_PATH.write_text(creds.to_json())
     print(f"Saved: {TOKEN_PATH}")
 

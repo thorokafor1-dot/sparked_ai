@@ -11,11 +11,16 @@ touch a real person's likeness, only the scene around them, so the creator's rea
 face/body from the reference photo stays untouched and only the background/setting
 changes to match the idea.
 
+Per a separate standing rule, a woman is this channel's thumbnail's main draw, not
+the creator solo, so by default the fill-in prompt asks for a woman to be added as
+the clear focal subject alongside the real (unaltered) creator. Pass --no-woman for
+a deliberate exception (e.g. a tier-list board graphic that isn't a person shot at all).
+
 Requires OPENAI_API_KEY in thumbnail-creation/.env (gitignored).
 
 Usage:
     python generate_concept_mockup.py --reference reference/self/thor_1.jpg \
-        --scenario "college campus quad between classes, daytime, casual talking-head pose" \
+        --scenario "college campus quad between classes, daytime" \
         --out output/strategist/college_campus_mockup.png
 """
 import argparse
@@ -57,6 +62,7 @@ def generate(
     face_pad: float = 0.25,
     text_band: float = 0.0,
     quality: str = "high",
+    include_woman: bool = True,
 ) -> Path:
     from openai import OpenAI
     client = OpenAI()
@@ -73,12 +79,24 @@ def generate(
     api_img.save(img_bytes_path)
     api_mask.save(mask_bytes_path)
 
+    # Standing channel rule: a woman is the thumbnail's main draw, not the creator
+    # solo, so the fill-in should add her as a real focal subject, not leave the
+    # scene empty. The creator's own likeness stays exactly as in the reference
+    # photo either way, only the masked-out (transparent) region gets generated.
+    people_clause = (
+        "Add a woman as the clear focal point of the scene, positioned so she reads "
+        "as the main subject, not a background extra, in a natural, candid moment "
+        "with the real person already in frame. She is a generated/composited "
+        "figure for this concept mockup, not a real identifiable person."
+        if include_woman else
+        "Do not add any new people."
+    )
     prompt = (
         f"Photo taken with a modern smartphone camera. Scene: {scenario}. "
         "Sharp focus, fine detail, photorealistic. Fill in the transparent area "
         "to naturally continue the existing scene, matching lighting and "
-        "perspective to the real person already in frame. Do not add any new "
-        "people, do not add any text."
+        f"perspective to the real person already in frame. {people_clause} "
+        "Do not add any text."
     )
 
     with open(img_bytes_path, "rb") as img_f, open(mask_bytes_path, "rb") as mask_f:
@@ -112,9 +130,12 @@ def main() -> None:
     parser.add_argument("--pad-factor", type=float, default=1.0)
     parser.add_argument("--face-pad", type=float, default=0.25)
     parser.add_argument("--quality", default="high", choices=["low", "medium", "high"])
+    parser.add_argument("--no-woman", action="store_true",
+                         help="Skip adding a woman to the scene (standing rule is she's the main draw in every thumbnail, only use this for a deliberate exception)")
     args = parser.parse_args()
 
-    out = generate(args.reference, args.scenario, args.out, args.pad_factor, args.face_pad, quality=args.quality)
+    out = generate(args.reference, args.scenario, args.out, args.pad_factor, args.face_pad,
+                    quality=args.quality, include_woman=not args.no_woman)
     print(f"Wrote {out}")
     print("Next: run through make_thumbnail.py for final crop/caption, then qa/checks_image.py thumbnail-specs, then critic.")
 

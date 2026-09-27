@@ -200,6 +200,17 @@ def python_imports_resolve(path: Path) -> list[str]:
         local |= {p.stem for p in d.glob("*.py")} | {p.name for p in d.iterdir() if p.is_dir()}
         if d == ROOT:
             break
+    # Also handles the sibling-folder idiom used for shared utilities like tools/
+    # denoise.py: sys.path.insert(0, str(Path(__file__).resolve().parents[N] / "name")),
+    # which makes that folder's .py files importable as top-level modules even though
+    # the folder isn't itself an ancestor of this file.
+    for n_str, folder in re.findall(r"parents\[(\d+)\]\s*/\s*[\"'](\w[\w\-]*)[\"']", text):
+        try:
+            target = path.parents[int(n_str)] / folder
+        except IndexError:
+            continue
+        if target.is_dir():
+            local |= {p.stem for p in target.glob("*.py")}
     missing = []
     for node in tree.body:  # top-level only; guarded/optional imports inside try are skipped
         names = []

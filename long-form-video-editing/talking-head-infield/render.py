@@ -46,6 +46,7 @@ GRADE = "eq=contrast=1.06:saturation=1.1:gamma=0.98"
 PUSH_BASE = (1.0, 1.07)  # talking-head pieces alternate wide/tighter framing to hide jump cuts
 PUSH_AMOUNT = 0.035  # ...and each one eases in slowly (brand: smooth push-ins, never hard punch-ins)
 VOICE_CHAIN = "highpass=f=80,acompressor=threshold=-20dB:ratio=3:attack=5:release=100:makeup=2"
+PEAK_TAMER = "acompressor=threshold=-12dB:ratio=4:attack=3:release=150"  # post-gain, shouts only
 
 MIN_GAP = 0.55  # pauses at least this long inside a talking-head range get cut
 EDGE_GAP = 0.12  # shortest breath between phrases that a range edge may snap to
@@ -374,7 +375,9 @@ def render_segment(seg: dict, idx: int, start: float, end: float, src: Path, gai
     vf += extra_vf
     af = f"volume={gain}dB,afade=t=in:d=0.02,afade=t=out:st={max(dur - 0.04, 0):.3f}:d=0.04"
     if src == TALKING_HEAD:
-        af = VOICE_CHAIN + "," + af
+        # VOICE_CHAIN runs on the raw (quiet) mic, so it barely touches emphasised words; the peak
+        # stage after the gain catches those shouts (a "Number two!" spiked 8 LU over the average)
+        af = VOICE_CHAIN + "," + af.replace(f"volume={gain}dB,", f"volume={gain}dB,{PEAK_TAMER},", 1)
     cmd = ["ffmpeg", "-y", "-hide_banner", "-ss", f"{start:.3f}", "-to", f"{end:.3f}", "-i", str(src)]
     audio_in = 0
     if src == TALKING_HEAD:

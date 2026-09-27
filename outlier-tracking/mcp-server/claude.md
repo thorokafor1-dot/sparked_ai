@@ -10,6 +10,7 @@ Protected by GitHub OAuth (`GitHubProvider`), not a static bearer token, Grok's 
 
 ## Tools
 - `list_tabs`, `get_top_outliers`, `get_video_details`: the 4 outlier-tracker tabs (niche/general x long/short form), same data the dashboard reads.
+- `get_style_rules`: this channel's standing content/style rules (thumbnail composition, no dance angle, no fabricated dialogue, on-camera not faceless, brand vibe). Grok has no access to this repo's local memory files, so this tool is the only way it sees these rules, call it before any tool that proposes a title/thumbnail/idea. Keep `STYLE_RULES` in `server.py` in sync whenever a standing rule changes elsewhere (a skill file, a memory feedback entry), and push, or the connector serves stale rules.
 - `list_idea_categories`, `get_ideas`, `get_title_patterns`: `video-ideation/strategist`'s ranked video ideas and the mechanical title-pattern evidence behind them (see `.claude/skills/video-idea-dashboard/SKILL.md`). Reads `ideas.json` and `report.json` from that folder, both untracked/gitignored-by-convention local outputs today, they must be committed for this deployment to see them.
 
 ## Scope rules
