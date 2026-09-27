@@ -293,6 +293,22 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None,
     return False
 
 
+def is_vertical_format(duration_str: str, thumbnail_width: int = None, thumbnail_height: int = None) -> bool:
+    """Detect a real long-form video shot in vertical/portrait orientation (phone
+    selfie-cam style, e.g. Steph Speaks) rather than landscape. This is a production
+    attribute orthogonal to niche/format, not something keyword search can find (nobody
+    titles a video "vertical format"), so it's inferred from the thumbnail's own aspect
+    ratio, the same portrait signal is_short_video() uses, but here it's a positive
+    signal for a real long-form video (duration confirmed >= 180s), not a Shorts flag."""
+    if not thumbnail_width or not thumbnail_height:
+        return False
+    if thumbnail_height <= thumbnail_width:
+        return False
+    if duration_str and parse_duration_seconds(duration_str) < 180:
+        return False  # that's a Short, not a vertical long-form video
+    return True
+
+
 def confirm_is_short(video_id: str) -> Any:
     """Confirm a duration-based Short classification against YouTube's own routing:
     youtube.com/shorts/<id> stays on that URL (200) if YouTube itself treats the video

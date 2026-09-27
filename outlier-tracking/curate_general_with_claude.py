@@ -68,6 +68,7 @@ from common import (  # noqa: E402
     is_short_video,
     is_english_title,
     pick_thumbnail,
+    is_vertical_format,
 )
 
 LOOKBACK_DAYS = 90
@@ -198,6 +199,7 @@ def scan_candidates(cfg: Dict[str, Any], existing_vids: set) -> List[Dict[str, A
                 "published_at": stats.get("snippet", {}).get("publishedAt", "")[:10],
                 "thumbnail_url": thumbnail.get("url", ""),
                 "duration": _format_duration(duration_secs),
+                "vertical": is_vertical_format(duration, thumbnail.get("width"), thumbnail.get("height")),
             })
             print(f"Candidate: '{title}' ({channel_title}) - {view_count:,} views")
 
@@ -446,6 +448,7 @@ CANDIDATES (image followed by its data, in order):
             "notes": p["notes"],
             "status": "Not Adapted",
             "scanned_at": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+            "vertical": c.get("vertical", False),
         }
         final_entries.append(entry)
         print(f"Curated: {c['title'][:60]}")

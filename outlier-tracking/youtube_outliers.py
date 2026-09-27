@@ -34,6 +34,7 @@ def to_dashboard_row(row: Dict[str, Any]) -> Dict[str, Any]:
         "thumbnailUrl": row["thumbnail_url"],
         "reason": row["reason"],
         "score": row["score"],
+        "vertical": row.get("vertical", False),
     }
 
 
@@ -120,7 +121,7 @@ def main() -> None:
                 print(f"  → Skipped (not relevant to cold approach/pickup niche)")
                 continue
 
-            # Confirm a duration-based Short flag against YouTube's own /shorts/ routing —
+            # Confirm a duration-based Short flag against YouTube's own /shorts/ routing,
             # catches a video under 3 minutes that YouTube itself doesn't treat as a Short.
             # Unofficial signal, so only ever downgrades a confirmed non-Short; a failed
             # request (None) falls back to trusting the duration-based flag as-is.
@@ -149,6 +150,7 @@ def main() -> None:
                 "video_url": f"https://www.youtube.com/watch?v={video_id}",
                 "vid": video_id,
                 "thumbnail_url": thumbnail_url,
+                "vertical": common.is_vertical_format(duration, thumbnail_width, thumbnail_height),
             }
 
             if is_short:

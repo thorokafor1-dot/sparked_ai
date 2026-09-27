@@ -5,23 +5,23 @@ translated into a cold-approach-ready title and thumbnail concept.
 
 Entries here must be real, statistically verified outliers found by
 general_outlier_finder.py (run via GitHub Actions, since computing view/subscriber/
-channel-average multipliers needs live channel stats from the YouTube API) — and must
+channel-average multipliers needs live channel stats from the YouTube API), and must
 be genuine RELATIVE outliers, not just big channels doing normal big-channel numbers.
 Concretely: a video only qualifies on raw views (1M+) if the channel has under 100K
 subscribers, where 1M+ views is itself remarkable. Channels at or above 100K subscribers
-must qualify via a relative signal instead — 5x+ subscriber breakout or 20x+ channel-
-average breakout — since 1M views means nothing for a channel whose average video
+must qualify via a relative signal instead, 5x+ subscriber breakout or 20x+ channel-
+average breakout, since 1M views means nothing for a channel whose average video
 already clears that. (An earlier batch of entries let big channels like MrBeast qualify
 purely on absolute views; those got removed once this rule was tightened.)
 
 That finder script only surfaces candidates; picking which ones cleanly translate into
-a cold-approach idea — both the title AND the thumbnail concept — and writing the
+a cold-approach idea, both the title AND the thumbnail concept, and writing the
 analysis below is a manual step. Cold-approach thumbnail concepts should put a woman
 front and center as the visual star (per the channel's packaging convention), regardless
-of whether the original video's thumbnail did. Entries must also be in English — a
+of whether the original video's thumbnail did. Entries must also be in English, a
 language filter (is_english_title in common.py) now screens the finder's
 output, but it only catches non-Latin scripts, not other Latin-script languages, so
-still verify by eye. This file is not a live API pull itself — run it manually whenever
+still verify by eye. This file is not a live API pull itself, run it manually whenever
 new entries are added.
 """
 import os
@@ -434,7 +434,7 @@ SWIPE_FILE = [
         "views_num": 19977587,
         "subscribers": 14000000,
         "score": "19,977,587 views",
-        "pattern": "Splits domestic novelty (living in a pool) with genuine candid reactions — woman cooking mid-task while man lounges — the contrast of 'normal life' happening somewhere absurd drives curiosity.",
+        "pattern": "Splits domestic novelty (living in a pool) with genuine candid reactions, woman cooking mid-task while man lounges, the contrast of 'normal life' happening somewhere absurd drives curiosity.",
         "trigger": "Novelty + relatable domestic comedy: viewers want to see how normal routines survive in a ridiculous setting.",
         "thumbnail": "Woman in foreground stirring a pot of food while sitting on a floating tray in a pool at night with string lights, man lounging on a floating chair behind her with a laptop, another person visible in the water.",
         "formula": "We [Did Normal Life Activity] In [Unusual Location] For 24 Hours!",
@@ -458,7 +458,7 @@ SWIPE_FILE = [
         "subscribers": 147000000,
         "score": "18,991,647 views",
         "pattern": "Both a man and woman crawl toward camera with matching exaggerated terrified expressions while blurred costumed 'monsters' loom behind them, creating instant 'what's chasing them' curiosity.",
-        "trigger": "Shared fear/anticipation — synced exaggerated reactions from both people amplify the perceived stakes and make viewers want the payoff.",
+        "trigger": "Shared fear/anticipation, synced exaggerated reactions from both people amplify the perceived stakes and make viewers want the payoff.",
         "thumbnail": "A man and a pink-haired woman both reaching toward the camera with wide-eyed terrified expressions on a yellow patterned floor, two costumed horror characters blurred in the background, red handprints and 'RUN' text.",
         "formula": "LAST TO [REACT/RUN] WINS [PRIZE]! (SHE'S TERRIFIED)",
         "why": "Mirrored exaggerated expressions on two people create a 'we're in this together' bond while promising an entertaining reveal.",
@@ -485,7 +485,7 @@ SWIPE_FILE = [
         "thumbnail": "A young man leans out of a small pool built into a Cybertruck bed smiling confidently, a blonde woman lies in the truck bed behind him, road and a Fortnite screen visible.",
         "formula": "Last To Leave The [Absurd Confined Space] Keeps It!",
         "why": "The novel confined-space visual is inherently scroll-stopping, and pairing both genders in the frame signals a shared date-like dynamic.",
-        "translation": "Turn into a proximity-based flirting dare — 'last to leave the car wins a date' — where forced closeness builds visible tension.",
+        "translation": "Turn into a proximity-based flirting dare, 'last to leave the car wins a date', where forced closeness builds visible tension.",
         "ca_title": "Last To Leave The Car Wins A Date With Her",
         "ca_thumbnail": "Man smiling confidently in the front of a quirky vehicle, woman lounging in the back seat looking at him with an amused expression.",
         "notes": "Confined-space formats naturally suggest tension/intimacy, making this one of the easier translations on the list.",
@@ -504,14 +504,14 @@ SWIPE_FILE = [
         "subscribers": 23300000,
         "score": "7,051,992 views",
         "pattern": "A close-up of a woman shushing the camera builds secrecy, while the background shows a man and another woman in an intimate late-night moment being 'caught'.",
-        "trigger": "Voyeuristic curiosity/secrecy — the shush gesture instantly signals 'something is being hidden' and pulls viewers in to find out what.",
+        "trigger": "Voyeuristic curiosity/secrecy, the shush gesture instantly signals 'something is being hidden' and pulls viewers in to find out what.",
         "thumbnail": "Blonde woman close-up making a 'shh' finger-to-lips gesture with wide eyes, background shows a man and another woman sitting together in an RV bed area at night.",
         "formula": "\"Be Quiet!\" - [Location] Last To Leave Challenge",
         "why": "The shush gesture is an instantly readable secrecy cue that promises a payoff worth discovering.",
         "translation": "Direct fit for cold-approach: frame it as catching a secret flirt moment, with the woman shushing the camera while the guy is caught nearby looking guilty.",
         "ca_title": "\"Be Quiet, He'll Hear!\" - Sneaking A Date Past Her Friends",
         "ca_thumbnail": "Woman in foreground shushing the camera with wide eyes, man visible in the background looking caught/smiling, dim intimate lighting.",
-        "notes": "This shush/secrecy device is one of the most literal 1:1 translations to flirting content on this list — high test priority.",
+        "notes": "This shush/secrecy device is one of the most literal 1:1 translations to flirting content on this list, high test priority.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
     },
@@ -527,7 +527,7 @@ SWIPE_FILE = [
         "subscribers": 4570000,
         "score": "5,063,354 views",
         "pattern": "A 'then vs. years-later' contrast triggers nostalgia, paired with the woman's genuinely overwhelmed, open-arm reaction to seeing the pets grown up.",
-        "trigger": "Nostalgia + emotional stakes (will they recognize me) — a universally strong hook that promises a satisfying payoff.",
+        "trigger": "Nostalgia + emotional stakes (will they recognize me), a universally strong hook that promises a satisfying payoff.",
         "thumbnail": "Woman with wide-open arms and a shocked/happy expression standing in front of a large group of grown golden doodle dogs, '2 years later' text overlay.",
         "formula": "[People/Pets] Reunited After [Time Period] - Will They Remember [Her]?",
         "why": "Nostalgia combined with an emotional recognition test is one of the most reliably high-performing hooks across niches.",
@@ -550,11 +550,11 @@ SWIPE_FILE = [
         "subscribers": 23300000,
         "score": "5,020,070 views",
         "pattern": "A playful underwater 'peeking eyes' shot creates a quirky, instantly recognizable visual tied to a classic endurance challenge title.",
-        "trigger": "Suspense of endurance combined with a cute/quirky visual — viewers want to see who breaks first.",
+        "trigger": "Suspense of endurance combined with a cute/quirky visual, viewers want to see who breaks first.",
         "thumbnail": "Man, woman, and young girl all submerged up to their eyes underwater in a pool, staring wide-eyed at the camera, 'Last To Leave' text overlay.",
         "formula": "Last To Leave The [Pool/Water] Wins!",
         "why": "The underwater peeking-eyes visual is instantly distinctive and signals a fun, competitive, low-stakes challenge.",
-        "translation": "Reframe as a staring-contest style attraction dare — last one to break eye contact or composure while submerged/close wins.",
+        "translation": "Reframe as a staring-contest style attraction dare, last one to break eye contact or composure while submerged/close wins.",
         "ca_title": "Last To Break Eye Contact Underwater Wins A Kiss",
         "ca_thumbnail": "Man and woman submerged to their eyes in a pool, staring intensely at each other with playful competitive tension.",
         "notes": "Easy to recreate visually with just two people and a pool; strong quirky-hook variety pick.",
@@ -573,7 +573,7 @@ SWIPE_FILE = [
         "subscribers": 94600000,
         "score": "3,741,828 views",
         "pattern": "An angry authority figure confronts a silenced man while a lineup of reacting classmates watches, creating a 'rule-breaker gets caught' tension hook.",
-        "trigger": "Authority/rebellion tension — viewers want to see if the rule-breaker gets away with it.",
+        "trigger": "Authority/rebellion tension, viewers want to see if the rule-breaker gets away with it.",
         "thumbnail": "Older woman playing an angry teacher pointing a ruler at a man with tape over his mouth, a lineup of students including two women also taped, standing in a school hallway.",
         "formula": "I Went Back To [Rule-Bound Place] For 24 Hours (Undercover)",
         "why": "The 'forbidden/silenced' visual plus an angry authority figure promises a rule-breaking payoff that's fun to watch unfold.",
@@ -596,7 +596,7 @@ SWIPE_FILE = [
         "subscribers": 8040000,
         "score": "2,531,226 views",
         "pattern": "A warm, candid group photo of young people crammed into a tent with genuine laughing expressions creates a 'this looks fun, I want in' social-proof hook.",
-        "trigger": "Social proof/FOMO — visible genuine joy across multiple faces signals authentic fun and pulls viewers into the group energy.",
+        "trigger": "Social proof/FOMO, visible genuine joy across multiple faces signals authentic fun and pulls viewers into the group energy.",
         "thumbnail": "Large group of young men and women squeezed together inside a tent outdoors, many genuinely laughing and smiling, close physical proximity, warm daylight.",
         "formula": "[Group] Last To Leave The [Tent/Confined Space] Wins!",
         "why": "Real candid group joy builds trust and curiosity about the social dynamic inside, distinct from staged posed group shots.",
@@ -654,6 +654,7 @@ def to_dashboard_row(row: dict) -> dict:
         "status": row["status"],
         "duration": row.get("duration", ""),
         "publishedAt": row.get("published_at", ""),
+        "vertical": row.get("vertical", False),
     }
 
 

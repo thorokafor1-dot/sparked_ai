@@ -2,27 +2,27 @@
 strong packaging, published in the last 90 days.
 
 "100x a channel's own average" (the original signal) structurally can only ever
-flag a small/mid channel having a fluke breakout — a mega-channel like MrBeast or
+flag a small/mid channel having a fluke breakout, a mega-channel like MrBeast or
 Mark Rober can never trigger it, since their own average is already huge, even
 though their packaging is often the best in the sample (confirmed: the first scan's
 log had 250M/165M/69M-view videos in it that never surfaced because of this). So
 three independent signals are used instead, any one of which qualifies:
-  1. Absolute reach: 1M+ views regardless of channel size — proves broad appeal on
+  1. Absolute reach: 1M+ views regardless of channel size, proves broad appeal on
      its own, and is how a big channel's strong packaging shows up.
-  2. Audience breakout: views >= 5x the channel's subscriber count — reached far
+  2. Audience breakout: views >= 5x the channel's subscriber count, reached far
      beyond the built-in audience, a direct sign the click came from the
      thumbnail/title, not brand loyalty.
-  3. Self-breakout: views >= 20x the channel's own average views per video —
+  3. Self-breakout: views >= 20x the channel's own average views per video,
      catches a normally-unremarkable channel nailing packaging once. (Lowered from
      100x based on real data: the highest multipliers actually found in two scans
-     were 115x and 44x — 100x is right at the edge of what occurs at all.)
+     were 115x and 44x, 100x is right at the edge of what occurs at all.)
 
 Shorts (under 3 minutes, via common.is_short_video) are filtered out here since this
-finder is long-form only — the sibling general-short-form/general_shorts_finder.py
+finder is long-form only, the sibling general-short-form/general_shorts_finder.py
 covers Shorts. An earlier batch let Shorts through unfiltered and they ended up
 curated into this folder's swipe file by mistake; those were moved out by hand.
 
-This only surfaces candidates — it does not judge whether a video's packaging
+This only surfaces candidates, it does not judge whether a video's packaging
 cleanly translates into a cold-approach video idea. That curation step happens
 afterward: a human (or Claude) reviews the printed CANDIDATE lines in this run's
 log, picks the ones with real translation potential, writes the packaging
@@ -30,7 +30,7 @@ analysis + cold-approach translation, and adds them to general_outlier_swipe_fil
 
 Deliberately scoped to niches with human/social/narrative dynamics (challenge,
 stakes, deception, transformation, fear, documentary, forbidden access,
-generosity) rather than truly "any" niche — those are the formats that have a
+generosity) rather than truly "any" niche, those are the formats that have a
 shot at translating into a cold-approach idea. Tutorial/review/gaming/music
 content is excluded from the keyword list for that reason.
 """
@@ -141,6 +141,20 @@ KEYWORDS = [
     "reunion after years surprise",
     "military homecoming surprise",
     "everyday hero story",
+    # Added 2026-09-27 -- storytime/diary/confession format is a genuinely different
+    # packaging pattern from the documentary/reveal/surprise themes above, and it's
+    # also the style most commonly filmed vertically (phone selfie-cam), which the
+    # tracker had zero coverage of despite the user's own footage being vertical.
+    "storytime what happened to me",
+    "car ride storytime",
+    "texting my ex storytime",
+    "red flags storytime",
+    "vent session real talk",
+    "3am thoughts confession",
+    "life update video honest",
+    "sitting in my car talking",
+    "get ready with me storytime",
+    "rant about my life",
 ]
 
 
