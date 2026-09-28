@@ -83,7 +83,10 @@ h1{font-size:clamp(26px,5.5vw,36px);line-height:1;font-weight:800;padding-bottom
 .section h2::before{content:"";width:4px;height:16px;background:var(--accent);border-radius:2px}
 .section .hint{color:var(--muted);margin:0;font-size:12.5px}
 
-.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;display:flex;flex-direction:column;gap:6px;box-shadow:var(--shadow)}
+.fmt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:11px 13px;display:flex;flex-direction:column;gap:8px;box-shadow:var(--shadow)}
+.fmt-row{display:flex;gap:11px}
+.fmt-thumb{width:92px;height:52px;object-fit:cover;border-radius:8px;flex:none;background:var(--surface2);display:block}
+.fmt-main{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px;justify-content:center}
 .fmt-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
 .fmt-name{font-weight:700;font-size:14px}
 .fmt-score{font-family:var(--mono);font-size:12px;color:var(--good);white-space:nowrap;font-variant-numeric:tabular-nums;font-weight:500}
@@ -226,9 +229,13 @@ function renderSwitcher(){
 function fmtRow(f){
   const uses = f.ideas.map(x=>'<button class="fmt-use" data-jump="'+esc(x.id)+'">#'+x.rank+' '+esc(x.title.slice(0,24))+(x.title.length>24?'…':'')+'</button>').join("");
   const pct = f._pct;
-  return '<div class="fmt"><div class="fmt-top"><span class="fmt-name">'+esc(f.label)+'</span><span class="fmt-score'+(f.thin?' thin':'')+'">'+f.median+'x · '+f.n+' video'+(f.n===1?'':'s')+'</span></div>'
+  return '<div class="fmt"><div class="fmt-row">'
+   +'<a href="'+esc(f.best_url)+'" target="_blank" rel="noopener" title="'+esc(f.best_title)+'"><img class="fmt-thumb" loading="lazy" src="thumbs/'+esc(f.best_vid)+'.jpg" alt=""></a>'
+   +'<div class="fmt-main">'
+   +'<div class="fmt-top"><span class="fmt-name">'+esc(f.label)+'</span><span class="fmt-score'+(f.thin?' thin':'')+'">'+f.median+'x · '+f.n+' video'+(f.n===1?'':'s')+'</span></div>'
    +'<div class="fmt-bar"><i class="'+(f.thin?'thin':'')+'" style="width:'+pct+'%"></i></div>'
    +'<div class="fmt-ex"><a href="'+esc(f.best_url)+'" target="_blank" rel="noopener">Best: "'+esc(f.best_title)+'" ('+f.best_score+'x)'+(f.thin?", only "+f.n+" tracked, not proven":"")+'</a></div>'
+   +'</div></div>'
    +(f.also.length?'<div class="fmt-also">Also wins in: '+f.also.map(esc).join(", ")+'</div>':'')
    +(uses?'<div class="fmt-ex" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:2px">'+uses+'</div>':'')
    +'</div>';

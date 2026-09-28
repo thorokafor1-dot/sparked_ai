@@ -43,7 +43,8 @@ for cat, allowed in F.RELEVANT.items():
             "id": fid, "label": F.FORMATS[fid][0], "n": len(hits),
             "median": round(statistics.median(r["score"] for r in hits), 1),
             "best_title": best["title"].strip().replace(" " + chr(0x2014) + " ", ", ")[:90], "best_score": round(best["score"]),
-            "best_url": best["videoUrl"], "thin": len(hits) < 3, "ideas": sorted(used.get(fid, []), key=lambda x: x["rank"]),
+            "best_url": best["videoUrl"], "best_vid": best["vid"], "best_thumb": best["thumbnailUrl"],
+            "thin": len(hits) < 3, "ideas": sorted(used.get(fid, []), key=lambda x: x["rank"]),
         })
     entries.sort(key=lambda x: (x["thin"], -x["median"]))
     formats_by_cat[cat] = {"label": CAT_LABEL[cat], "videos": len(rows), "median": cat_median, "formats": entries}
@@ -80,14 +81,14 @@ OUT.mkdir(exist_ok=True)
 (OUT / "thumbs").mkdir(exist_ok=True)
 import requests  # noqa: E402
 
-for _c in ideas["categories"].values():
-    for _i in _c["ideas"]:
-        for _e in _i["evidence"]:
-            _p = OUT / "thumbs" / f"{_e['vid']}.jpg"
-            if not _p.exists():
-                _r = requests.get(_e["thumbnail"], timeout=20)
-                if _r.ok:
-                    _p.write_bytes(_r.content)
+_needed = [(_e["vid"], _e["thumbnail"]) for _c in ideas["categories"].values() for _i in _c["ideas"] for _e in _i["evidence"]]
+_needed += [(_f["best_vid"], _f["best_thumb"]) for _b in formats_by_cat.values() for _f in _b["formats"]]
+for _vid, _thumb in _needed:
+    _p = OUT / "thumbs" / f"{_vid}.jpg"
+    if not _p.exists():
+        _r = requests.get(_thumb, timeout=20)
+        if _r.ok:
+            _p.write_bytes(_r.content)
 out = OUT / "idea_desk.html"
 out.write_text(html, encoding="utf-8")
 print("html bytes", len(html), {c: len(b["formats"]) for c, b in formats_by_cat.items()})
