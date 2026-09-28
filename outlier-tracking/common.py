@@ -198,6 +198,21 @@ NIGHTGAME_KEYWORDS = {
     "night game tips", "approaching her at the bar", "cold approach at night",
     "nightlife approach", "bar approach compilation", "club approach infield",
     "night game rejection",
+    # Folded in 2026-09-28 from a one-off scratchpad scan that found real results but
+    # never got merged here, so the weekly rebuild kept wiping them (same bug as the
+    # Video Chat gap). Keep this set as the single source of truth going forward.
+    "nightgame infield", "bar game breakdown", "club infield", "nightclub game",
+    "bar rizz", "night rizz", "getting her number at a bar", "escalation at the bar",
+    "nightgame pickup", "bar seduction", "club seduction", "vegas nightgame",
+    "miami nightgame", "la nightgame", "bar hopping approach", "flirting at the club",
+    "flirting at a bar", "how to approach a girl at a bar", "how to talk to a girl at a bar",
+    "how to get a girls number at a bar", "approaching a girl at a party",
+    "party approach girls", "house party flirting", "college party approach",
+    "flirting at a party", "drunk girl approach", "girls night out approach",
+    "nightclub flirting", "vegas nightlife approach", "miami nightlife approach",
+    "singles night approach", "club game infield", "bar approach breakdown",
+    "kiss close infield", "instant date bar", "nightgame tips infield",
+    "club approach breakdown", "bar conversation girl",
 }
 
 
@@ -421,7 +436,21 @@ EXCLUDED_PHRASES = [
     "refusing to approach", "refuse to approach", "don't approach women", "do not approach women",
     "not *approaching women*", "not approaching women", "begging men to approach",
     "men won't approach", "“terrified” to approach", "meta glasses", "harass women",
-    "skyrocketing as men",
+    "skyrocketing as men", "men refuse to date", "crashing out",
+    # Added 2026-09-28 (nightgame/bar scan curation) -- scripted/acted content, not real footage
+    "seduction scene", "babysitter's seduction", "deadly seduction", "seduction protocol",
+    "nightclub line", "knight club", "queer movie clip", "movie scene", "heated rivalry",
+    "shortdrama", "short drama", "dared approach cold", "digital circus", "pomni",
+    "tadc", "rotten tomatoes", "spectacular spider-man", "mafs dinner party", "netflix philippines",
+    # Espionage podcasts/interviews, not dating content despite "seduction" in the title
+    "sex spy", "russian spy", "honeytrap", "kgb secret", "seduction manipulation tactics",
+    # Sex-tourism/nightlife-guide travel vlogs (Pattaya, Bangkok, Bali, Goa etc.), not technique content
+    "nightlife district", "pattaya nightlife", "bangkok nightlife", "bali nightlife",
+    "goa nightlife", "nightlife guide", "nightlife prices", "nightlife tips: approaching girls",
+    "working girls", "freelancers 2025", "beach club exposed",
+    # Reality TV / prank / vlog drama, not adaptable technique
+    "caught me and monty", "flirting for 1 hour", "flirting under the table", "office party",
+    "dinner party (scene)", "caught flirting with both",
 ]
 
 
@@ -574,6 +603,22 @@ def write_rows_to_json(path: str, rows: List[Dict[str, Any]]) -> str:
     with open(path, "w", encoding="utf-8") as f:
         json.dump(rows, f, indent=2, ensure_ascii=False)
     return path
+
+
+def cap_format_total(rows: List[Dict[str, Any]], format_caps: Dict[str, int]) -> List[Dict[str, Any]]:
+    """Cap the total number of rows per format (e.g. Video Chat max 100, user request
+    2026-09-28), keeping the highest-scoring rows for each capped format. Formats not
+    listed in format_caps are left untouched."""
+    by_format: Dict[str, List[Dict[str, Any]]] = {}
+    for row in rows:
+        by_format.setdefault(row.get("format", ""), []).append(row)
+    out: List[Dict[str, Any]] = []
+    for fmt, group in by_format.items():
+        cap = format_caps.get(fmt)
+        if cap is not None:
+            group = sorted(group, key=lambda r: r.get("score", 0), reverse=True)[:cap]
+        out.extend(group)
+    return out
 
 
 def cap_and_sort_by_channel(rows: List[Dict[str, Any]], per_channel_cap: int = None) -> List[Dict[str, Any]]:

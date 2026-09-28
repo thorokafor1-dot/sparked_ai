@@ -182,6 +182,11 @@ def main() -> None:
     capped_rows = common.cap_and_sort_by_channel(rows, long_form_tracker.PER_CHANNEL_CAP)
     capped_shorts_rows = common.cap_and_sort_by_channel(shorts_rows, short_form_tracker.SHORTS_PER_CHANNEL_CAP)
 
+    # Total-per-format cap, applied after the per-channel cap so diversity is already
+    # locked in. Video Chat max 100 (user request 2026-09-28) since it was crowding out
+    # In-Person and Explainer at 174 of 349 rows.
+    capped_rows = common.cap_format_total(capped_rows, {"Video Chat": 100})
+
     this_dir = os.path.dirname(os.path.abspath(__file__))
     long_form_path = os.path.join(this_dir, "niche-long-form", "data.json")
     short_form_path = os.path.join(this_dir, "niche-short-form", "data.json")
