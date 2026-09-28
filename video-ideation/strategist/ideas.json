@@ -1,89 +1,915 @@
 {
-  "generated": "2026-09-27",
-  "source": "outlier-tracking/niche-long-form + general-long-form, scored via extract_patterns.py",
-  "headline_finding": "Explainer/psychology content scores dramatically higher than infield/POV content in the tracked niche data (top scores 572.6 / 399.6 / 176.1 vs. bar's top of 142.0 and street's top of 67.3). This channel is on-camera and does real infield work already, which most competing explainer channels lack as proof, that is a real differentiation angle worth testing, not just a volume play.",
-  "style_rules_note": "Every thumbnail_scenario below already bakes in the standing rule that a woman is the main visual focus, not the creator solo (tier-list board graphics are the one documented exception). See the get_style_rules MCP tool or .claude/skills/video-idea-dashboard/SKILL.md for the full standing rule set before generating any prompt from this file.",
+  "generated": "2026-09-28",
+  "source": "outlier-tracking niche-long-form (In-Person / Video Chat / Explainer formats) + general-long-form, scored by extract_patterns.py",
+  "headline_finding": "Explainer/psychology titles have the strongest outliers in the tracker (top 594x channel average) and video chat e-date content has by far the most data (174 entries), while bar-specific data is thin (11 entries). Most explainer winners are faceless voiceover, so on-camera real-footage proof is the differentiation. Bar ideas lean on cross-niche reaction and ranking patterns, not direct bar outliers.",
+  "style_rules_note": "Every thumbnail brief has a woman as the main visual focus (standing rule, no exceptions). Titles never name the app used for video chat, always say e-dates. No fabricated dialogue, no dance angle.",
   "categories": {
-    "explainer": {
-      "coverage": "38 tracked entries, strongest category by score",
+    "daygame": {
+      "label": "Daygame",
       "ideas": [
         {
-          "title": "7 Signs She Wants You To Approach Her (Explained With Real Footage)",
-          "thumbnail_scenario": "A woman's genuine reaction moment is the main visual focus, medium/wide framing, natural lighting, minimal caption text, the creator is present but secondary, not a solo talking-head shot",
-          "source": "Iron Mindset, 7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained, score 572.6",
-          "why": "Direct lift of the highest-scoring title formula in the whole dataset, differentiated by backing the claims with real footage instead of stock/AI voiceover, which most channels in this bucket use"
+          "id": "dg-100-women",
+          "category": "daygame",
+          "potential": "High",
+          "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+          "pattern": "Count challenge + 'uncut' trust tag",
+          "strength": "adapted",
+          "why": "A hard number plus 'uncut' gives viewers a scoreboard to follow. Niche precedent exists for both halves (a 100-approach challenge and a 12-hour marathon), but each has one channel behind it, so treat it as adapted.",
+          "hook": "I have a rule for today: I don't go home until I've talked to 100 women. Here is the scoreboard.",
+          "thumbnail": "A woman's genuine amused/surprised reaction mid-conversation on a busy street, medium-wide. A '100' counter badge added later in the thumbnail tool. Creator visible but secondary.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, laughing with a surprised, genuinely amused expression while listening to someone off-frame. Scene: busy daytime downtown sidewalk, shoppers softly blurred behind her. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "A full day of approaches with a running tally on screen. If 100 is unrealistic, use 50 and change the number. A scaled-down version is 60 uncut minutes.",
+          "risk": "Needs a dedicated shoot day. Keep the number honest, viewers check it.",
+          "evidence": [
+            {
+              "title": "I tried to 'Cold Approach' 100 girls without any experience (Introvert vs Girls)",
+              "channel": "Dylan McKnight",
+              "stat": "80x avg",
+              "views": "2.4M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=sMr1ddukSQ4",
+              "thumbnail": "https://i.ytimg.com/vi/sMr1ddukSQ4/mqdefault.jpg",
+              "vid": "sMr1ddukSQ4",
+              "subs": 705000,
+              "adapted_title": null,
+              "note": "Dylan McKnight: same 100-approach challenge structure, one of the highest infield scores in the tracked set."
+            },
+            {
+              "title": "I Cold Approached Women in Toronto for 12 Hours Straight",
+              "channel": "Chris Goldy",
+              "stat": "14x avg",
+              "views": "13K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=r-kS6IkXwPo",
+              "thumbnail": "https://i.ytimg.com/vi/r-kS6IkXwPo/mqdefault.jpg",
+              "vid": "r-kS6IkXwPo",
+              "subs": 1530,
+              "adapted_title": null,
+              "note": "Time-boxed marathon format from a niche channel."
+            },
+            {
+              "title": "A Realistic 60 Minutes of Approaching Women (UNCUT INFIELD)",
+              "channel": "Alex León",
+              "stat": "31x avg",
+              "views": "89K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=8nPnxQKnVto",
+              "thumbnail": "https://i.ytimg.com/vi/8nPnxQKnVto/mqdefault.jpg",
+              "vid": "8nPnxQKnVto",
+              "subs": 18900,
+              "adapted_title": null,
+              "note": "'Uncut / realistic' framing is what makes long infield feel trustworthy."
+            }
+          ]
         },
         {
-          "title": "The Psychology Of Why Women Test Men (And How I Respond On Camera)",
-          "thumbnail_scenario": "A woman is the main visual focus, a candid moment reading as genuine interest/testing him, natural lighting, no vignette, the creator is present but secondary",
-          "source": "Silent Mastery, The Psychology of Making Them Crave You, score 176.1; keyword bucket 'how women test men'",
-          "why": "Psychology-explainer framing with a first-person real-response angle this channel can uniquely deliver"
+          "id": "dg-intimidating",
+          "category": "daygame",
+          "potential": "Medium",
+          "title": "Cold Approaching The Most Intimidating Women At The Mall (Part 1)",
+          "pattern": "Series with 'Part N' + intimidation hook",
+          "strength": "adapted",
+          "why": "'Intimidating' names the viewer's own fear, and 'Part 1' seeds a series so one video promotes the next.",
+          "hook": "These are the women most guys walk right past. Today I'm walking up to every one of them.",
+          "thumbnail": "A stylish, confident woman looking at the camera with a small curious smile, mall background, medium-wide. Creator approaching from the side.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, stylish and confident, looking toward the camera with a small curious smile. Scene: modern shopping mall concourse with warm storefront lighting. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "A mall shoot focused on the approaches you'd normally hesitate on.",
+          "risk": "Avoid a 'baddies' label that reads as objectifying, keep the tone confident and respectful (brand: cool, mature).",
+          "evidence": [
+            {
+              "title": "Cold Approaching Intimidating Baddies In Walmart (Part 3)",
+              "channel": "Chris Bizness",
+              "stat": "22x avg",
+              "views": "227K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=rpvyNC9_AMc",
+              "thumbnail": "https://i.ytimg.com/vi/rpvyNC9_AMc/mqdefault.jpg",
+              "vid": "rpvyNC9_AMc",
+              "subs": 11200,
+              "adapted_title": null,
+              "note": "Chris Bizness: the 'intimidating women in a mundane location, Part N' series format."
+            },
+            {
+              "title": "PICKING UP ATTRACTIVE GIRLS IN PUBLIC (Wholesome Reactions)",
+              "channel": "simpleGworld",
+              "stat": "20x avg",
+              "views": "6K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=0NT6DluYfww",
+              "thumbnail": "https://i.ytimg.com/vi/0NT6DluYfww/mqdefault.jpg",
+              "vid": "0NT6DluYfww",
+              "subs": 284,
+              "adapted_title": null,
+              "note": "simpleGworld: a real-reactions framing on public approaches."
+            }
+          ]
         },
         {
-          "title": "How To Make Her Want You Before You Even Approach",
-          "thumbnail_scenario": "A woman is the main visual focus, a warm/interested candid expression, medium/wide framing, the creator is present but secondary, not a solo shot",
-          "source": "Feminine Connection, How to Make Her WANT You, Even When She's Not Interested, score 399.6",
-          "why": "Second-highest scoring title formula in the dataset, adapted to a pre-approach framing that fits an in-person cold-approach channel better than a texting/relationship angle"
+          "id": "dg-places-tier",
+          "category": "daygame",
+          "potential": "Medium",
+          "status": "Script written",
+          "title": "Best Places to Cold Approach in Public (TIER LIST)",
+          "pattern": "(TIER LIST) title format",
+          "strength": "adapted",
+          "why": "Tier-list titles are live in dating on YouTube right now (Coach Knox's channel), but the tracker holds just one tier-list video in this niche and it scored low, so this rests on live search rather than tracked proof. Already scripted.",
+          "hook": "I've approached women in every public place. I ranked all eleven, S tier to F tier, based on what actually happened.",
+          "thumbnail": "A woman's reaction with a large S or F tier badge added later, medium-wide, mixed public settings.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, smiling, genuinely engaged in conversation. Scene: sunny outdoor plaza with cafe seating. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "One representative clip per location (11 locations). Script: script-writing/script_best_places_tier_list.md.",
+          "risk": "Tier placements are still a draft until you correct them against real results.",
+          "evidence": [
+            {
+              "title": "Signs She Likes You (TIER LIST)",
+              "channel": "Coach Knox",
+              "stat": "3x avg",
+              "views": "89K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=4R5WhS9yQ1M",
+              "thumbnail": "https://i.ytimg.com/vi/4R5WhS9yQ1M/mqdefault.jpg",
+              "vid": "4R5WhS9yQ1M",
+              "subs": 26900,
+              "adapted_title": null,
+              "note": "The only tier-list title in the tracked niche data, at a low score, so treat the format as unproven here."
+            },
+            {
+              "title": "How to talk to Any woman, Anytime, Anywhere",
+              "channel": "The Dark Needle",
+              "stat": "20x avg",
+              "views": "598K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=Fr8Liky9N0w",
+              "thumbnail": "https://i.ytimg.com/vi/Fr8Liky9N0w/mqdefault.jpg",
+              "vid": "Fr8Liky9N0w",
+              "subs": 479000,
+              "adapted_title": null,
+              "note": "Broad how-to-approach demand exists, which is the topic this tier list ranks."
+            }
+          ]
+        },
+        {
+          "id": "dg-ask-women",
+          "category": "daygame",
+          "potential": "Medium",
+          "title": "I Asked 10 Women How They Want To Be Approached (Then Tried It)",
+          "pattern": "Ask strangers for advice, then apply it",
+          "strength": "adapted",
+          "why": "Real women answering on camera puts a woman front and center by design, and applying their advice gives the video a second half instead of ending at the interviews.",
+          "hook": "I'm going to ask ten women how they actually want to be approached, then do exactly what they say.",
+          "thumbnail": "A woman answering a question on the street with a thoughtful, amused expression, medium-wide, creator holding the conversation at the edge of frame.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, thoughtful and amused, mid-answer to a question. Scene: sunny public plaza, casual passersby softly blurred. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Ten short consented street interviews, then the approaches where you apply the advice. Use only what each woman actually said, never write words for her.",
+          "risk": "Needs consent from every woman on camera. Evidence is adapted from general dating-advice formats.",
+          "evidence": [
+            {
+              "title": "I Asked 100 Married Couples for Dating Advice and Learned...",
+              "channel": "Sprouht",
+              "stat": "32x avg",
+              "views": "974K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=8T-W5ObEIjo",
+              "thumbnail": "https://i.ytimg.com/vi/8T-W5ObEIjo/mqdefault.jpg",
+              "vid": "8T-W5ObEIjo",
+              "subs": 1300000,
+              "adapted_title": null,
+              "note": "Sprouht: ask-real-people-for-advice format at 32x channel average."
+            },
+            {
+              "title": "Asking Strangers How to Approach a Girl",
+              "channel": "Benjamin Seda",
+              "stat": "10x avg",
+              "views": "299K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=2CvI6hOP8vE",
+              "thumbnail": "https://i.ytimg.com/vi/2CvI6hOP8vE/mqdefault.jpg",
+              "vid": "2CvI6hOP8vE",
+              "subs": 1480000,
+              "adapted_title": null,
+              "note": "Benjamin Seda: the same 'ask strangers' premise applied to approaching."
+            },
+            {
+              "title": "Asking Miami Gym Girls If You Should Approach At The Gym?",
+              "channel": "RemellGains",
+              "stat": "2x avg",
+              "views": "50K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=3uBg_d5bL8g",
+              "thumbnail": "https://i.ytimg.com/vi/3uBg_d5bL8g/mqdefault.jpg",
+              "vid": "3uBg_d5bL8g",
+              "subs": 66600,
+              "adapted_title": null,
+              "note": "RemellGains: a public-question format on approaching."
+            }
+          ]
         }
-      ]
+      ],
+      "count": 4
     },
-    "bar": {
-      "coverage": "41 tracked entries",
+    "bargame": {
+      "label": "Bargame",
       "ideas": [
         {
-          "title": "I Tried Cold Approaching Women At The Bar For 30 Days (Here's What Changed)",
-          "thumbnail_scenario": "A woman is the main visual focus, her genuine reaction mid-conversation, medium/wide, real bar setting, natural lighting",
-          "source": "Dylan McKnight, I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible), score 142.0, and I tried to 'Cold Approach' 100 girls without any experience, score 80.0",
-          "why": "Highest-scoring real infield precedent in the bar/nightlife bucket, time-boxed challenge structure"
-        },
-        {
+          "id": "bg-line-reaction",
+          "category": "bargame",
+          "potential": "High",
           "title": "I Said This At The Bar... Her Reaction",
-          "thumbnail_scenario": "A woman is the main visual focus, her candid reaction, medium/wide, natural lighting, the creator visible but secondary",
-          "source": "Already promoted, see video-ideas/bar/bar_line_testing_format.md, cites NanoBaiter (8,816,745) and Real Princess Sophia (3,761,183)",
-          "why": "Strongest cross-niche lineage found this session, two convergent outliers on the same structure"
+          "pattern": "'I said X... Her Reaction' mini-series",
+          "strength": "adapted",
+          "why": "One clip is one episode, so your weekly bar footage becomes a series with almost no extra production. Reaction-first titles are the strongest cross-niche pattern found.",
+          "hook": "One line. One woman. Watch what happens.",
+          "thumbnail": "A woman at a bar mid-reaction (laughing, eyes wide), warm bar lighting, medium-wide, creator half in frame at the edge.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, laughing and visibly surprised, hand near her face. Scene: dimly lit stylish bar with warm ambient lighting, other patrons softly blurred. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Any single approach at the bar with a clear, on-camera reaction. Never write words for her, let the clip carry it.",
+          "risk": "Bar-specific niche data is thin, so this is adapted from cross-niche proof.",
+          "evidence": [
+            {
+              "title": "Scammer CRIES After I HACK Her Live Webcam!",
+              "channel": "NanoBaiter",
+              "stat": "8,816,745 views",
+              "views": null,
+              "source": "general",
+              "url": "https://www.youtube.com/watch?v=KqkJF9oVmoA",
+              "thumbnail": "https://i.ytimg.com/vi/KqkJF9oVmoA/mqdefault.jpg",
+              "vid": "KqkJF9oVmoA",
+              "subs": null,
+              "adapted_title": "She CRIED After I Said This During Our Conversation",
+              "note": "NanoBaiter: 'after I said this' reaction title at very large reach (cross-niche)."
+            },
+            {
+              "title": "Reuniting With Ferran After 7 Years Royalty Family Surprise",
+              "channel": "Real Princess Sophia",
+              "stat": "3,761,183 views",
+              "views": null,
+              "source": "general",
+              "url": "https://www.youtube.com/watch?v=ZOvFdjafmVY",
+              "thumbnail": "https://i.ytimg.com/vi/ZOvFdjafmVY/mqdefault.jpg",
+              "vid": "ZOvFdjafmVY",
+              "subs": null,
+              "adapted_title": "I Ran Into My High School Crush After 7 Years -- Her Reaction",
+              "note": "Real Princess Sophia: 'Her Reaction' at multi-million reach."
+            },
+            {
+              "title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+              "channel": "Empathic Pickup Artist",
+              "stat": "58x avg",
+              "views": "43K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+              "thumbnail": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+              "vid": "RgDCIvRnfcI",
+              "subs": 750,
+              "adapted_title": null,
+              "note": "Nightgame POV with a 'Real Infield (Uncut)' trust tag, a top in-person bar-adjacent score."
+            }
+          ]
+        },
+        {
+          "id": "bg-10-lines",
+          "category": "bargame",
+          "potential": "High",
+          "title": "I Tested 10 Openers At The Bar (Ranked By Her Reaction)",
+          "pattern": "'I Tested' + ranking",
+          "strength": "adapted",
+          "why": "Ranking gives every clip a reason to exist and viewers stay to see the top of the list. Reuses your weekly bar footage.",
+          "hook": "Ten openers, ten different women. I'm ranking them by what actually happened, not by what I hoped.",
+          "thumbnail": "A woman reacting to someone off-frame at a bar, smiling with raised eyebrows, medium-wide. Rank badge added later.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, amused with raised eyebrows, mid-laugh. Scene: lively bar with string lights and blurred patrons. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Ten approaches with a distinct opener each, clean audio of your opener, her reaction visible.",
+          "risk": "Ranking must reflect real reactions. Describe them directionally, never quote her.",
+          "evidence": [
+            {
+              "title": "Reuniting With Ferran After 7 Years Royalty Family Surprise",
+              "channel": "Real Princess Sophia",
+              "stat": "3,761,183 views",
+              "views": null,
+              "source": "general",
+              "url": "https://www.youtube.com/watch?v=ZOvFdjafmVY",
+              "thumbnail": "https://i.ytimg.com/vi/ZOvFdjafmVY/mqdefault.jpg",
+              "vid": "ZOvFdjafmVY",
+              "subs": null,
+              "adapted_title": "I Ran Into My High School Crush After 7 Years -- Her Reaction",
+              "note": "Reaction-ranking has cross-niche reach."
+            },
+            {
+              "title": "I tried to 'Cold Approach' 100 girls without any experience (Introvert vs Girls)",
+              "channel": "Dylan McKnight",
+              "stat": "80x avg",
+              "views": "2.4M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=sMr1ddukSQ4",
+              "thumbnail": "https://i.ytimg.com/vi/sMr1ddukSQ4/mqdefault.jpg",
+              "vid": "sMr1ddukSQ4",
+              "subs": 705000,
+              "adapted_title": null,
+              "note": "Niche precedent for a numbered test challenge."
+            },
+            {
+              "title": "I tried 'cold approaching' 10 girls as an average introvert (you'll cringe)",
+              "channel": "Jak Piggott",
+              "stat": "27x avg",
+              "views": "801K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=j2pDzG_oUHg",
+              "thumbnail": "https://i.ytimg.com/vi/j2pDzG_oUHg/mqdefault.jpg",
+              "vid": "j2pDzG_oUHg",
+              "subs": 2170000,
+              "adapted_title": null,
+              "note": "Jak Piggott: numbered self-test with a stakes tag."
+            }
+          ]
+        },
+        {
+          "id": "bg-alone",
+          "category": "bargame",
+          "potential": "High",
+          "title": "How To Go To A Bar Alone And Actually Meet Women (Real Footage)",
+          "pattern": "How-to + 'real footage' proof",
+          "strength": "proven",
+          "why": "Real search demand ('go to a bar alone') plus a competitor gap: those videos are talking heads, you can show it happening.",
+          "hook": "Most guys are scared to walk into a bar alone. Here is exactly what I do, filmed live.",
+          "thumbnail": "A woman at the bar smiling at the camera as if just noticing someone arrive, medium-wide, creator entering the frame.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, relaxed, looking over with a friendly curious smile. Scene: bar counter with warm pendant lights. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Arrival, first 20 minutes, first conversation, all from one solo night.",
+          "risk": "Top competitors are established channels, so the real-footage angle is the whole edge.",
+          "evidence": [
+            {
+              "title": "How to Go to a Bar Alone",
+              "channel": "Gentlemen's Collective",
+              "stat": "50x avg",
+              "views": "1.3M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=3abQ0Pxqt7E",
+              "thumbnail": "https://i.ytimg.com/vi/3abQ0Pxqt7E/mqdefault.jpg",
+              "vid": "3abQ0Pxqt7E",
+              "subs": 290000,
+              "adapted_title": null,
+              "note": "Gentlemen's Collective: 1.3M views on a 290K channel, the strongest bar-topic demand signal found."
+            },
+            {
+              "title": "Go Out Alone And Meet Girls At Bars — Solo Night Game Decoded!",
+              "channel": "Evolution Daily Aaron",
+              "stat": "48x avg",
+              "views": "122K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=w0Q4ZHITLxk",
+              "thumbnail": "https://i.ytimg.com/vi/w0Q4ZHITLxk/mqdefault.jpg",
+              "vid": "w0Q4ZHITLxk",
+              "subs": 2540,
+              "adapted_title": null,
+              "note": "Same topic, second independent outlier."
+            }
+          ]
+        },
+        {
+          "id": "bg-pov",
+          "category": "bargame",
+          "potential": "Medium",
+          "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+          "pattern": "POV + 'Real Infield (Uncut)' trust tag",
+          "strength": "adapted",
+          "why": "POV framing puts the viewer in your seat, and 'uncut' is the trust signal. Only one bar POV outlier backs it (a 750-subscriber channel), so treat it as adapted.",
+          "hook": "No cuts, no edits. This is one night at the bar, exactly as it happened.",
+          "thumbnail": "A first-person-feeling shot of a woman turning toward the camera with a smile at a bar, medium-wide.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, turning toward the camera with a warm smile. Scene: crowded bar, warm ambient lighting. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "A continuous section of a bar night with mic audio.",
+          "risk": "Do not imply outcomes that did not happen, no fabricated results in the title.",
+          "evidence": [
+            {
+              "title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+              "channel": "Empathic Pickup Artist",
+              "stat": "58x avg",
+              "views": "43K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+              "thumbnail": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+              "vid": "RgDCIvRnfcI",
+              "subs": 750,
+              "adapted_title": null,
+              "note": "Empathic Pickup Artist: the top-scoring bar/nightgame POV title in the tracked set."
+            },
+            {
+              "title": "Owen Cook Nightgame Infield Breakdown (RSD Tyler)",
+              "channel": "Insane Flirt",
+              "stat": "15x avg",
+              "views": "13K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=6ADoalk4iss",
+              "thumbnail": "https://i.ytimg.com/vi/6ADoalk4iss/mqdefault.jpg",
+              "vid": "6ADoalk4iss",
+              "subs": 2570,
+              "adapted_title": null,
+              "note": "Nightgame breakdown formats keep resurfacing."
+            }
+          ]
         }
       ],
-      "note": "Full title/lineage detail already lives in video-ideation/video-ideas/bar/, not duplicated here."
+      "count": 4
     },
-    "street-daytime-pov": {
-      "coverage": "50 tracked entries",
+    "video-chat-edates": {
+      "label": "Video chat e-dates",
       "ideas": [
         {
+          "id": "vc-10-edates",
+          "category": "video-chat-edates",
+          "potential": "High",
+          "title": "I Went On 10 Video Chat E-Dates In One Night (Ranked By Conversation)",
+          "pattern": "'Dating N girls' + ranking",
+          "strength": "proven",
+          "why": "The largest real data pool in the tracker (174 entries) repeats one promise: several dates, one video. Ranking adds a payoff that keeps people to the end.",
+          "hook": "Ten e-dates in one night. I'm ranking them by how the conversation actually went.",
+          "thumbnail": "A woman's face on a phone/laptop video call, smiling and engaged, medium framing, soft home lighting. Creator secondary.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, smiling on a video call, seen on a laptop screen in front of the man, engaged and relaxed. Scene: cozy evening room lit by the laptop and a warm lamp. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "A new shoot: ten e-dates, each with a clear moment and permission to show it. Blur usernames and personal info.",
+          "risk": "Keep wording 'e-dates', never name the app. Get consent and blur handles/PII.",
+          "evidence": [
+            {
+              "title": "DATING 10 GIRLS I MET ON OMEGLE 😍 | OMEGLE TO REAL LIFE | FT @adarshuc @AnkitaSingh_1029",
+              "channel": "RAMESH MAITY",
+              "stat": "172x avg",
+              "views": "5.2M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=B1xTXIvnA6o",
+              "thumbnail": "https://i.ytimg.com/vi/B1xTXIvnA6o/mqdefault.jpg",
+              "vid": "B1xTXIvnA6o",
+              "subs": 2330000,
+              "adapted_title": null,
+              "note": "RAMESH MAITY: 5.2M views on a 2.3M channel."
+            },
+            {
+              "title": "Kalogeras Sisters SPEED DATE ON OMEGLE!",
+              "channel": "Kalogeras Sisters",
+              "stat": "152x avg",
+              "views": "4.6M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=9HUZCGT2a7Y",
+              "thumbnail": "https://i.ytimg.com/vi/9HUZCGT2a7Y/mqdefault.jpg",
+              "vid": "9HUZCGT2a7Y",
+              "subs": 8890000,
+              "adapted_title": null,
+              "note": "Kalogeras Sisters speed-date format, 4.6M views."
+            },
+            {
+              "title": "Omegle Dating Show",
+              "channel": "Family Friendly",
+              "stat": "106x avg",
+              "views": "3.2M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=KOITaIFqFb8",
+              "thumbnail": "https://i.ytimg.com/vi/KOITaIFqFb8/mqdefault.jpg",
+              "vid": "KOITaIFqFb8",
+              "subs": 3980000,
+              "adapted_title": null,
+              "note": "Family Friendly: dating-show framing, 3.2M views."
+            }
+          ]
+        },
+        {
+          "id": "vc-real-life",
+          "category": "video-chat-edates",
+          "potential": "High",
+          "title": "I Met My Best E-Date In Real Life (First Date Reaction)",
+          "pattern": "Online to real life payoff",
+          "strength": "proven",
+          "why": "The 'online to real life' arc is the single most repeated winner in this bucket across multiple channels.",
+          "hook": "We met on a video chat. Tonight was our first time in the same room.",
+          "thumbnail": "A woman greeting the camera with a big surprised smile in a real cafe, medium-wide, creator secondary.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, beaming with a surprised happy smile as if meeting someone for the first time. Scene: sunny cafe terrace with soft daylight. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Only with her clear consent to film the meeting. Real, not staged.",
+          "risk": "Privacy and consent are non-negotiable, blur PII, and skip if she is not comfortable on camera.",
+          "evidence": [
+            {
+              "title": "I Gifted Mystry Box TO MY LOVE I FOUND ON OMEGLE 😍 || MET IN REAL LIFE",
+              "channel": "adarshuc",
+              "stat": "224x avg",
+              "views": "6.7M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=kjKo-JAlNck",
+              "thumbnail": "https://i.ytimg.com/vi/kjKo-JAlNck/mqdefault.jpg",
+              "vid": "kjKo-JAlNck",
+              "subs": 3670000,
+              "adapted_title": null,
+              "note": "adarshuc: 6.7M views, the 'met in real life' payoff."
+            },
+            {
+              "title": "FOUND MY Love with 20 HYPEMAN on OMEGLE 😍",
+              "channel": "adarshuc",
+              "stat": "201x avg",
+              "views": "6.0M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=kWqf-rQ9XhI",
+              "thumbnail": "https://i.ytimg.com/vi/kWqf-rQ9XhI/mqdefault.jpg",
+              "vid": "kWqf-rQ9XhI",
+              "subs": 3670000,
+              "adapted_title": null,
+              "note": "adarshuc: 6.0M views, same channel, same arc."
+            },
+            {
+              "title": "OMEGLE TO WHATSAPP 😍 | RAMESH MAITY",
+              "channel": "RAMESH MAITY",
+              "stat": "164x avg",
+              "views": "4.9M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=igIFZ8sdR-w",
+              "thumbnail": "https://i.ytimg.com/vi/igIFZ8sdR-w/mqdefault.jpg",
+              "vid": "igIFZ8sdR-w",
+              "subs": 2330000,
+              "adapted_title": null,
+              "note": "RAMESH MAITY: 4.9M views on the move from chat to contact."
+            }
+          ]
+        },
+        {
+          "id": "vc-3am",
+          "category": "video-chat-edates",
+          "potential": "Medium",
+          "title": "3 AM E-Dates: The Conversations That Actually Went Somewhere",
+          "pattern": "Late-night challenge + count",
+          "strength": "proven",
+          "why": "A time-of-night plus an outcome count is a simple, repeatable series hook.",
+          "hook": "It's 3 AM and I'm going on e-dates until I find the conversations worth showing you.",
+          "thumbnail": "A woman on a late-night video call, lit warmly by a lamp and the screen, curious smile, medium framing.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, warmly lit by a lamp and a laptop screen, curious and playful smile. Scene: lamp-lit living room in the evening, seen over the man's shoulder toward the laptop. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "A late-night session with a running tally on screen.",
+          "risk": "Source titles lean chaotic and meme-heavy, keep yours calm and mature (brand vibe).",
+          "evidence": [
+            {
+              "title": "RIZZING GIRLS AT 3AM GONE WILD! | OMETV on EASY MODE (DAY 3)",
+              "channel": "MarcusT",
+              "stat": "115x avg",
+              "views": "3.4M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=GdVsmfAtRP4",
+              "thumbnail": "https://i.ytimg.com/vi/GdVsmfAtRP4/mqdefault.jpg",
+              "vid": "GdVsmfAtRP4",
+              "subs": 2400000,
+              "adapted_title": null,
+              "note": "MarcusT: 3.4M views on a 2.4M channel, day-numbered challenge."
+            },
+            {
+              "title": "DREADHEAD WITH HAND TATTOO MAKES BADDIES  FOLD (monkey app)",
+              "channel": "Jaiden 28 Medeiros",
+              "stat": "202x avg",
+              "views": "53K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=apgWBMEjzrY",
+              "thumbnail": "https://i.ytimg.com/vi/apgWBMEjzrY/mqdefault.jpg",
+              "vid": "apgWBMEjzrY",
+              "subs": 260,
+              "adapted_title": null,
+              "note": "Jaiden 28 Medeiros: 'makes X fold' catchphrase, small-channel outlier."
+            },
+            {
+              "title": "IShowSpeed Goes On Omegle",
+              "channel": "ILoveSpeed",
+              "stat": "170x avg",
+              "views": "3.8M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=z0bVolxirl0",
+              "thumbnail": "https://i.ytimg.com/vi/z0bVolxirl0/mqdefault.jpg",
+              "vid": "z0bVolxirl0",
+              "subs": 22300,
+              "adapted_title": null,
+              "note": "Creator-goes-on-video-chat drives curiosity at 3.8M views."
+            }
+          ]
+        },
+        {
+          "id": "vc-tier",
+          "category": "video-chat-edates",
+          "potential": "High",
+          "title": "Ranking Every Video Chat E-Date I've Had (TIER LIST)",
+          "pattern": "(TIER LIST) applied to your largest footage pool",
+          "strength": "adapted",
+          "why": "You already own the biggest footage library in this category, and a tier list turns a pile of clips into a debate viewers comment on. Unlike the 10 e-dates idea, this needs no new shoot.",
+          "hook": "I've had a lot of e-dates. I finally ranked them, S tier to F tier.",
+          "thumbnail": "A woman reacting on a video call with a large S badge added later, medium framing.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, delighted and laughing on a video call, seen on a laptop screen. Scene: warm-lit room, evening. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Uses your existing library, no new shoot: the best clip from each of many past e-dates, with consent, PII blurred.",
+          "risk": "No names, no apps, no handles on screen. Rankings should be about the conversation, not people's looks.",
+          "evidence": [
+            {
+              "title": "DATING 10 GIRLS I MET ON OMEGLE 😍 | OMEGLE TO REAL LIFE | FT @adarshuc @AnkitaSingh_1029",
+              "channel": "RAMESH MAITY",
+              "stat": "172x avg",
+              "views": "5.2M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=B1xTXIvnA6o",
+              "thumbnail": "https://i.ytimg.com/vi/B1xTXIvnA6o/mqdefault.jpg",
+              "vid": "B1xTXIvnA6o",
+              "subs": 2330000,
+              "adapted_title": null,
+              "note": "Ranking-style multi-date content already lands at 5M+ views."
+            },
+            {
+              "title": "3 Couples with 3 Breakup-Level Confessions | Truth or Drink | Cut",
+              "channel": "Cut",
+              "stat": "1,743,889 views",
+              "views": null,
+              "source": "general",
+              "url": "https://www.youtube.com/watch?v=SapryT8caj8",
+              "thumbnail": "https://i.ytimg.com/vi/SapryT8caj8/mqdefault.jpg",
+              "vid": "SapryT8caj8",
+              "subs": null,
+              "adapted_title": "3 Couples Answer Breakup-Level Questions | Truth or Drink",
+              "note": "Graded game structure (severity levels) at 1.7M views, cross-niche."
+            }
+          ]
+        },
+        {
+          "id": "vc-guess",
+          "category": "video-chat-edates",
+          "potential": "Medium",
+          "title": "Guessing Strangers' Names On Video Chat: How Many Can I Get Right?",
+          "pattern": "Game challenge with a visible score",
+          "strength": "adapted",
+          "why": "A simple game with a visible score is easy to follow and easy to clip. It shows charm without depending on an outcome.",
+          "hook": "Twenty strangers. I get one guess each at their name. Let's see my score.",
+          "thumbnail": "A woman on a video call laughing as she reveals whether the guess was right, medium framing, soft lamp lighting.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, laughing warmly on a video call, seen on a laptop screen. Scene: lamp-lit room in the evening. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Twenty short video chat clips with a running score, permission to show each person, PII blurred.",
+          "risk": "One outlier from a large channel and a different audience, so this is adapted. Keep it warm, never mocking.",
+          "evidence": [
+            {
+              "title": "Guessing People's Names 1-20",
+              "channel": "Peter Prankster",
+              "stat": "132x avg",
+              "views": "4.0M views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=YMOknaj6MWQ",
+              "thumbnail": "https://i.ytimg.com/vi/YMOknaj6MWQ/mqdefault.jpg",
+              "vid": "YMOknaj6MWQ",
+              "subs": 922000,
+              "adapted_title": null,
+              "note": "Peter Prankster: 132x channel average, 3.96M views, a game with a counting score."
+            }
+          ]
+        }
+      ],
+      "count": 5
+    },
+    "explainer": {
+      "label": "Explainers",
+      "ideas": [
+        {
+          "id": "ex-7-signs",
+          "category": "explainer",
+          "potential": "High",
+          "title": "7 Signs She Wants You To Approach Her (Real Footage Proof)",
+          "pattern": "Numbered 'hidden signs' + real proof",
+          "strength": "proven",
+          "why": "'Signs she likes you' is the strongest demand cluster in the data. The 594x figure comes from a 2,240-subscriber channel and most winners are faceless voiceover, so on-camera proof from your own footage is the difference.",
+          "hook": "Seven signs a woman wants you to walk over. I filmed all seven.",
+          "thumbnail": "A woman glancing toward the camera with a small interested smile, medium-wide, creator in the background. Number badge added later.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, glancing over with a small interested smile. Scene: cafe seating area with soft window light. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Seven clean moments from your infield footage that each show a real sign, described by you, not scripted for her.",
+          "risk": "Market is crowded with faceless clones. Your footage proof is the only durable edge.",
+          "evidence": [
+            {
+              "title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | Stoicism",
+              "channel": "Iron Mindset",
+              "stat": "594x avg",
+              "views": "136K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=YXvo995yAFU",
+              "thumbnail": "https://i.ytimg.com/vi/YXvo995yAFU/mqdefault.jpg",
+              "vid": "YXvo995yAFU",
+              "subs": 2240,
+              "adapted_title": null,
+              "note": "Iron Mindset: 594x channel average, the top outlier in the entire tracker."
+            },
+            {
+              "title": "🔥When a Woman Wants You, She Always Shows These 3 Signs | Female Psychology🔥",
+              "channel": "STOIC MASTERY IDEAS",
+              "stat": "83x avg",
+              "views": "438K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=wTjuNKvK0Zw",
+              "thumbnail": "https://i.ytimg.com/vi/wTjuNKvK0Zw/mqdefault.jpg",
+              "vid": "wTjuNKvK0Zw",
+              "subs": 27600,
+              "adapted_title": null,
+              "note": "STOIC MASTERY: 437K views on a 27K channel, same 'signs' structure."
+            },
+            {
+              "title": "12 Subtle Body Language Signs She's Highly Attracted To You (Hidden Signals)",
+              "channel": "Affinee",
+              "stat": "117x avg",
+              "views": "72K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=jwBsxc8TYOU",
+              "thumbnail": "https://i.ytimg.com/vi/jwBsxc8TYOU/mqdefault.jpg",
+              "vid": "jwBsxc8TYOU",
+              "subs": 619,
+              "adapted_title": null,
+              "note": "Affinee: 117x on a tiny channel."
+            }
+          ]
+        },
+        {
+          "id": "ex-not-interested",
+          "category": "explainer",
+          "potential": "High",
+          "title": "Interested Or Just Polite? How To Tell (And When To Let It Go)",
+          "pattern": "The 'is she interested' doubt moment, taken the respectful way",
+          "strength": "proven",
+          "why": "The moment a viewer wonders whether she is interested is the most searched-for doubt in the explainer data (400x on one video). This version teaches reading the signal and respecting a no, which also fits the brand.",
+          "hook": "Some women are warming up. Some are just being kind. Here's how I tell the difference.",
+          "thumbnail": "A woman with a polite, neutral-to-friendly expression mid-conversation, medium-wide, creator at a respectful distance.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, polite and friendly, expression neither clearly warm nor cold. Scene: quiet street with soft daylight. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Two kinds of clips: a conversation that warms up, and a polite one where you let it go. End each at her first clear response and describe it directionally.",
+          "risk": "Never frame it as persistence past a no. The lesson is reading the signal and leaving well.",
+          "evidence": [
+            {
+              "title": "How to Make Her WANT You — Even When She’s Not Interested",
+              "channel": "Feminine Connection",
+              "stat": "400x avg",
+              "views": "104K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=89KhJYbEDnc",
+              "thumbnail": "https://i.ytimg.com/vi/89KhJYbEDnc/mqdefault.jpg",
+              "vid": "89KhJYbEDnc",
+              "subs": 2150,
+              "adapted_title": null,
+              "note": "Feminine Connection: 400x channel average."
+            },
+            {
+              "title": "You Think She's Not intrested, Watch This FIRST! || Female Psychology",
+              "channel": "Female Couple Circle",
+              "stat": "117x avg",
+              "views": "41K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=NbZ71weCuf0",
+              "thumbnail": "https://i.ytimg.com/vi/NbZ71weCuf0/mqdefault.jpg",
+              "vid": "NbZ71weCuf0",
+              "subs": 355,
+              "adapted_title": null,
+              "note": "Female Couple Circle: 117x, 'watch this first' hook."
+            }
+          ]
+        },
+        {
+          "id": "ex-talk-anyone",
+          "category": "explainer",
+          "potential": "Medium",
+          "title": "How To Talk To Any Woman, Anywhere (Real Examples, Uncut)",
+          "pattern": "Broad how-to + real examples",
+          "strength": "proven",
+          "why": "Broad how-to titles capture the largest search audience, real examples make it different from generic advice.",
+          "hook": "You don't need a perfect line. You need these three things, and I'll show each one working.",
+          "thumbnail": "A woman in an easy relaxed conversation, medium-wide, creator engaged, outdoors.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, relaxed and smiling, easy and natural body language. Scene: outdoor plaza in soft daylight. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Short clips of the same three skills across different settings.",
+          "risk": "Broad topic means heavy competition, differentiate with your footage and clarity.",
+          "evidence": [
+            {
+              "title": "How to talk to Any woman, Anytime, Anywhere",
+              "channel": "The Dark Needle",
+              "stat": "20x avg",
+              "views": "598K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=Fr8Liky9N0w",
+              "thumbnail": "https://i.ytimg.com/vi/Fr8Liky9N0w/mqdefault.jpg",
+              "vid": "Fr8Liky9N0w",
+              "subs": 479000,
+              "adapted_title": null,
+              "note": "The Dark Needle: ~598K views on a 479K channel."
+            },
+            {
+              "title": "How To Approach A Girl? Shared By Sanjana Sanghi | Raj Shamani Clips",
+              "channel": "Raj Shamani Clips",
+              "stat": "25x avg",
+              "views": "753K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=XQtZ3o6J_ns",
+              "thumbnail": "https://i.ytimg.com/vi/XQtZ3o6J_ns/mqdefault.jpg",
+              "vid": "XQtZ3o6J_ns",
+              "subs": 1750000,
+              "adapted_title": null,
+              "note": "Raj Shamani Clips: broad how-to-approach demand."
+            }
+          ]
+        },
+        {
+          "id": "ex-10-seconds",
+          "category": "explainer",
+          "potential": "Medium",
           "title": "How I Create Attraction In The First 10 Seconds (Infield Breakdown)",
-          "thumbnail_scenario": "A woman is the main visual focus, her genuine in-the-moment reaction, medium/wide, street setting, natural lighting",
-          "source": "ApproachCraft, How To Create Sexual Tension During Cold Approach (Infield Breakdown), score 30.3",
-          "why": "Bridges the high-scoring explainer format into infield content by teaching through real footage instead of pure theory"
+          "pattern": "Infield breakdown",
+          "strength": "adapted",
+          "why": "Teaching from a real clip bridges the explainer category's huge demand into infield content you already shoot.",
+          "hook": "I'm going to freeze this approach and show you exactly what happens in the first ten seconds.",
+          "thumbnail": "A woman's face lighting up at the start of a conversation, medium-wide, creator entering from the side.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, face lighting up with a spontaneous smile as someone walks up. Scene: sunny city street. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Three or four approaches with clear first-ten-second moments to freeze and annotate.",
+          "risk": "Breakdown narration must describe reactions directionally, never invent her words.",
+          "evidence": [
+            {
+              "title": "How To Create Sexual Tension During Cold Approach (Infield Breakdown)",
+              "channel": "ApproachCraft",
+              "stat": "30x avg",
+              "views": "45K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=NUQS-v1DWZM",
+              "thumbnail": "https://i.ytimg.com/vi/NUQS-v1DWZM/mqdefault.jpg",
+              "vid": "NUQS-v1DWZM",
+              "subs": 1470,
+              "adapted_title": null,
+              "note": "ApproachCraft: an 'infield breakdown' at 30x channel average."
+            },
+            {
+              "title": "Owen Cook Nightgame Infield Breakdown (RSD Tyler)",
+              "channel": "Insane Flirt",
+              "stat": "15x avg",
+              "views": "13K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=6ADoalk4iss",
+              "thumbnail": "https://i.ytimg.com/vi/6ADoalk4iss/mqdefault.jpg",
+              "vid": "6ADoalk4iss",
+              "subs": 2570,
+              "adapted_title": null,
+              "note": "Breakdown-style teaching clips keep performing."
+            }
+          ]
         },
         {
-          "title": "POV: I Approached Her In 10 Seconds. Real Infield (Uncut)",
-          "thumbnail_scenario": "A woman is the main visual focus, a candid mid-approach moment, medium/wide, street setting",
-          "source": "Empathic Pickup Artist, POV: She Invited Me Home, Best Nightgame Pickup Ever, Real Infield (Uncut), score 58.6",
-          "why": "POV framing plus 'Real Infield (Uncut)' trust tag, the top-scoring pattern in this category"
+          "id": "ex-how-women-flirt",
+          "category": "explainer",
+          "potential": "Medium",
+          "title": "How Women Actually Flirt (The Science Plus Real Footage)",
+          "pattern": "'How women flirt' explainer with proof",
+          "strength": "proven",
+          "why": "Three separate channels hit the same topic, and all are talking heads or animation. Real clips of the signals in your own footage is the gap.",
+          "hook": "Women flirt in ways most guys walk right past. I'll show you real examples of each.",
+          "thumbnail": "A woman mid-flirt, a playful look and slight head tilt, medium-wide, creator engaged.",
+          "prompt": "Use the uploaded photo as the man and keep his face and likeness exactly as in the photo. Photorealistic candid smartphone-style photo, medium-wide framing, natural lighting, no vignette, no heavy color grade. A woman is the clear main subject of the frame, playful look with a slight head tilt and a small smile. Scene: cafe patio in soft daylight. The man is present but secondary, at the edge of the frame or slightly behind her. No text, no logos, no dancing.",
+          "footage": "Four or five short clips, each isolating one way she flirted, described directionally.",
+          "risk": "Broad topic with strong competition. Keep claims modest.",
+          "evidence": [
+            {
+              "title": "Ways To Flirt Subtly",
+              "channel": "Psych2Go",
+              "stat": "33x avg",
+              "views": "982K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=qSV8-rqOmV4",
+              "thumbnail": "https://i.ytimg.com/vi/qSV8-rqOmV4/mqdefault.jpg",
+              "vid": "qSV8-rqOmV4",
+              "subs": 13200000,
+              "adapted_title": null,
+              "note": "Psych2Go: 33x channel average on a 13M channel."
+            },
+            {
+              "title": "The Science Behind How Women Flirt",
+              "channel": "Zoomology",
+              "stat": "24x avg",
+              "views": "734K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=58Hu_MHqIV8",
+              "thumbnail": "https://i.ytimg.com/vi/58Hu_MHqIV8/mqdefault.jpg",
+              "vid": "58Hu_MHqIV8",
+              "subs": 147000,
+              "adapted_title": null,
+              "note": "Zoomology: 25x, 734K views."
+            },
+            {
+              "title": "4 Ways Women Are Flirting With You (Don't Miss These Signs!)",
+              "channel": "Kimberly Hill - Men's Dating & Relationship Coach",
+              "stat": "19x avg",
+              "views": "561K views",
+              "source": "niche",
+              "url": "https://www.youtube.com/watch?v=kurZS8M6-rI",
+              "thumbnail": "https://i.ytimg.com/vi/kurZS8M6-rI/mqdefault.jpg",
+              "vid": "kurZS8M6-rI",
+              "subs": 85000,
+              "adapted_title": null,
+              "note": "Kimberly Hill: 19x, 561K views."
+            }
+          ]
         }
       ],
-      "note": "Best Places to Cold Approach in Public (TIER LIST) already promoted and scripted, see ideation_best_places_tier_list.md."
-    },
-    "monkey-app-video-chat": {
-      "coverage": "133 tracked entries, largest single category by volume, but the top-scoring titles lean drama/persona/meme-heavy (confrontation clips, character bits like 'BANDANA MAN', emoji-heavy titles), which does not fit this channel's documented cool/smooth/mature brand vibe. Ideas below adapt the underlying mechanics, not the raw aesthetic.",
-      "ideas": [
-        {
-          "title": "Ranking Every Girl I've Talked To On Monkey App (TIER LIST)",
-          "thumbnail_scenario": "Tier-board graphic style, matches the existing tier-list thumbnail convention, not the man-and-woman chemistry pattern",
-          "source": "Tier-list format study (Coach Knox), applied to this channel's large existing Monkey App footage library",
-          "why": "Reuses the proven tier-list mechanic on the single largest real footage pool this channel already has"
-        },
-        {
-          "title": "I Tested Pickup Lines On Monkey App. Her Reactions Ranked",
-          "thumbnail_scenario": "A woman's reaction on her video-chat panel is the main visual focus, screen-recording style split frame, minimal caption",
-          "source": "Adapted from the bar line-testing format (video-ideas/bar/bar_line_testing_format.md) applied to video-chat medium",
-          "why": "Same proven structure as the bar line-testing series, different medium, doubles the format's output without new research"
-        }
-      ]
+      "count": 5
     }
   },
-  "next_steps": [
-    "Pick 3-5 ideas to generate AI concept thumbnail mockups for (needs a self-reference photo, pending)",
-    "Promote a chosen idea into a full ideation_<name>.md concept doc via the existing hook-researcher -> script-writer pipeline",
-    "Publish/refresh the Claude Artifact dashboard once mockups exist"
+  "parked": [
+    {
+      "title": "I Ran Into A Girl I Approached A Year Ago. Her Reaction",
+      "why": "Needs a real, consented reunion, and the evidence is a cross-niche reunion format. Revisit only if it happens naturally."
+    },
+    {
+      "title": "My 5 Worst Bar Approaches Of The Year (And What I'd Change)",
+      "why": "Evidence is faceless Reddit-style reading, and it can read as mocking rejections. Revisit with a respectful framing."
+    },
+    {
+      "title": "Speed E-Dating 10 Strangers",
+      "why": "Same video as the 10 e-dates idea, repackaged."
+    },
+    {
+      "title": "12 Subtle Body Language Signs / 3 Signs She Wants You To Talk To Her",
+      "why": "Same topic as the 7 signs idea. Test one signs video first."
+    },
+    {
+      "title": "60 Real Minutes Of Approaching Women (Uncut)",
+      "why": "Folded into the 100 women idea as a scaled-down version."
+    }
   ]
 }

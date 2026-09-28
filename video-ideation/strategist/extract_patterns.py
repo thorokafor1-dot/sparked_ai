@@ -34,53 +34,15 @@ for _stream in (sys.stdout, sys.stderr):
 _THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 _ROOT = os.path.dirname(os.path.dirname(_THIS_DIR))
 
-# Maps this channel's video-ideas/ category folders to the niche-long-form keyword
-# buckets that belong in each (see outlier-tracking/common.py's KEYWORDS list).
-# A keyword not listed here falls into "uncategorized" rather than being guessed at.
-CATEGORY_KEYWORDS = {
-    # "party" has no dedicated video-ideas/ folder, folded into bar/nightlife since
-    # the social dynamics (alcohol, music, mingling) are closer to bar than daytime
-    # street approach.
-    "bar": [
-        "club approach women", "bar approach women", "bar game infield",
-        "nightclub approach", "night game infield", "bar pickup",
-        "approaching women at bars", "approaching women at the club", "bar flirting",
-        "how to approach a girl at a bar", "how to talk to a girl at a bar",
-        "club seduction", "club infield", "nightgame infield", "flirting at the club",
-        "approaching a girl at a party", "flirting at a party",
-    ],
-    "monkey-app-video-chat": [
-        "flirting on video chat", "getting numbers on video chat", "video call with strangers",
-        "monkey app flirting", "monkey app girls", "monkey app baddies",
-        "monkey app best moments", "omegle flirting", "random video chat girls",
-        "azar app flirting", "rizzing up baddies monkey app", "making girls fold monkey app",
-        "video chat rizz", "omegle rizz", "stranger video chat girls",
-        "chatroulette flirting", "video chat pickup",
-    ],
-    "street-daytime-pov": [
-        "street game infield", "daygame infield", "cold approach infield",
-        "approaching random girls", "street flirting", "cold approach",
-        "picking up girls", "picking up girls in public", "daygame",
-        "approaching women at college", "approaching women at the gym",
-        "flirting with strangers", "seduction infield",
-        "talking to girls in public", "flirting experiment public",
-        "social experiment flirting", "rizz in public", "overcoming approach anxiety",
-        "approach women",
-    ],
-    "explainer": [
-        "attraction psychology", "attraction triggers in women explained",
-        "body language attraction signs", "female attraction triggers",
-        "female body language flirting", "female body language signs",
-        "female dating psychology explained", "female psychology dating advice",
-        "female psychology explained", "hidden attraction signals women",
-        "how to know if she likes you", "how women test men",
-        "psychology of attraction women", "reading body language women",
-        "signs a girl is interested", "signs of attraction",
-        "signs of female interest", "signs she likes you",
-        "signs she wants you to approach", "understanding women attraction",
-        "what women want explained",
-    ],
-}
+# Category comes from the tracker's own `format` field (In-Person / Video Chat / Explainer
+# Video), which is more reliable than guessing from search keywords. In-Person is split
+# into bargame vs daygame by venue words in the keyword or title. General-tab rows are
+# always "general" (cross-niche formats, not niche-proven). Labels match how the channel
+# talks about its content: daygame, bargame, video chat e-dates, explainer.
+BAR_RX = re.compile(
+    r"(?<![a-z])(bars?|clubs?|nightclub|nightlife|night ?game|nightgame|night rizz|lounge|party|"
+    r"girls night out|solo night)(?![a-z])", re.I)
+FORMAT_TO_CATEGORY = {"Video Chat": "video-chat-edates", "Explainer Video": "explainer"}
 
 # Structural title patterns worth tracking, each is (label, compiled regex).
 # Ordered roughly by how often they've shown up as winners in this session's
@@ -121,11 +83,11 @@ def _title_of(entry: dict) -> str:
 def categorize(entry: dict, source: str) -> str:
     if source == "general":
         return "general"
-    kw = (entry.get("keyword") or "").strip().lower()
-    for cat, kws in CATEGORY_KEYWORDS.items():
-        if kw in kws:
-            return cat
-    return "uncategorized"
+    fmt = entry.get("format")
+    if fmt in FORMAT_TO_CATEGORY:
+        return FORMAT_TO_CATEGORY[fmt]
+    text = f"{entry.get('keyword') or ''} {entry.get('title') or ''}"
+    return "bargame" if BAR_RX.search(text) else "daygame"
 
 
 def detect_patterns(title: str) -> list:
@@ -153,6 +115,9 @@ def build_report(min_score: float, top_n: int) -> dict:
                 "category": categorize(e, source),
                 "source": source,
                 "url": e.get("videoUrl", ""),
+                "vid": e.get("vid", ""),
+                "thumbnailUrl": e.get("thumbnailUrl", ""),
+                "format": e.get("format", ""),
                 "patterns": detect_patterns(title),
             })
 

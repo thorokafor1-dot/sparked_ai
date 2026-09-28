@@ -47,3 +47,4 @@ long-form-video-editing/*/clips_raw/
 tools/bin/
 # Channel analytics OAuth token, never commit
 channel-analytics/token.json
+video-ideation/strategist/dashboard/

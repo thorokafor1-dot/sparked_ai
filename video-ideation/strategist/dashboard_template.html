@@ -1,0 +1,231 @@
+<title>Sparked Idea Desk</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F4F7; --surface:#FFFFFF; --surface2:#EFEBF1; --ink:#1B1722; --ink2:#5B5567; --muted:#7A7385;
+  --line:#E3DDE8; --accent:#C0304F; --accent-ink:#FFFFFF; --accent-soft:#F8E6EB;
+  --good:#1F7A5C; --good-soft:#DDF1E9; --warn:#96590A; --warn-soft:#F8EBD3; --shadow:0 1px 2px rgba(27,23,34,.06),0 6px 18px rgba(27,23,34,.05);
+  --display:"Bricolage Grotesque","Trebuchet MS",system-ui,sans-serif;
+  --body:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#141118; --surface:#1D1922; --surface2:#26212D; --ink:#F1EDF4; --ink2:#B3ABBF; --muted:#8F879C;
+    --line:#35303D; --accent:#F27A93; --accent-ink:#1B0F14; --accent-soft:#3A2129;
+    --good:#52C39B; --good-soft:#193329; --warn:#E0A44A; --warn-soft:#3A2D14; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.25);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#141118; --surface:#1D1922; --surface2:#26212D; --ink:#F1EDF4; --ink2:#B3ABBF; --muted:#8F879C;
+  --line:#35303D; --accent:#F27A93; --accent-ink:#1B0F14; --accent-soft:#3A2129;
+  --good:#52C39B; --good-soft:#193329; --warn:#E0A44A; --warn-soft:#3A2D14; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.25);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;padding-inline:16px;padding-block:20px 56px}
+.wrap{max-width:1180px;margin-inline:auto;display:flex;flex-direction:column;gap:24px}
+h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;letter-spacing:-.01em}
+.top{display:flex;flex-direction:column;gap:6px}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:clamp(28px,5vw,42px);line-height:1.05}
+.sub{color:var(--ink2);max-width:66ch;margin:0}
+.insight{background:var(--accent-soft);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:4px}
+.insight b{font-family:var(--display);font-size:15px}
+.insight p{margin:0;color:var(--ink);max-width:80ch}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;box-shadow:var(--shadow)}
+.panel h2{font-size:18px}
+.panel .hint{color:var(--ink2);margin:0;font-size:13px;max-width:78ch}
+.formats{display:grid;gap:10px}
+.fmt{display:grid;grid-template-columns:minmax(120px,210px) 1fr;gap:6px 14px;align-items:center}
+.fmt .name{font-weight:600;font-size:14px}
+.fmt .bar{position:relative;height:22px;background:var(--surface2);border-radius:6px;overflow:hidden}
+.fmt .fill{position:absolute;inset:0 auto 0 0;background:var(--accent);border-radius:6px}
+.fmt .fill.thin{background:var(--muted);opacity:.55}
+.fmt .val{position:absolute;inset:0 8px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink)}
+.fmt .val span:first-child{background:var(--surface);padding:0 6px;border-radius:4px}
+.fmt .ex{grid-column:2;color:var(--muted);font-size:12px}
+.fmt .ex.tight{margin-top:-4px}
+@media (min-width:900px){.controls{position:sticky}}
+@media (max-width:560px){.fmt{grid-template-columns:1fr}.fmt .ex{grid-column:1}}
+.controls{display:flex;flex-direction:column;gap:12px;position:static;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line)}
+.tabs,.chips{display:flex;flex-wrap:wrap;gap:8px}
+button{font:inherit;color:inherit;cursor:pointer}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:7px 14px;font-weight:600;font-size:14px;display:inline-flex;gap:8px;align-items:center}
+.tab .n{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.tab[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tab[aria-pressed="true"] .n{color:var(--bg);opacity:.75}
+.chip{border:1px solid var(--line);background:transparent;border-radius:8px;padding:5px 10px;font-size:13px;color:var(--ink2)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);color:var(--ink);border-color:var(--accent)}
+.row2{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.search{flex:1 1 220px;max-width:360px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:8px;padding:8px 12px;font:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,520px),1fr));gap:16px;align-items:start}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
+.meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--ink2)}
+.tag.high{background:var(--accent-soft);color:var(--accent)}
+.tag.proven{background:var(--good-soft);color:var(--good)}
+.tag.adapted{background:var(--warn-soft);color:var(--warn)}
+.tag.status{background:var(--ink);color:var(--bg)}
+.star{margin-left:auto;border:1px solid var(--line);background:transparent;border-radius:8px;width:34px;height:34px;font-size:17px;line-height:1;color:var(--muted)}
+.star[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.title{font-size:21px;line-height:1.2}
+.pattern{margin:0;color:var(--muted);font-size:13px}
+.why{margin:0;color:var(--ink);max-width:70ch}
+.evidence{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.ev{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:inherit;min-width:0}
+.ev img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:8px;border:1px solid var(--line);background:var(--surface2);display:block}
+.ev .stat{font-family:var(--mono);font-size:12px;color:var(--good);font-weight:500}
+.ev .who{font-size:12px;color:var(--ink2);line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.ev:hover .who{color:var(--ink)}
+.evlabel{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+details{border-top:1px solid var(--line);padding-top:10px}
+summary{cursor:pointer;font-weight:600;font-size:14px;list-style:none;display:flex;align-items:center;gap:8px}
+summary::-webkit-details-marker{display:none}
+summary::before{content:"+";font-family:var(--mono);color:var(--accent);width:14px}
+details[open] summary::before{content:"-"}
+dl{display:grid;gap:12px;margin:12px 0 0}
+dt{font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+dd{margin:0;color:var(--ink)}
+.prompt{position:relative;background:var(--surface2);border-radius:8px;padding:10px 12px 10px;font-size:13px;line-height:1.45;color:var(--ink)}
+.copy{margin-top:8px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:5px 10px;font-size:13px;font-weight:600}
+.copy.done{background:var(--good-soft);color:var(--good);border-color:var(--good)}
+.empty{color:var(--ink2);padding:20px;text-align:center;border:1px dashed var(--line);border-radius:12px}
+.how ol{margin:0;padding-left:20px;display:grid;gap:6px}
+.foot{color:var(--muted);font-size:12px;max-width:80ch}
+@media (prefers-reduced-motion:no-preference){.card{transition:box-shadow .15s}.card:hover{box-shadow:0 2px 4px rgba(27,23,34,.08),0 10px 26px rgba(27,23,34,.09)}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow" id="eyebrow"></div>
+    <h1>Sparked Idea Desk</h1>
+    <p class="sub">Video ideas built from real outlier formats in cold approach and flirting content, with the thumbnail plan for each one so you can shoot toward the packaging.</p>
+  </header>
+
+  <div class="insight" id="insight"></div>
+
+  <section class="panel" aria-labelledby="fh">
+    <h2 id="fh">Title formats that are winning in your niche</h2>
+    <p class="hint">Median outlier score of tracked niche videos using each format (a score of 15 is the median for all niche videos, higher means a stronger typical result). Sample size is shown so a thin format is not mistaken for a proven one.</p>
+    <div class="formats" id="formats"></div>
+  </section>
+
+  <section aria-label="Ideas" style="display:grid;gap:14px">
+    <div class="controls">
+      <div class="tabs" id="tabs" role="group" aria-label="Category"></div>
+      <div class="row2">
+        <div class="chips" id="chips" role="group" aria-label="Filters"></div>
+        <input class="search" id="q" type="search" placeholder="Search titles and formats" aria-label="Search ideas">
+      </div>
+    </div>
+    <div class="grid" id="grid"></div>
+  </section>
+
+  <section class="panel how" aria-labelledby="hh">
+    <h2 id="hh">Making the thumbnail before you shoot</h2>
+    <ol>
+      <li>Open an idea, expand its thumbnail plan and copy the prompt.</li>
+      <li>In Grok Imagine, upload your reference photo, paste the prompt and generate. Check that the man really looks like you.</li>
+      <li>Every prompt puts a woman in the main position. This is a concept mockup, so shoot toward the same framing and build the final thumbnail from a real frame.</li>
+      <li>Send the image back and it goes through the crop, caption and quality checks.</li>
+    </ol>
+  </section>
+  <section class="panel" aria-labelledby="ph"><h2 id="ph">Parked ideas</h2><p class="hint">Cut after review. Kept here so they are not proposed again by accident.</p><ul id="parked" style="margin:0;padding-left:18px;display:grid;gap:6px"></ul></section>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+const DATA = __DATA__;
+const CATS = [["all","All ideas"]].concat(Object.entries(DATA.categories).map(([k,v])=>[k,v.label]));
+const state = {cat:"all", strength:"any", potential:"any", star:false, q:""};
+let stars = new Set();
+try{ stars = new Set(JSON.parse(localStorage.getItem("ideaDeskStars")||"[]")); }catch(e){}
+function saveStars(){ try{ localStorage.setItem("ideaDeskStars", JSON.stringify([...stars])); }catch(e){} }
+const fmtSubs = n => n==null?"":(n>=1e6?(n/1e6).toFixed(1).replace(".0","")+"M":n>=1e3?(n/1e3).toFixed(1).replace(".0","")+"K":String(n))+" subs";
+const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const allIdeas = Object.entries(DATA.categories).flatMap(([cat,v])=>v.ideas.map(i=>({...i,catLabel:v.label})));
+
+document.getElementById("eyebrow").textContent = "Updated " + DATA.generated + " · " + allIdeas.length + " ideas · " + DATA.tracked + " tracked outlier videos";
+document.getElementById("insight").innerHTML = "<b>What the data says</b><p>"+esc(DATA.headline)+"</p>";
+document.getElementById("foot").textContent = DATA.footnote;
+document.getElementById("parked").innerHTML = DATA.parked.map(p=>"<li><b>"+esc(p.title)+".</b> "+esc(p.why)+"</li>").join("");
+
+const maxMed = Math.max(...DATA.formats.filter(f=>f.n>=3).map(f=>f.median));
+document.getElementById("formats").innerHTML = DATA.formats.map(f=>{
+  const thin = f.n<3; const pct = Math.max(3, Math.min(100, Math.round(f.median/maxMed*100)));
+  return '<div class="fmt"><div class="name">'+esc(f.name)+'</div><div class="bar"><div class="fill'+(thin?' thin':'')+'" style="width:'+pct+'%"></div><div class="val"><span>median '+f.median+'</span><span>'+f.n+' video'+(f.n===1?'':'s')+'</span></div></div><div class="ex">'+esc(f.note)+'</div></div>';
+}).join("");
+
+function countFor(cat){ return cat==="all"?allIdeas.length:allIdeas.filter(i=>i.category===cat).length; }
+function renderTabs(){
+  document.getElementById("tabs").innerHTML = CATS.map(([k,l])=>'<button class="tab" data-cat="'+k+'" aria-pressed="'+(state.cat===k)+'">'+esc(l)+' <span class="n">'+countFor(k)+'</span></button>').join("");
+}
+function renderChips(){
+  const chips = [
+    ["strength","proven","Proven in niche"],["strength","adapted","Adapted from other niches"],
+    ["potential","High","High potential"],["star",true,"Shortlist ("+stars.size+")"]
+  ];
+  document.getElementById("chips").innerHTML = chips.map(([g,v,l])=>{
+    const on = g==="star"?state.star:state[g]===v;
+    return '<button class="chip" data-g="'+g+'" data-v="'+v+'" aria-pressed="'+on+'">'+esc(l)+'</button>';
+  }).join("");
+}
+function matches(i){
+  if(state.cat!=="all" && i.category!==state.cat) return false;
+  if(state.strength!=="any" && i.strength!==state.strength) return false;
+  if(state.potential!=="any" && i.potential!==state.potential) return false;
+  if(state.star && !stars.has(i.id)) return false;
+  if(state.q){ const h=(i.title+" "+i.pattern+" "+i.catLabel).toLowerCase(); if(!h.includes(state.q)) return false; }
+  return true;
+}
+function card(i){
+  const ev = i.evidence.map(e=>'<a class="ev" href="'+esc(e.url)+'" target="_blank" rel="noopener"><img loading="lazy" src="thumbs/'+esc(e.vid)+'.jpg" alt="Thumbnail of '+esc(e.title)+'"><span class="stat">'+esc(e.stat)+(e.views?' · '+esc(e.views):'')+(e.subs?' · '+fmtSubs(e.subs):'')+'</span><span class="who">'+esc(e.channel)+': '+esc(e.title)+'</span></a>').join("");
+  const notes = i.evidence.map(e=>'<li><b>'+esc(e.channel)+'.</b> '+esc(e.note)+'</li>').join("");
+  const strengthLabel = i.strength==="proven"?"Proven in niche":"Adapted";
+  const st = stars.has(i.id);
+  return '<article class="card" data-id="'+esc(i.id)+'">'
+   +'<div class="meta"><span class="tag">'+esc(i.catLabel)+'</span><span class="tag '+(i.potential==="High"?"high":"")+'">'+esc(i.potential)+' potential</span><span class="tag '+esc(i.strength)+'">'+strengthLabel+'</span>'+(i.status?'<span class="tag status">'+esc(i.status)+'</span>':'')
+   +'<button class="star" data-star="'+esc(i.id)+'" aria-pressed="'+st+'" aria-label="'+(st?"Remove from shortlist":"Add to shortlist")+'" title="Shortlist">'+(st?"★":"☆")+'</button></div>'
+   +'<h3 class="title">'+esc(i.title)+'</h3><p class="pattern">Format: '+esc(i.pattern)+'</p>'
+   +'<p class="why">'+esc(i.why)+'</p>'
+   +'<div class="evlabel">Outliers this comes from</div><div class="evidence">'+ev+'</div>'
+   +'<details><summary>Thumbnail plan, hook and shoot notes</summary><dl>'
+   +'<div><dt>Opening line (yours)</dt><dd>'+esc(i.hook)+'</dd></div>'
+   +'<div><dt>Thumbnail brief</dt><dd>'+esc(i.thumbnail)+'</dd></div>'
+   +'<div><dt>Grok Imagine prompt</dt><dd><div class="prompt" id="p-'+esc(i.id)+'">'+esc(i.prompt)+'</div><button class="copy" data-copy="p-'+esc(i.id)+'">Copy prompt</button></dd></div>'
+   +'<div><dt>Footage you need</dt><dd>'+esc(i.footage)+'</dd></div>'
+   +'<div><dt>Watch out for</dt><dd>'+esc(i.risk)+'</dd></div>'
+   +'<div><dt>Why these outliers</dt><dd><ul style="margin:0;padding-left:18px;display:grid;gap:4px">'+notes+'</ul></dd></div>'
+   +'</dl></details></article>';
+}
+function renderGrid(){
+  const list = allIdeas.filter(matches);
+  document.getElementById("grid").innerHTML = list.length? list.map(card).join("") : '<div class="empty">No ideas match these filters.</div>';
+}
+function renderAll(){ renderTabs(); renderChips(); renderGrid(); }
+document.addEventListener("click",e=>{
+  const t = e.target.closest("button"); if(!t) return;
+  if(t.dataset.cat){ state.cat=t.dataset.cat; renderAll(); return; }
+  if(t.dataset.g){
+    const g=t.dataset.g, v=t.dataset.v;
+    if(g==="star") state.star=!state.star; else state[g]= state[g]===v?"any":v;
+    renderAll(); return;
+  }
+  if(t.dataset.star){
+    const id=t.dataset.star; stars.has(id)?stars.delete(id):stars.add(id); saveStars(); renderAll(); return;
+  }
+  if(t.dataset.copy){
+    const el=document.getElementById(t.dataset.copy); const text=el.textContent;
+    const done=()=>{t.textContent="Copied"; t.classList.add("done"); setTimeout(()=>{t.textContent="Copy prompt"; t.classList.remove("done");},1600);};
+    const fallback=()=>{const r=document.createRange(); r.selectNodeContents(el); const s=getSelection(); s.removeAllRanges(); s.addRange(r); t.textContent="Selected, press Ctrl+C";};
+    try{ navigator.clipboard.writeText(text).then(done,fallback); }catch(err){ fallback(); }
+  }
+});
+document.getElementById("q").addEventListener("input",e=>{state.q=e.target.value.trim().toLowerCase(); renderGrid();});
+renderAll();
+</script>

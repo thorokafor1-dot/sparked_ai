@@ -179,9 +179,9 @@ def _load_ideas() -> dict:
 STYLE_RULES = {
     "thumbnail_composition": (
         "A woman is the thumbnail's main draw, not the creator solo, every "
-        "thumbnail needs a woman as the clear focal subject. Exception: a "
-        "tier-list format thumbnail uses an S-F tier board graphic instead, "
-        "that's not a person shot at all."
+        "thumbnail needs a woman as the clear focal subject, no exceptions. "
+        "A tier-list thumbnail is still a woman's reaction with a tier badge "
+        "added on top."
     ),
     "thumbnail_style": (
         "Natural lighting, no vignette, no heavy color grade. Medium/wide "
@@ -199,7 +199,17 @@ STYLE_RULES = {
         "The creator is on-camera, not faceless. Never propose or imply a "
         "faceless/voiceover-only production format for this channel."
     ),
-    "brand_vibe": "Cool, smooth, mature. Not chaotic, meme-heavy, or drama/persona-bait, even when a data category's top real outliers lean that way (e.g. monkey-app-video-chat), adapt the underlying mechanic, don't copy that aesthetic.",
+    "e_date_wording": (
+        "Video chat conversations are 'e-dates'. Never name the app used in "
+        "any title, thumbnail or copy, and never write 'I only flirt'. Blur "
+        "usernames and personal info."
+    ),
+    "respect_a_no": (
+        "Never frame content around pushing past a no, 'winning her over "
+        "when she's not interested' or 'before you walk away'. Teach reading "
+        "the signal and leaving well."
+    ),
+    "brand_vibe": "Cool, smooth, mature. Not chaotic, meme-heavy, or drama/persona-bait, even when a data category's top real outliers lean that way (e.g. video-chat-edates), adapt the underlying mechanic, don't copy that aesthetic.",
 }
 
 
@@ -215,8 +225,8 @@ def get_style_rules() -> dict:
 
 @mcp.tool
 def list_idea_categories() -> dict:
-    """List this channel's video-idea categories (bar, monkey-app-video-chat,
-    street-daytime-pov, explainer, general), each with its idea count, real
+    """List this channel's video-idea categories (daygame, bargame,
+    video-chat-edates, explainer), each with its idea count, real
     outlier-tracker coverage note, and the headline strategic finding. Call
     get_style_rules first if you haven't this session, those rules govern how
     to actually use anything returned here."""
@@ -226,7 +236,7 @@ def list_idea_categories() -> dict:
         "generated": data.get("generated"),
         "headline_finding": data.get("headline_finding"),
         "categories": {
-            cat: {"count": len(v.get("ideas", [])), "coverage": v.get("coverage", "")}
+            cat: {"count": len(v.get("ideas", [])), "label": v.get("label", "")}
             for cat, v in data.get("categories", {}).items()
         },
     }
@@ -235,12 +245,13 @@ def list_idea_categories() -> dict:
 @mcp.tool
 def get_ideas(category: str = "") -> list:
     """Get the ranked video idea proposals for one category, or every category if
-    none is given. Each idea has a title, a thumbnail scenario description ready to
-    turn into an image-gen prompt, the specific outlier it's sourced from, and why.
+    none is given. Each idea has a title, an evidence-strength label (proven or
+    adapted), the real outliers it comes from, a thumbnail brief and ready-to-paste
+    image prompt, the footage needed, and what to watch out for.
 
     Args:
-        category: One of "bar", "monkey-app-video-chat", "street-daytime-pov",
-            "explainer", "general". Omit to get all categories at once.
+        category: One of "daygame", "bargame", "video-chat-edates",
+            "explainer". Omit to get all categories at once.
     """
     _require_owner()
     data = _load_ideas()
