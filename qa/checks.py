@@ -117,6 +117,21 @@ def no_em_dash(path: Path) -> list[str]:
     return [f"em dash on line(s) {shown}; replace with a comma, period, parentheses, or rewrite"]
 
 
+# .json is excluded from TEXT_EXTS above because outlier-tracking/*/data.json legitimately
+# quotes real YouTube titles verbatim (those often contain em dashes and aren't our copy).
+# The strategist's own JSON is different: ideas_source.py strips em dashes from evidence
+# titles at build time, so any em dash here is a real regression, not quoted external data.
+@check("no-em-dash-strategist-json", paths=["video-ideation/strategist/ideas.json", "video-ideation/strategist/formats.json"], exts={".json"})
+def no_em_dash_strategist_json(path: Path) -> list[str]:
+    text = read_text(path)
+    if text is None:
+        return []
+    hits = [i for i, line in enumerate(text.splitlines(), 1) if EM_DASH in line]
+    if not hits:
+        return []
+    return [f"em dash on line(s) {', '.join(map(str, hits[:15]))}; fix the em-dash strip in ideas_source.py's find(), don't hand-edit the .json"]
+
+
 @check("no-merge-markers", exts=TEXT_EXTS | {".json"})
 def no_merge_markers(path: Path) -> list[str]:
     text = read_text(path)
@@ -247,6 +262,10 @@ def _src_hash(fn: Callable) -> str:
     # whole module + the shared media helpers, so constants (thresholds) and analyze() changes count too
     try:
         src = Path(inspect.getsourcefile(fn)).read_bytes() + (Path(__file__).parent / "media.py").read_bytes()
+        # helper scripts the checks import from their tool folders (verify_*.py, reframe.py): a threshold
+        # fix there must not be masked by a stale cached verdict
+        for helper in sorted(ROOT.glob("*/*/verify_*.py")) + sorted(ROOT.glob("*/*/reframe.py")):
+            src += helper.read_bytes()
         return hashlib.md5(src).hexdigest()[:8]
     except (OSError, TypeError):
         return "nosrc"

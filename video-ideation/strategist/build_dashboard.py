@@ -17,28 +17,40 @@ ideas = json.load(open(ROOT / "video-ideation/strategist/ideas.json", encoding="
 niche = json.load(open(ROOT / "outlier-tracking/niche-long-form/data.json", encoding="utf-8"))
 overall_median = statistics.median(r["score"] for r in niche)
 
-LABELS = {
-    "Numbered list (N Things/Ways/Signs)": "Numbered list (N signs, ways, things)",
-    "I Tested / I Tried": "I tested / I tried",
-    "Superlative claim (Best/Worst/Every)": "Best, worst or every",
-    "Parenthetical reaction tag": "Trust tag in brackets (Uncut, Real)",
-    "POV framing": "POV: framing",
-    "TIER LIST": "(TIER LIST) title",
-}
-buckets = {}
+import formats as F  # noqa: E402
+
+CAT_LABEL = {c: d["label"] for c, d in ideas["categories"].items()}
+by_cat = {}
 for r in niche:
-    for p in ep.detect_patterns(r["title"]):
-        if p in LABELS:
-            buckets.setdefault(p, []).append(r)
-formats = []
-for p, rows in buckets.items():
-    best = max(rows, key=lambda r: r["score"])
-    med = round(statistics.median(r["score"] for r in rows), 1)
-    note = f'Best: "{best["title"].strip()[:90]}" ({round(best["score"])}x)'
-    if len(rows) < 3:
-        note += ". Only " + str(len(rows)) + " tracked, so not proven."
-    formats.append({"name": LABELS[p], "median": med, "n": len(rows), "note": note})
-formats.sort(key=lambda f: (f["n"] < 3, -f["median"]))
+    by_cat.setdefault(ep.categorize(r, "niche"), []).append(r)
+
+# Per category: only the formats that make sense for it (formats.RELEVANT), with that category's own numbers.
+formats_by_cat = {}
+for cat, allowed in F.RELEVANT.items():
+    rows = by_cat.get(cat, [])
+    cat_median = round(statistics.median(r["score"] for r in rows), 1) if rows else 0
+    used = {}
+    for i in ideas["categories"][cat]["ideas"]:
+        for f in i.get("formats", []):
+            used.setdefault(f, []).append({"id": i["id"], "title": i["title"], "rank": i["rank"]})
+    entries = []
+    for fid in allowed:
+        hits = [r for r in rows if fid in F.detect(r["title"])]
+        if not hits:
+            continue
+        best = max(hits, key=lambda r: r["score"])
+        entries.append({
+            "id": fid, "label": F.FORMATS[fid][0], "n": len(hits),
+            "median": round(statistics.median(r["score"] for r in hits), 1),
+            "best_title": best["title"].strip().replace(" " + chr(0x2014) + " ", ", ")[:90], "best_score": round(best["score"]),
+            "best_url": best["videoUrl"], "thin": len(hits) < 3, "ideas": sorted(used.get(fid, []), key=lambda x: x["rank"]),
+        })
+    entries.sort(key=lambda x: (x["thin"], -x["median"]))
+    formats_by_cat[cat] = {"label": CAT_LABEL[cat], "videos": len(rows), "median": cat_median, "formats": entries}
+for cat, block in formats_by_cat.items():
+    for entry in block["formats"]:
+        entry["also"] = [CAT_LABEL[c] for c, b in formats_by_cat.items() if c != cat and any(x["id"] == entry["id"] for x in b["formats"] if not x["thin"])]
+(HERE / "formats.json").write_text(json.dumps(formats_by_cat, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 data = {
     "generated": ideas["generated"],
@@ -53,7 +65,7 @@ data = {
         "Scores are multiples of each channel's average views from the outlier tracker. Cross-niche evidence shows 90-day views. "
         "Refresh with the video-idea-dashboard skill after each outlier refresh. Typical niche video scores " + f"{overall_median:.0f}."
     ),
-    "formats": formats,
+    "formats": formats_by_cat,
     "categories": ideas["categories"],
     "parked": ideas["parked"],
 }
@@ -78,4 +90,4 @@ for _c in ideas["categories"].values():
                     _p.write_bytes(_r.content)
 out = OUT / "idea_desk.html"
 out.write_text(html, encoding="utf-8")
-print("html bytes", len(html), "formats", [(f["name"], f["median"], f["n"]) for f in formats])
+print("html bytes", len(html), {c: len(b["formats"]) for c, b in formats_by_cat.items()})

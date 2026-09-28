@@ -48,7 +48,13 @@ h1{font-size:clamp(28px,5vw,42px);line-height:1.05}
 .fmt .val{position:absolute;inset:0 8px;display:flex;align-items:center;justify-content:space-between;font-family:var(--mono);font-size:12px;color:var(--ink)}
 .fmt .val span:first-child{background:var(--surface);padding:0 6px;border-radius:4px}
 .fmt .ex{grid-column:2;color:var(--muted);font-size:12px}
-.fmt .ex.tight{margin-top:-4px}
+.fmt .ex a{color:inherit}
+.fmt .also{grid-column:2;color:var(--muted);font-size:11px;font-family:var(--mono)}
+.fmt .uses{grid-column:2;display:flex;flex-wrap:wrap;gap:6px}
+.fmt .uses button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:2px 9px;font-size:11px;color:var(--ink2)}
+.fmt .uses button:hover{color:var(--ink);border-color:var(--accent)}
+.catgroup + .catgroup{margin-top:6px;padding-top:14px;border-top:1px dashed var(--line)}
+.catgroup h3{font-size:14px;margin-bottom:2px}
 @media (min-width:900px){.controls{position:sticky}}
 @media (max-width:560px){.fmt{grid-template-columns:1fr}.fmt .ex{grid-column:1}}
 .controls{display:flex;flex-direction:column;gap:12px;position:static;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;border-bottom:1px solid var(--line)}
@@ -67,7 +73,11 @@ button{font:inherit;color:inherit;cursor:pointer}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;box-shadow:var(--shadow)}
 .meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .tag{font-family:var(--mono);font-size:11px;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:6px;background:var(--surface2);color:var(--ink2)}
-.tag.high{background:var(--accent-soft);color:var(--accent)}
+.tag.pot-1{background:var(--accent-soft);color:var(--accent)}
+.tag.pot-2{background:var(--surface2);color:var(--ink)}
+.tag.pot-3{background:var(--surface2);color:var(--muted)}
+.rank{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--muted);min-width:22px}
+.rank.r1{color:var(--accent)}
 .tag.proven{background:var(--good-soft);color:var(--good)}
 .tag.adapted{background:var(--warn-soft);color:var(--warn)}
 .tag.status{background:var(--ink);color:var(--bg)}
@@ -110,8 +120,8 @@ dd{margin:0;color:var(--ink)}
   <div class="insight" id="insight"></div>
 
   <section class="panel" aria-labelledby="fh">
-    <h2 id="fh">Title formats that are winning in your niche</h2>
-    <p class="hint">Median outlier score of tracked niche videos using each format (a score of 15 is the median for all niche videos, higher means a stronger typical result). Sample size is shown so a thin format is not mistaken for a proven one.</p>
+    <h2 id="fh">Title formats that are winning, by category</h2>
+    <p class="hint">Median outlier score of tracked niche videos using each format, within that category only (a format that wins in daygame is not assumed to win in explainers). Formats that don't apply to a category aren't shown there. A thin bar (fewer than 3 tracked videos) is a lead, not proof. Click an idea chip to jump to it. Use the category tabs below to filter this panel too.</p>
     <div class="formats" id="formats"></div>
   </section>
 
@@ -155,12 +165,31 @@ document.getElementById("insight").innerHTML = "<b>What the data says</b><p>"+es
 document.getElementById("foot").textContent = DATA.footnote;
 document.getElementById("parked").innerHTML = DATA.parked.map(p=>"<li><b>"+esc(p.title)+".</b> "+esc(p.why)+"</li>").join("");
 
-const maxMed = Math.max(...DATA.formats.filter(f=>f.n>=3).map(f=>f.median));
-document.getElementById("formats").innerHTML = DATA.formats.map(f=>{
-  const thin = f.n<3; const pct = Math.max(3, Math.min(100, Math.round(f.median/maxMed*100)));
-  return '<div class="fmt"><div class="name">'+esc(f.name)+'</div><div class="bar"><div class="fill'+(thin?' thin':'')+'" style="width:'+pct+'%"></div><div class="val"><span>median '+f.median+'</span><span>'+f.n+' video'+(f.n===1?'':'s')+'</span></div></div><div class="ex">'+esc(f.note)+'</div></div>';
-}).join("");
+function fmtRow(f){
+  const cat = DATA.formats[state.cat] ? state.cat : null;
+  const maxMed = Math.max(...(cat?DATA.formats[cat].formats:Object.values(DATA.formats).flatMap(b=>b.formats)).filter(x=>!x.thin).map(x=>x.median), 1);
+  const pct = Math.max(3, Math.min(100, Math.round(f.median/maxMed*100)));
+  const uses = f.ideas.map(x=>'<button data-jump="'+esc(x.id)+'">#'+x.rank+' '+esc(x.title.slice(0,28))+(x.title.length>28?'…':'')+'</button>').join("");
+  const also = f.also.length? '<div class="also">Also wins in: '+f.also.map(esc).join(", ")+'</div>' : "";
+  return '<div class="fmt"><div class="name">'+esc(f.label)+'</div>'
+   +'<div class="bar"><div class="fill'+(f.thin?' thin':'')+'" style="width:'+pct+'%"></div><div class="val"><span>median '+f.median+'x</span><span>'+f.n+' video'+(f.n===1?'':'s')+'</span></div></div>'
+   +'<div class="ex"><a href="'+esc(f.best_url)+'" target="_blank" rel="noopener">Best: "'+esc(f.best_title)+'" ('+f.best_score+'x)'+(f.thin?", only "+f.n+" tracked, not proven":"")+'</a></div>'
+   +also+(uses?'<div class="uses">'+uses+'</div>':'')+'</div>';
+}
+function renderFormats(){
+  const el = document.getElementById("formats");
+  if(state.cat==="all"){
+    el.innerHTML = Object.entries(DATA.formats).map(([cat,b])=>
+      '<div class="catgroup"><h3>'+esc(b.label)+' <span style="color:var(--muted);font-weight:400;font-size:12px">· '+b.videos+' tracked, median '+b.median+'x</span></h3>'
+      +b.formats.map(fmtRow).join("")+'</div>'
+    ).join("");
+  } else {
+    const b = DATA.formats[state.cat];
+    el.innerHTML = b ? b.formats.map(fmtRow).join("") : '<div class="empty">No format data for this category.</div>';
+  }
+}
 
+function renderAll(){ renderTabs(); renderChips(); renderFormats(); renderGrid(); }
 function countFor(cat){ return cat==="all"?allIdeas.length:allIdeas.filter(i=>i.category===cat).length; }
 function renderTabs(){
   document.getElementById("tabs").innerHTML = CATS.map(([k,l])=>'<button class="tab" data-cat="'+k+'" aria-pressed="'+(state.cat===k)+'">'+esc(l)+' <span class="n">'+countFor(k)+'</span></button>').join("");
@@ -168,7 +197,7 @@ function renderTabs(){
 function renderChips(){
   const chips = [
     ["strength","proven","Proven in niche"],["strength","adapted","Adapted from other niches"],
-    ["potential","High","High potential"],["star",true,"Shortlist ("+stars.size+")"]
+    ["potential","Top pick","Top pick"],["star",true,"Shortlist ("+stars.size+")"]
   ];
   document.getElementById("chips").innerHTML = chips.map(([g,v,l])=>{
     const on = g==="star"?state.star:state[g]===v;
@@ -183,15 +212,16 @@ function matches(i){
   if(state.q){ const h=(i.title+" "+i.pattern+" "+i.catLabel).toLowerCase(); if(!h.includes(state.q)) return false; }
   return true;
 }
+const POT_CLASS = {"Top pick":"pot-1","Strong":"pot-2","Worth testing":"pot-3"};
 function card(i){
   const ev = i.evidence.map(e=>'<a class="ev" href="'+esc(e.url)+'" target="_blank" rel="noopener"><img loading="lazy" src="thumbs/'+esc(e.vid)+'.jpg" alt="Thumbnail of '+esc(e.title)+'"><span class="stat">'+esc(e.stat)+(e.views?' · '+esc(e.views):'')+(e.subs?' · '+fmtSubs(e.subs):'')+'</span><span class="who">'+esc(e.channel)+': '+esc(e.title)+'</span></a>').join("");
   const notes = i.evidence.map(e=>'<li><b>'+esc(e.channel)+'.</b> '+esc(e.note)+'</li>').join("");
   const strengthLabel = i.strength==="proven"?"Proven in niche":"Adapted";
   const st = stars.has(i.id);
   return '<article class="card" data-id="'+esc(i.id)+'">'
-   +'<div class="meta"><span class="tag">'+esc(i.catLabel)+'</span><span class="tag '+(i.potential==="High"?"high":"")+'">'+esc(i.potential)+' potential</span><span class="tag '+esc(i.strength)+'">'+strengthLabel+'</span>'+(i.status?'<span class="tag status">'+esc(i.status)+'</span>':'')
+   +'<div class="meta"><span class="rank'+(i.rank===1?" r1":"")+'">#'+i.rank+'</span><span class="tag">'+esc(i.catLabel)+'</span><span class="tag '+(POT_CLASS[i.potential]||"")+'">'+esc(i.potential)+'</span><span class="tag '+esc(i.strength)+'">'+strengthLabel+'</span>'+(i.status?'<span class="tag status">'+esc(i.status)+'</span>':'')
    +'<button class="star" data-star="'+esc(i.id)+'" aria-pressed="'+st+'" aria-label="'+(st?"Remove from shortlist":"Add to shortlist")+'" title="Shortlist">'+(st?"★":"☆")+'</button></div>'
-   +'<h3 class="title">'+esc(i.title)+'</h3><p class="pattern">Format: '+esc(i.pattern)+'</p>'
+   +'<h3 class="title">'+esc(i.title)+'</h3><p class="pattern">Format: '+esc(i.pattern)+'. '+esc(i.rank_reason)+'</p>'
    +'<p class="why">'+esc(i.why)+'</p>'
    +'<div class="evlabel">Outliers this comes from</div><div class="evidence">'+ev+'</div>'
    +'<details><summary>Thumbnail plan, hook and shoot notes</summary><dl>'
@@ -204,10 +234,9 @@ function card(i){
    +'</dl></details></article>';
 }
 function renderGrid(){
-  const list = allIdeas.filter(matches);
+  const list = allIdeas.filter(matches).sort((a,b)=> a.category===b.category ? a.rank-b.rank : a.category.localeCompare(b.category));
   document.getElementById("grid").innerHTML = list.length? list.map(card).join("") : '<div class="empty">No ideas match these filters.</div>';
 }
-function renderAll(){ renderTabs(); renderChips(); renderGrid(); }
 document.addEventListener("click",e=>{
   const t = e.target.closest("button"); if(!t) return;
   if(t.dataset.cat){ state.cat=t.dataset.cat; renderAll(); return; }
@@ -218,6 +247,14 @@ document.addEventListener("click",e=>{
   }
   if(t.dataset.star){
     const id=t.dataset.star; stars.has(id)?stars.delete(id):stars.add(id); saveStars(); renderAll(); return;
+  }
+  if(t.dataset.jump){
+    if(state.cat==="all"){ const idea=allIdeas.find(x=>x.id===t.dataset.jump); if(idea){ state.cat=idea.category; renderAll(); } }
+    requestAnimationFrame(()=>{
+      const card = document.querySelector('.card[data-id="'+t.dataset.jump+'"]');
+      if(card){ card.scrollIntoView({behavior:"smooth", block:"center"}); card.style.outline="2px solid var(--accent)"; setTimeout(()=>card.style.outline="",1400); }
+    });
+    return;
   }
   if(t.dataset.copy){
     const el=document.getElementById(t.dataset.copy); const text=el.textContent;

@@ -28,7 +28,7 @@ def find(key, channel=None):
                 stat = r["scoreRaw"]
                 views = None
             return {
-                "title": r["title"].strip(),
+                "title": r["title"].strip().replace(" " + chr(0x2014) + " ", ", ").replace(chr(0x2014), ","),
                 "channel": r["channel"].strip(),
                 "stat": stat,
                 "views": views,
@@ -37,6 +37,7 @@ def find(key, channel=None):
                 "thumbnail": r["thumbnailUrl"],
                 "vid": r["vid"],
                 "subs": r.get("subscribers") if source == "niche" else None,
+                "score": round(r["score"], 1) if source == "niche" else None,
                 "adapted_title": r.get("coldTitle"),
             }
     MISSING.append(key)
@@ -364,6 +365,7 @@ IDEAS = [
 
 
 exec((Path(__file__).parent / "ideas_revisions.py").read_text(encoding="utf-8"))
+exec((Path(__file__).parent / "ideas_expansion.py").read_text(encoding="utf-8"))
 
 out = {
     "generated": date.today().isoformat(),
@@ -395,6 +397,15 @@ for idea in IDEAS:
 out["parked"] = PARKED
 for cat, d in out["categories"].items():
     d["count"] = len(d["ideas"])
+
+for _i in IDEAS:
+    if _i["strength"] == "proven":
+        _strong = [e for e in _i["evidence"] if e["source"] == "niche" and (e["score"] or 0) >= 20]
+        if len(_strong) < 2:
+            sys.exit(f"{_i['id']} is labelled proven but has {len(_strong)} niche evidence row(s) at 20x or more")
+from collections import Counter  # noqa: E402
+_per = Counter(i["category"] for i in IDEAS)
+assert all(v == 10 for v in _per.values()) and len(_per) == 4, f"expected 10 ideas in each of 4 categories, got {dict(_per)}"
 
 dest = ROOT / "video-ideation/strategist/ideas.json"
 dest.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
