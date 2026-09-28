@@ -69,6 +69,7 @@ from common import (  # noqa: E402
     is_english_title,
     pick_thumbnail,
     is_vertical_format,
+    is_made_for_kids,
 )
 
 LOOKBACK_DAYS = 90
@@ -171,6 +172,8 @@ def scan_candidates(cfg: Dict[str, Any], existing_vids: set) -> List[Dict[str, A
 
             channel_title = stats.get("snippet", {}).get("channelTitle", "")
             if _is_spam_channel(channel_title):
+                continue
+            if is_made_for_kids(stats, channel_title):
                 continue
 
             tags = stats.get("snippet", {}).get("tags", []) or []

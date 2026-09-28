@@ -235,11 +235,11 @@ def search_videos(youtube, keyword: str, lookback_days: int = None) -> List[Dict
 
 def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
-        part="statistics,snippet,contentDetails,player",
+        part="statistics,snippet,contentDetails,player,status",
         id=video_id,
         maxHeight=720,
         maxWidth=720,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,contentDetails/duration,player/embedWidth,player/embedHeight)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,contentDetails/duration,player/embedWidth,player/embedHeight,status/madeForKids,status/selfDeclaredMadeForKids)",
     )
     response = execute_request(request)
     if not response:
@@ -452,6 +452,28 @@ EXCLUDED_PHRASES = [
     "caught me and monty", "flirting for 1 hour", "flirting under the table", "office party",
     "dinner party (scene)", "caught flirting with both",
 ]
+
+
+# Channels that make family/kids content, for the General Long/Short Form tabs specifically
+# (user preference 2026-09-28: not made-for-kids). These slipped through before because
+# madeForKids wasn't fetched from the API at all; get_video_stats now requests part=status
+# so is_made_for_kids() below can use the real field going forward. This name list is a
+# text-based backstop for channels already found to publish kids content, in case the API
+# field is ever missing or a borderline case doesn't self-declare accurately.
+KIDS_CHANNEL_NAMES = {
+    "dhar mann", "dhar mann studios", "royalty family", "the royalty family",
+    "ninja fam", "the ninja fam!", "unspeakable", "unspeakable studios",
+}
+
+
+def is_made_for_kids(stats: Dict[str, Any], channel_title: str = "") -> bool:
+    """True if YouTube's own madeForKids flag says so, or the channel is a known
+    kids/family creator. Only meaningful for the General tabs, the niche tabs aren't
+    kids-adjacent content to begin with."""
+    status = stats.get("status", {}) if stats else {}
+    if status.get("madeForKids") or status.get("selfDeclaredMadeForKids"):
+        return True
+    return (channel_title or "").strip().lower() in KIDS_CHANNEL_NAMES
 
 
 def is_excluded_content(title: str = "", channel_title: str = "") -> bool:
