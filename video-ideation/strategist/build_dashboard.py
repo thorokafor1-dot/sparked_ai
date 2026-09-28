@@ -44,6 +44,7 @@ for cat, allowed in F.RELEVANT.items():
             "median": round(statistics.median(r["score"] for r in hits), 1),
             "best_title": best["title"].strip().replace(" " + chr(0x2014) + " ", ", ")[:90], "best_score": round(best["score"]),
             "best_url": best["videoUrl"], "best_vid": best["vid"], "best_thumb": best["thumbnailUrl"],
+            "thumb_note": F.THUMB_NOTES.get(fid, ""),
             "thin": len(hits) < 3, "ideas": sorted(used.get(fid, []), key=lambda x: x["rank"]),
         })
     entries.sort(key=lambda x: (x["thin"], -x["median"]))

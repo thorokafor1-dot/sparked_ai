@@ -28,6 +28,31 @@ FORMATS = {
     "tier": ("Tier list or ranking", "Tier list", r"tier list|ranked|ranking"),
     "superlative": ("Best / worst / every / must watch", "Superlative", r"\b(best|worst|every|must watch|ever)\b"),
 }
+# Packaging guidance specific to each title format, shown next to it in the dashboard instead
+# of one generic "how to make a thumbnail" blurb at the bottom of the page. Every idea's own
+# thumbnail brief already covers its scene, this is the one extra thing THIS format needs on
+# top of the standing rule (woman as main subject, medium/wide, natural light, no dancing).
+THUMB_NOTES = {
+    "number-list": "Leave room for a number badge, the count is often the hook.",
+    "signs": "Show the specific cue named in the title happening on her, not a generic close-up.",
+    "hidden": "Bold, high-contrast callout text earns its place here, 'secret'/'hidden' pulls the eye even over a busy frame.",
+    "challenge": "Make the count or clock visible (a badge, a scoreboard), it's the whole promise of the title.",
+    "i-tried": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+    "trust-tag": "Keep it unstaged and a little rough around the edges, a polished shot undercuts 'Real Infield Uncut'.",
+    "pov": "Frame it like the viewer is standing where you are, her reaction faces the camera.",
+    "series": "Include a small episode marker (Part 2, #52), it signals a series worth subscribing for.",
+    "place": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+    "online-to-real": "A split or before/after framing (screen vs. in-person) sells the arc faster than either half alone.",
+    "how-to": "Show the moment of doing the thing, not you explaining it.",
+    "psychology": "Clean and minimal, one clear expression, this audience responds to clarity over drama.",
+    "reaction": "Her face, mid-reaction, is the entire thumbnail, everything else is secondary.",
+    "breakdown": "A paused, slightly annotated feel (a freeze-frame look) matches the 'let's break this down' promise.",
+    "guest": "If a recognizable person is in it, keep both faces clearly readable at thumbnail size.",
+    "game": "Show the score, the rule, or the stakes visibly, the mechanic is the hook.",
+    "tier": "Use the S-F tier board as a graphic overlay, not a plain moment shot, that's the convention tier-list viewers expect.",
+    "superlative": "Go bigger and bolder than your usual thumbnail, 'best/worst/every' titles earn a more dramatic treatment.",
+}
+
 _COMPILED = {k: re.compile(v[2], re.I) for k, v in FORMATS.items()}
 
 

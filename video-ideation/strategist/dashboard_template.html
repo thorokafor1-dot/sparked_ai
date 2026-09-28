@@ -1,4 +1,4 @@
-<title>Sparked Idea Desk</title>
+<title>Sparked Video Ideation</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&family=Instrument+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -97,13 +97,16 @@ h1{font-size:clamp(26px,5.5vw,36px);line-height:1;font-weight:800;padding-bottom
 .fmt-ex{color:var(--muted);font-size:12px}
 .fmt-ex a{color:inherit}
 .fmt-also{color:var(--muted);font-size:11px;font-family:var(--mono)}
+.fmt-thumbnote{background:var(--gold-soft);color:var(--ink);border-radius:7px;padding:7px 10px;font-size:12.5px;line-height:1.4}
+.fmt-thumbnote b{color:var(--gold);font-family:var(--mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;font-weight:700}
 .fmt-use{border:1px solid var(--line);background:var(--surface2);border-radius:999px;padding:2px 8px;font-size:10.5px;color:var(--ink2);font-weight:500}
 .fmt-use:hover{border-color:var(--accent);color:var(--ink)}
 .fmt-list{display:grid;gap:9px}
 
 .idea{background:var(--surface);border:1px solid var(--line);border-left:3px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
 .idea.p1{border-left-color:var(--gold)}
-.idea-head{width:100%;display:flex;align-items:center;gap:11px;padding:10px 14px;text-align:left;background:none;border:0;list-style:none;cursor:pointer}
+.idea-head{width:100%;display:flex;align-items:center;gap:11px;padding:11px 14px;text-align:left;background:none;border:0;list-style:none;cursor:pointer}
+.idea-head:hover{background:var(--surface2)}
 .idea-head::-webkit-details-marker{display:none}
 .idea-head::marker{content:""}
 .idea-thumb{width:68px;height:38px;object-fit:cover;border-radius:7px;flex:none;background:var(--surface2)}
@@ -129,22 +132,19 @@ dd{margin:0;color:var(--ink);font-size:14px}
 .copy{margin-top:8px;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 11px;font-size:12.5px;font-weight:600}
 .copy:hover{border-color:var(--accent)}
 .copy.done{background:var(--good-soft);color:var(--good);border-color:var(--good)}
-.star{margin-left:4px;border:1px solid var(--line);background:transparent;border-radius:7px;width:30px;height:30px;font-size:15px;color:var(--muted);flex:none}
+.star{margin-left:4px;border:1px solid var(--line);background:transparent;border-radius:7px;width:32px;height:32px;font-size:16px;color:var(--muted);flex:none}
+.star:hover{border-color:var(--accent);color:var(--accent)}
 .star[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.star[aria-pressed="true"]:hover{color:var(--accent-ink)}
 
-details.more{border-top:1px solid var(--line);padding-top:12px}
-details.more summary{cursor:pointer;font-size:13px;color:var(--ink2);font-weight:600;list-style:none}
-details.more summary::-webkit-details-marker{display:none}
-details.more summary::before{content:"+ ";color:var(--accent);font-weight:700}
-details.more[open] summary::before{content:"- "}
-.foot{color:var(--muted);font-size:11.5px;max-width:70ch}
+.foot{color:var(--muted);font-size:11.5px;max-width:70ch;padding-top:4px;border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:no-preference){.idea{transition:box-shadow .15s}.chip,.copy{transition:background .12s, border-color .12s}}
 </style>
 
 <div class="wrap">
   <header class="top">
     <span class="eyebrow" id="eyebrow"></span>
-    <h1>Sparked Idea Desk</h1>
+    <h1>Sparked Video Ideation</h1>
     <p class="sub" id="sub"></p>
   </header>
 
@@ -165,18 +165,6 @@ details.more[open] summary::before{content:"- "}
     </div>
   </div>
 
-  <details class="more">
-    <summary>How to build the thumbnail</summary>
-    <ol style="margin:10px 0 0;padding-left:18px;display:grid;gap:5px;font-size:13.5px;color:var(--ink2)">
-      <li>Open an idea, expand it, copy the prompt.</li>
-      <li>In Grok Imagine, upload your reference photo, paste the prompt, generate. Check it looks like you.</li>
-      <li>A woman is always the main subject in the prompt, you're secondary. Shoot toward that framing, build the final thumbnail from a real frame.</li>
-    </ol>
-  </details>
-  <details class="more" id="parkedWrap">
-    <summary>Cut ideas (why they didn't make the list)</summary>
-    <ul id="parked" style="margin:10px 0 0;padding-left:18px;display:grid;gap:5px;font-size:13.5px;color:var(--ink2)"></ul>
-  </details>
   <p class="foot" id="foot"></p>
 </div>
 
@@ -201,8 +189,6 @@ const esc = s => String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&
 document.getElementById("eyebrow").textContent = "Cold approach · video strategy · updated " + DATA.generated;
 document.getElementById("sub").textContent = "Pick what you're filming, see only the formats and ideas that fit it.";
 document.getElementById("foot").textContent = DATA.footnote;
-document.getElementById("parked").innerHTML = DATA.parked.map(p=>"<li><b>"+esc(p.title)+".</b> "+esc(p.why)+"</li>").join("");
-document.getElementById("parkedWrap").style.display = DATA.parked.length ? "" : "none";
 
 function topIdea(c){ return DATA.categories[c].ideas.slice().sort((a,b)=>a.rank-b.rank)[0]; }
 function bestEvidence(i){ return i.evidence.slice().sort((a,b)=>(b.score||0)-(a.score||0))[0]; }
@@ -236,6 +222,7 @@ function fmtRow(f){
    +'<div class="fmt-bar"><i class="'+(f.thin?'thin':'')+'" style="width:'+pct+'%"></i></div>'
    +'<div class="fmt-ex"><a href="'+esc(f.best_url)+'" target="_blank" rel="noopener">Best: "'+esc(f.best_title)+'" ('+f.best_score+'x)'+(f.thin?", only "+f.n+" tracked, not proven":"")+'</a></div>'
    +'</div></div>'
+   +(f.thumb_note?'<div class="fmt-thumbnote"><b>Thumbnail:</b> '+esc(f.thumb_note)+'</div>':'')
    +(f.also.length?'<div class="fmt-also">Also wins in: '+f.also.map(esc).join(", ")+'</div>':'')
    +(uses?'<div class="fmt-ex" style="display:flex;flex-wrap:wrap;gap:5px;margin-top:2px">'+uses+'</div>':'')
    +'</div>';
