@@ -157,10 +157,12 @@ details.more[open] summary::before{content:"- "}
 <script>
 const DATA = __DATA__;
 const CATS = Object.keys(DATA.categories);
-// Infield (real footage, on-location) vs explainer (talking-head) are different shoots with
-// different formats, kept visually separate so picking one never surfaces the other's ideas.
+// Three different shoots with different formats, kept visually separate so picking one never
+// surfaces another's ideas: in-person infield, video chat (a different medium, not infield),
+// and explainer (talking-head, no approach footage at all).
 const GROUPS = [
-  {label:"Infield (raw footage)", cats:CATS.filter(c=>c!=="explainer")},
+  {label:"Infield (in-person, raw footage)", cats:["daygame","bargame"].filter(c=>CATS.includes(c))},
+  {label:"Video chat e-dates", cats:CATS.filter(c=>c==="video-chat-edates")},
   {label:"Explainer (talking-head)", cats:CATS.filter(c=>c==="explainer")},
 ].filter(g=>g.cats.length);
 let cat = null;
