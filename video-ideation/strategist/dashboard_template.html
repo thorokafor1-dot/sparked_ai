@@ -37,20 +37,27 @@ h1{font-size:clamp(24px,5vw,32px);line-height:1.1}
 .sub{color:var(--ink2);margin:0;font-size:14px}
 
 /* Step 1: pick what you're making */
+.group{display:flex;flex-direction:column;gap:8px}
+.group-label{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .picker{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.picker.solo{grid-template-columns:1fr}
 @media (max-width:480px){.picker{grid-template-columns:1fr}}
-.pick{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:left;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow)}
+.pick{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:10px;text-align:left;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow)}
 .pick:hover{border-color:var(--accent)}
 .pick[aria-pressed="true"]{background:var(--ink);border-color:var(--ink)}
 .pick[aria-pressed="true"] .pick-name,.pick[aria-pressed="true"] .pick-best{color:var(--bg)}
-.pick-name{font-family:var(--display);font-size:17px}
-.pick-best{color:var(--ink2);font-size:13px;line-height:1.35}
+.pick img{width:72px;height:72px;object-fit:cover;border-radius:9px;flex:none;background:var(--surface2)}
+.pick-text{display:flex;flex-direction:column;gap:3px;min-width:0}
+.pick-name{font-family:var(--display);font-size:16px}
+.pick-best{color:var(--ink2);font-size:12.5px;line-height:1.3;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
 .pick[aria-pressed="true"] .pick-best{opacity:.75}
 
 /* Step 2: everything scoped to the chosen category */
 .scope{display:none;flex-direction:column;gap:22px}
 .scope.on{display:flex}
-.switcher{display:flex;flex-wrap:wrap;gap:8px}
+.switcher{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.switcher-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.switcher-group + .switcher-group{padding-left:14px;border-left:1px solid var(--line)}
 .chip{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;font-size:13px;font-weight:600;color:var(--ink2)}
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 
@@ -72,9 +79,10 @@ h1{font-size:clamp(24px,5vw,32px);line-height:1.1}
 .fmt-list{display:grid;gap:8px}
 
 .idea{background:var(--surface);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow);overflow:hidden}
-.idea-head{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;text-align:left;background:none;border:0;list-style:none;cursor:pointer}
+.idea-head{width:100%;display:flex;align-items:center;gap:10px;padding:10px 14px;text-align:left;background:none;border:0;list-style:none;cursor:pointer}
 .idea-head::-webkit-details-marker{display:none}
 .idea-head::marker{content:""}
+.idea-thumb{width:64px;height:36px;object-fit:cover;border-radius:6px;flex:none;background:var(--surface2)}
 .rank{font-family:var(--mono);font-weight:700;font-size:13px;color:var(--muted);min-width:20px}
 .rank.r1{color:var(--accent)}
 .idea-title{flex:1;font-family:var(--display);font-size:15px;line-height:1.3}
@@ -149,6 +157,12 @@ details.more[open] summary::before{content:"- "}
 <script>
 const DATA = __DATA__;
 const CATS = Object.keys(DATA.categories);
+// Infield (real footage, on-location) vs explainer (talking-head) are different shoots with
+// different formats, kept visually separate so picking one never surfaces the other's ideas.
+const GROUPS = [
+  {label:"Infield (raw footage)", cats:CATS.filter(c=>c!=="explainer")},
+  {label:"Explainer (talking-head)", cats:CATS.filter(c=>c==="explainer")},
+].filter(g=>g.cats.length);
 let cat = null;
 let stars = new Set();
 try{ stars = new Set(JSON.parse(localStorage.getItem("ideaDeskStars")||"[]")); }catch(e){}
@@ -162,17 +176,25 @@ document.getElementById("parked").innerHTML = DATA.parked.map(p=>"<li><b>"+esc(p
 document.getElementById("parkedWrap").style.display = DATA.parked.length ? "" : "none";
 
 function topIdea(c){ return DATA.categories[c].ideas.slice().sort((a,b)=>a.rank-b.rank)[0]; }
+function bestEvidence(i){ return i.evidence.slice().sort((a,b)=>(b.score||0)-(a.score||0))[0]; }
+function pickCard(c){
+  const t = topIdea(c), ev = bestEvidence(t);
+  return '<button class="pick" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'
+    +'<img src="thumbs/'+esc(ev.vid)+'.jpg" alt="">'
+    +'<span class="pick-text"><span class="pick-name">'+esc(DATA.categories[c].label)+'</span>'
+    +'<span class="pick-best">#1: '+esc(t.title)+'</span></span></button>';
+}
 function renderPicker(){
-  document.getElementById("picker").innerHTML = CATS.map(c=>{
-    const t = topIdea(c);
-    return '<button class="pick" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'
-      +'<span class="pick-name">'+esc(DATA.categories[c].label)+'</span>'
-      +'<span class="pick-best">#1: '+esc(t.title)+'</span></button>';
-  }).join("");
+  document.getElementById("picker").outerHTML = '<div id="picker">'+GROUPS.map(g=>
+    '<div class="group"><div class="group-label">'+esc(g.label)+'</div>'
+    +'<div class="picker'+(g.cats.length<2?' solo':'')+'">'+g.cats.map(pickCard).join("")+'</div></div>'
+  ).join("")+'</div>';
 }
 function renderSwitcher(){
-  document.getElementById("switcher").innerHTML = CATS.map(c=>
-    '<button class="chip" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'+esc(DATA.categories[c].label)+'</button>'
+  document.getElementById("switcher").innerHTML = GROUPS.map(g=>
+    '<div class="switcher-group">'+g.cats.map(c=>
+      '<button class="chip" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'+esc(DATA.categories[c].label)+'</button>'
+    ).join("")+'</div>'
   ).join("");
 }
 function fmtRow(f){
@@ -194,9 +216,10 @@ function renderFormats(){
 }
 function ideaCard(i){
   const st = stars.has(i.id);
+  const top = bestEvidence(i);
   const ev = i.evidence.map(e=>'<a class="ev" href="'+esc(e.url)+'" target="_blank" rel="noopener"><img loading="lazy" src="thumbs/'+esc(e.vid)+'.jpg" alt=""><span class="stat">'+esc(e.stat)+(e.views?' · '+esc(e.views):'')+(e.subs?' · '+fmtSubs(e.subs):'')+'</span><span class="who">'+esc(e.channel)+': '+esc(e.title)+'</span></a>').join("");
   return '<details class="idea" data-id="'+esc(i.id)+'">'
-   +'<summary class="idea-head"><span class="rank'+(i.rank===1?' r1':'')+'">#'+i.rank+'</span><span class="idea-title">'+esc(i.title)+'</span>'
+   +'<summary class="idea-head"><img class="idea-thumb" loading="lazy" src="thumbs/'+esc(top.vid)+'.jpg" alt=""><span class="rank'+(i.rank===1?' r1':'')+'">#'+i.rank+'</span><span class="idea-title">'+esc(i.title)+'</span>'
    +'<span class="pot'+(i.rank<=3?' p1':'')+'">'+esc(i.potential)+'</span>'
    +'<button class="star" data-star="'+esc(i.id)+'" aria-pressed="'+st+'" aria-label="Shortlist" title="Shortlist">'+(st?"★":"☆")+'</button><span class="chev">▸</span></summary>'
    +'<div class="idea-body">'
