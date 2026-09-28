@@ -53,6 +53,7 @@ SWIPE_FILE = [
         "ca_thumbnail": "The creator in a recognizable costume mid-approach with a woman in a real public setting, bold text naming a specific outcome, playful dramatic lighting.",
         "notes": "The costume does double duty -- it's an icebreaker in the actual approach AND a scroll-stopping visual hook on the thumbnail.",
         "status": "Not Adapted",
+        "vertical": False,
     },
     {
         "title": "6 Times Urban Explorers Barely Escaped Death",
@@ -75,6 +76,7 @@ SWIPE_FILE = [
         "ca_thumbnail": "A real candid mid-conversation shot showing a tense moment, bold \"ALMOST FAILED\" text, natural daylight street setting.",
         "notes": "The near-miss-then-recovery structure creates tension without needing a single big dramatic incident -- several small real ones stacked together does the same job.",
         "status": "Not Adapted",
+        "vertical": False,
     },
     {
         "title": "Reuniting With Ferran After 7 Years Royalty Family Surprise",
@@ -98,6 +100,7 @@ SWIPE_FILE = [
         "notes": "An oddly specific number (7 years, not \"years\") is a small, reusable device for making a claim feel more real and less generic.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "BILLIONAIRE TEST | Kind Girl Risk Her Job To Defend Old Woman Been Humiliated | FULL MOVIE",
@@ -121,6 +124,7 @@ SWIPE_FILE = [
         "notes": "Naming a real, specific personal cost, not just \"she was kind,\" is what makes the kindness in these tests feel earned rather than trivial.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "I STOLE a Soft Drink From a Provision Store as a Homeless Mad Man…Her Reaction Left Me in Tears! 😭❤️",
@@ -144,6 +148,7 @@ SWIPE_FILE = [
         "notes": "An active provocation, not passive waiting, creates real uncertainty about the outcome, which is what separates this from a purely predictable kindness test.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": True,
     },
     {
         "title": "[Full] The Day They Hurt Her Daughter, the Mafia Queen Returned🔥",
@@ -167,6 +172,7 @@ SWIPE_FILE = [
         "notes": "Putting the twist in the title itself, rather than saving it, is a legitimate, different strategy from withheld-twist titles used elsewhere, worth testing both approaches.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": True,
     },
     {
         "title": "CONFRONTING NASIA ELIZ AFTER CHEATING WITH MY BESTFRIEND | LIFE FORCE SKATE AKO TO CHEAT AKO",
@@ -190,6 +196,7 @@ SWIPE_FILE = [
         "notes": "Real names and raw, minimal-production framing are what sell the authenticity here, over-producing this format would undercut it immediately.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "25 Instant Karma Moments Caught On Camera | Best Of The Week #28",
@@ -213,6 +220,7 @@ SWIPE_FILE = [
         "notes": "The branded weekly-numbered-series device is the real takeaway here -- it's a format that could become the channel's own recurring show rather than one-off videos.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "2000 Craziest Moments Idiots in Cars Get Instant Karma Caught on Camera | Best of The Week !",
@@ -235,6 +243,7 @@ SWIPE_FILE = [
         "ca_thumbnail": "A frozen mid-confrontation street shot, bold yellow text naming the specific bad-behavior type, red \"INSTANT KARMA\" stamp matching the branded look.",
         "notes": "Same insight as the other karma entry -- the value here is specifically the narrow, nameable sub-genre identity, not karma content in general.",
         "status": "Not Adapted",
+        "vertical": False,
     },
     {
         "title": "Confronting Real Scammers, Thieves & Cheaters in Public!",
@@ -257,6 +266,7 @@ SWIPE_FILE = [
         "ca_thumbnail": "A real in-person street scene, the creator's genuine intense expression mid-confrontation, a woman visible nearby.",
         "notes": "Taking any online-native confrontation format into real, in-person footage instantly raises its perceived stakes and authenticity.",
         "status": "Not Adapted",
+        "vertical": False,
     },
     {
         "title": "3 Couples with 3 Breakup-Level Confessions | Truth or Drink | Cut",
@@ -280,6 +290,7 @@ SWIPE_FILE = [
         "notes": "One of the most directly translatable entries in this batch -- this format already IS dating content, just needs your own branded execution.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Finally I Proposed Nega ❤️ With a Guinness Record  | Samsameer_insta",
@@ -303,6 +314,7 @@ SWIPE_FILE = [
         "notes": "A specific, named, checkable record, not a vague superlative, is what makes an extreme claim feel real rather than exaggerated.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "She finally admitted she's a fraud",
@@ -326,6 +338,7 @@ SWIPE_FILE = [
         "notes": "Using someone's own words as the proof, not the creator's claim, is what makes this reveal format land as credible rather than one-sided.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "MERYLL SORIANO & DAD, WILLIE REVILLAME: The Journey To Forgiveness & Healing | Karen Davila",
@@ -349,6 +362,7 @@ SWIPE_FILE = [
         "notes": "The interview format itself, not just the story, lends credibility -- a calm, sit-down conversation reads as more serious/real than a street clip.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Confronting Angry Paris Scammers!",
@@ -372,6 +386,7 @@ SWIPE_FILE = [
         "notes": "Naming a real, specific, recognizable location is a reusable device for adding grounded travel appeal to almost any format in this file.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Scammer CRIES After I HACK Her Live Webcam!",
@@ -395,6 +410,7 @@ SWIPE_FILE = [
         "notes": "Naming the exact emotional reaction in the title, not \"reacting,\" is a small but effective specificity upgrade over vaguer emotional promises.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Telling My Twin I’m Pregnant FULL REACTION - Merrell Twins",
@@ -418,6 +434,7 @@ SWIPE_FILE = [
         "notes": "Explicitly labeling a reaction as \"full,\" not a highlight, is a cheap trust signal worth using whenever the footage genuinely is complete.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "We surprised Tom Holland and Zendaya with AMAZING Titanium Flashmob at Spider-Man fan event 😍",
@@ -441,6 +458,7 @@ SWIPE_FILE = [
         "notes": "The elaborate-real-gesture-plus-genuine-reaction structure works at any scale -- the celebrity names here are what make it shareable, but the mechanic works with ordinary real reactions too.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Reunited With My Brother After 10 Years (FACE REVEAL)",
@@ -464,6 +482,7 @@ SWIPE_FILE = [
         "notes": "This device only works if there's a genuine separate anticipation already built with your audience -- don't fabricate a \"reveal\" that isn't real.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Marumagal Gave Us a HUGE Surprise! 😍🚗❤️ | New Car Reveal | @Mrrockyy",
@@ -487,6 +506,7 @@ SWIPE_FILE = [
         "notes": "The relationship context, not the object's value alone, is what makes a material-gift reveal feel warm rather than showy -- keep that framing front and center.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "A New Level Of Entitlement | Reading Reddit Stories",
@@ -510,6 +530,7 @@ SWIPE_FILE = [
         "notes": "Naming the specific behavioral theme up front, not just \"stories,\" is what gives an otherwise-generic reaction format a clear emotional hook before it starts.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "We Lived in our Pool for 24 Hours!",
@@ -533,6 +554,7 @@ SWIPE_FILE = [
         "notes": "Needs a genuinely candid (not posed) reaction shot to hit the same authenticity that makes the original work.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "LAST TO LEAVE BACKROOMS!",
@@ -556,6 +578,7 @@ SWIPE_FILE = [
         "notes": "Keep tone comedic, not genuinely frightening, so it still reads as playful flirting content rather than horror.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Last To Leave Cybertruck Keeps It!",
@@ -579,6 +602,7 @@ SWIPE_FILE = [
         "notes": "Confined-space formats naturally suggest tension/intimacy, making this one of the easier translations on the list.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Last To Leave RV Wins",
@@ -602,6 +626,7 @@ SWIPE_FILE = [
         "notes": "This shush/secrecy device is one of the most literal 1:1 translations to flirting content on this list, high test priority.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Puppies are Reunited after 2 Years! Will they remember?",
@@ -625,6 +650,7 @@ SWIPE_FILE = [
         "notes": "Reunion/nostalgia hooks translate cleanly and rarely feel forced when reframed around reconnecting with someone.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "Last To Leave Pool Wins",
@@ -648,6 +674,7 @@ SWIPE_FILE = [
         "notes": "Easy to recreate visually with just two people and a pool; strong quirky-hook variety pick.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "I Went Back To School For 24 Hours...",
@@ -671,6 +698,7 @@ SWIPE_FILE = [
         "notes": "Authority/rule-based tension is a fresh twist distinct from the typical last-to-leave format, good for variety.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
     {
         "title": "KINAWAWA NILA SI SOPHIA! *LAST TO LEAVE THE TENT!*",
@@ -694,6 +722,7 @@ SWIPE_FILE = [
         "notes": "Good variety pick since it showcases a group-proximity dynamic rather than a strict 1:1 pairing.",
         "status": "Not Adapted",
         "scanned_at": "2026-09-25",
+        "vertical": False,
     },
 ]
 

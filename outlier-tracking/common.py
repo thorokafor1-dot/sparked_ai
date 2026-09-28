@@ -183,8 +183,26 @@ def execute_request(request):
         return None
 
 
-def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
-    published_after = (datetime.now(timezone.utc) - timedelta(days=LOOKBACK_DAYS)).strftime("%Y-%m-%dT%H:%M:%SZ")
+# Thin sub-niches (Video Chat, Explainer, bar/nightgame) peak in bursts and then go quiet,
+# so their best outliers are often 1-3 years old. The default 200-day window silently
+# excluded them (Jameer, Jay Throck, ItsMP3, most nightgame). Found 2026-09-28: a manual
+# extended-lookback scan fixed the dashboard but the weekly Actions run rebuilds
+# data.json from scratch and wiped it, so these lists get the long window in the weekly
+# scan itself. Same number of searches, just a wider publishedAfter.
+EXTENDED_LOOKBACK_DAYS = int(os.getenv("EXTENDED_LOOKBACK_DAYS", "1095"))
+NIGHTGAME_KEYWORDS = {
+    "night game approach", "bar approach women", "club approach women", "bar game infield",
+    "nightclub approach", "night game infield", "bar pickup", "approaching women at bars",
+    "approaching women at the club", "bar flirting", "club flirting", "night game breakdown",
+    "bar approach infield", "picking up girls at the bar", "picking up girls at the club",
+    "night game tips", "approaching her at the bar", "cold approach at night",
+    "nightlife approach", "bar approach compilation", "club approach infield",
+    "night game rejection",
+}
+
+
+def search_videos(youtube, keyword: str, lookback_days: int = None) -> List[Dict[str, Any]]:
+    published_after = (datetime.now(timezone.utc) - timedelta(days=lookback_days or LOOKBACK_DAYS)).strftime("%Y-%m-%dT%H:%M:%SZ")
     request = youtube.search().list(
         q=keyword,
         part="snippet",
@@ -202,9 +220,11 @@ def search_videos(youtube, keyword: str) -> List[Dict[str, Any]]:
 
 def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
     request = youtube.videos().list(
-        part="statistics,snippet,contentDetails",
+        part="statistics,snippet,contentDetails,player",
         id=video_id,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,contentDetails/duration)",
+        maxHeight=720,
+        maxWidth=720,
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,contentDetails/duration,player/embedWidth,player/embedHeight)",
     )
     response = execute_request(request)
     if not response:
@@ -293,19 +313,21 @@ def is_short_video(duration_str: str, title: str = "", tags: list = None,
     return False
 
 
-def is_vertical_format(duration_str: str, thumbnail_width: int = None, thumbnail_height: int = None) -> bool:
-    """Detect a real long-form video shot in vertical/portrait orientation (phone
-    selfie-cam style, e.g. Steph Speaks) rather than landscape. This is a production
-    attribute orthogonal to niche/format, not something keyword search can find (nobody
-    titles a video "vertical format"), so it's inferred from the thumbnail's own aspect
-    ratio, the same portrait signal is_short_video() uses, but here it's a positive
-    signal for a real long-form video (duration confirmed >= 180s), not a Shorts flag."""
-    if not thumbnail_width or not thumbnail_height:
+def is_vertical_format(duration_str: str, embed_width=None, embed_height=None) -> bool:
+    """True for a real long-form video (over 3 minutes) filmed in vertical/portrait
+    orientation, like a phone selfie-cam recording (e.g. Steph Speaks). The API's
+    thumbnail dimensions can NOT be used for this: YouTube reports every thumbnail as
+    320x180 even for vertical Shorts (verified 2026-09-28), so the old thumbnail check
+    never fired. The player's embed size (part=player with maxHeight/maxWidth) does
+    follow the video's real aspect ratio (vertical Shorts come back 405x720)."""
+    try:
+        w, h = int(embed_width or 0), int(embed_height or 0)
+    except (TypeError, ValueError):
         return False
-    if thumbnail_height <= thumbnail_width:
+    if not w or not h or h <= w:
         return False
-    if duration_str and parse_duration_seconds(duration_str) < 180:
-        return False  # that's a Short, not a vertical long-form video
+    if duration_str and parse_duration_seconds(duration_str) <= 180:
+        return False  # a Short (up to 3 minutes), not a vertical long-form video
     return True
 
 
@@ -353,7 +375,7 @@ def is_english_title(title: str) -> bool:
         import re
         _NON_ENGLISH_SCRIPT_PATTERN = re.compile(
             r'[؀-ۿ֐-׿가-힯一-鿿぀-ヿ'
-            r'ऀ-ॿ฀-๿Ѐ-ӿ'
+            r'ऀ-෿฀-๿Ѐ-ӿ'
             r'À-ɏ]'
         )
     if not title:
@@ -384,12 +406,44 @@ def is_video_chat_content(title: str, tags: list = None) -> bool:
     )
 
 
+# Curation decisions made by hand during 2026-09 review, encoded so the weekly rebuild
+# stops re-adding them (it rebuilds data.json from scratch every Sunday). Substring match
+# on lowercased title + channel name.
+EXCLUDED_PHRASES = [
+    # Kids/sports/comedy/skit content that surfaces through shared vocabulary
+    "peppa pig", "dude perfect", "dhar mann", "standup comedy", "stand up comedy", "modiji",
+    # App-review listicles, not flirting content
+    "free video call", "video call app", "video calling app", "omegle alternatives",
+    "how to use umingle",
+    # Not the target niche (male approaching women) or off-format
+    "lgbtq", "languages to strangers", "to fall asleep",
+    # Societal-commentary videos with no technique to adapt
+    "refusing to approach", "refuse to approach", "don't approach women", "do not approach women",
+    "not *approaching women*", "not approaching women", "begging men to approach",
+    "men won't approach", "“terrified” to approach", "meta glasses", "harass women",
+    "skyrocketing as men",
+]
+
+
+def is_excluded_content(title: str = "", channel_title: str = "") -> bool:
+    """Hard, cheap exclusions: ASMR channels (the title/tag check misses them because
+    'asmr' is often only in the channel name) and the curated phrase list above."""
+    text = (title or "").lower()
+    chan = (channel_title or "").lower()
+    if "asmr" in chan:
+        return True
+    return any(p in text or p in chan for p in EXCLUDED_PHRASES)
+
+
 def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_keyword: str = "",
                       channel_title: str = "") -> bool:
     """Check if a video's tags/title/category indicate it's relevant to cold approach/pickup dating content."""
     import re
 
     if channel_title and channel_title.strip().lower() in EXCLUDED_CHANNELS:
+        return False
+
+    if is_excluded_content(title, channel_title):
         return False
 
     # Hard category exclusion, catches things keyword-matching can't, like songs

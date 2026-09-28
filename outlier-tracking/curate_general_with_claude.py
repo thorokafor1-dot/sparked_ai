@@ -199,7 +199,7 @@ def scan_candidates(cfg: Dict[str, Any], existing_vids: set) -> List[Dict[str, A
                 "published_at": stats.get("snippet", {}).get("publishedAt", "")[:10],
                 "thumbnail_url": thumbnail.get("url", ""),
                 "duration": _format_duration(duration_secs),
-                "vertical": is_vertical_format(duration, thumbnail.get("width"), thumbnail.get("height")),
+                "vertical": is_vertical_format(duration, stats.get("player", {}).get("embedWidth"), stats.get("player", {}).get("embedHeight")),
             })
             print(f"Candidate: '{title}' ({channel_title}) - {view_count:,} views")
 

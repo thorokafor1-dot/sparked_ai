@@ -62,7 +62,8 @@ def main() -> None:
     )
 
     for keyword, format_label in search_targets:
-        for item in common.search_videos(youtube, keyword):
+        extended = format_label in ("Video Chat", "Explainer Video") or keyword in common.NIGHTGAME_KEYWORDS
+        for item in common.search_videos(youtube, keyword, common.EXTENDED_LOOKBACK_DAYS if extended else None):
             video_id = item.get("id", {}).get("videoId")
             if not video_id:
                 continue
@@ -150,7 +151,7 @@ def main() -> None:
                 "video_url": f"https://www.youtube.com/watch?v={video_id}",
                 "vid": video_id,
                 "thumbnail_url": thumbnail_url,
-                "vertical": common.is_vertical_format(duration, thumbnail_width, thumbnail_height),
+                "vertical": common.is_vertical_format(duration, stats.get("player", {}).get("embedWidth"), stats.get("player", {}).get("embedHeight")),
             }
 
             if is_short:
