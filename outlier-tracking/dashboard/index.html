@@ -1,0 +1,589 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:dark}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#0A0A0C;color:#F4F2EC}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+
+<title>Outlier Tracker</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Work+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap">
+<style>
+  :root{
+    --ground:#0A0A0C;
+    --surface:#151417;
+    --surface-2:#1D1B1F;
+    --ink:#F4F2EC;
+    --ink-soft:#A6A29B;
+    --ink-faint:#6E6A66;
+    --line:#2A2830;
+    --amber:#FF3B1F;
+    --amber-strong:#FF7A52;
+    --amber-soft:#3A1712;
+    --teal:#C6FF3D;
+    --teal-soft:#22280F;
+    --good:#3ED598;
+    --good-soft:#0F2A21;
+    --shadow:0 1px 0 rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box;}
+  html{color-scheme:dark;}
+  body{
+    margin:0; background:var(--ground); color:var(--ink);
+    font-family:'Work Sans',-apple-system,Segoe UI,sans-serif;
+    padding:0 20px;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding-block:28px 80px;}
+
+  h1,h2,h3{font-family:'Bebas Neue',Georgia,serif; text-wrap:balance; margin:0; font-weight:600;}
+  a{color:inherit;}
+  .mono{font-family:'Space Mono',ui-monospace,monospace; font-variant-numeric:tabular-nums;}
+
+  /* ---------- header ---------- */
+  header.masthead{
+    display:flex; flex-wrap:wrap; gap:20px; align-items:flex-end; justify-content:space-between;
+    padding-bottom:18px; border-bottom:1px solid var(--line); margin-bottom:20px;
+  }
+  .brand-eyebrow{
+    font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+    color:var(--amber); font-weight:600;
+  }
+  h1.title{font-size:clamp(30px,5vw,42px); letter-spacing:0.01em; line-height:1; margin-top:6px; display:flex; align-items:center; gap:8px;}
+  .title-mark{flex:none;}
+  .sub{color:var(--ink-soft); font-size:13.5px; margin-top:6px; max-width:52ch; line-height:1.5;}
+  .last-scanned{
+    font-family:'Space Mono',monospace; font-size:11px; color:var(--ink-faint);
+    text-align:right; white-space:nowrap;
+  }
+  .last-scanned b{color:var(--ink-soft); font-weight:600;}
+
+  /* ---------- tabs + search ---------- */
+  .controls{
+    display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:space-between;
+    margin-bottom:22px; position:sticky; top:0; background:var(--ground); z-index:5;
+    padding-block:10px; margin-inline:-20px; padding-inline:20px;
+  }
+  .tabs{display:flex; flex-wrap:wrap; gap:6px;}
+  .tab-btn{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:0.03em; text-transform:uppercase;
+    background:var(--surface); color:var(--ink-soft); border:1px solid var(--line); border-radius:3px;
+    padding:8px 12px; cursor:pointer; white-space:nowrap;
+  }
+  .tab-btn:hover{color:var(--ink); border-color:var(--amber);}
+  .tab-btn:focus-visible{outline:2px solid var(--amber); outline-offset:1px;}
+  .tab-btn[aria-selected="true"]{background:var(--amber); color:#1B140A; border-color:var(--amber);}
+
+  .search-box{
+    display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line);
+    border-radius:3px; padding:7px 12px; min-width:220px; flex:1 1 220px; max-width:340px;
+  }
+  .search-box svg{flex:none; opacity:0.55;}
+  .search-box input{
+    border:none; outline:none; background:transparent; color:var(--ink); font:13px 'Work Sans',sans-serif; width:100%;
+  }
+  .search-box input::placeholder{color:var(--ink-faint);}
+
+  /* ---------- stat strip ---------- */
+  .stats{display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:28px;}
+  @media (max-width:760px){ .stats{grid-template-columns:repeat(2,1fr);} }
+  .stat-tile{
+    background:var(--surface); border:1px solid var(--line); border-radius:6px; padding:14px 16px;
+    box-shadow:var(--shadow);
+  }
+  .stat-label{font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.08em; color:var(--ink-faint);}
+  .stat-value{font-family:'Space Mono',monospace; font-size:20px; font-weight:600; color:var(--ink); margin-top:6px; font-variant-numeric:tabular-nums;}
+  .stat-value.accent{color:var(--amber);}
+  .stat-sub{font-size:12px; color:var(--ink-soft); margin-top:3px; line-height:1.4;}
+
+  section.panel{display:none;}
+  section.panel.active{display:block;}
+
+  /* ---------- sighting cards ---------- */
+  .score-chip{
+    display:inline-block; font-family:'Space Mono',monospace; font-size:12px; font-weight:600;
+    padding:3px 8px; border-radius:99px; background:var(--amber-soft); color:var(--amber-strong); white-space:nowrap;
+  }
+
+  .sight-toolbar{display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:10px; margin-bottom:16px;}
+  .sight-count{font-size:12.5px; color:var(--ink-soft);}
+  .sight-count b{color:var(--ink); font-weight:600;}
+  .sort-select{
+    font-family:'Space Mono',monospace; font-size:11.5px; letter-spacing:0.02em; text-transform:uppercase;
+    background:var(--surface); color:var(--ink-soft); border:1px solid var(--line); border-radius:3px;
+    padding:7px 10px; cursor:pointer;
+  }
+  .sort-select:hover{color:var(--ink); border-color:var(--amber);}
+
+  .sight-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(272px, 1fr)); gap:18px;}
+  .sight-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column;
+  }
+  .thumb-wrap{position:relative; aspect-ratio:16/9; background:var(--surface-2); display:block;}
+  .thumb-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+  .thumb-fallback{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    color:var(--ink-faint); font-family:'Space Mono',monospace; font-size:11px; text-align:center; padding:10px;
+  }
+  .badge-row{display:flex; flex-wrap:wrap; align-items:center; gap:6px; padding:10px 15px 0;}
+  .score-badge{
+    background:var(--amber); color:#1B140A;
+    font-family:'Space Mono',monospace; font-size:12px; font-weight:700; padding:4px 8px; border-radius:5px;
+    letter-spacing:0.01em; white-space:nowrap;
+  }
+  .format-badge{
+    background:var(--teal); color:#12140A;
+    font-family:'Space Mono',monospace; font-size:10.5px; font-weight:700; padding:3px 7px; border-radius:5px;
+    letter-spacing:0.02em; text-transform:uppercase; white-space:nowrap;
+  }
+  .duration-badge{
+    background:var(--surface-2); color:var(--ink-soft); border:1px solid var(--line);
+    font-family:'Space Mono',monospace; font-size:11px; padding:3px 7px; border-radius:5px; white-space:nowrap;
+  }
+  .format-toolbar{display:flex; flex-wrap:wrap; gap:8px;}
+  .sight-body{padding:8px 15px 15px; display:flex; flex-direction:column; flex:1;}
+  .sight-title{
+    font-family:'Work Sans',sans-serif; font-size:14px; font-weight:600; line-height:1.35; margin:0;
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; color:var(--ink);
+  }
+  .sight-title a{text-decoration:none;}
+  .sight-title a:hover{color:var(--amber-strong);}
+  .sight-meta{font-size:12px; color:var(--ink-soft); margin-top:6px;}
+  .sight-reason{font-size:11.5px; color:var(--ink-faint); margin-top:4px;}
+  .stat-row{display:flex; margin-top:12px; padding-top:11px; border-top:1px solid var(--line);}
+  .stat-col{flex:1; text-align:center; padding:0 4px; min-width:0;}
+  .stat-col + .stat-col{border-left:1px solid var(--line);}
+  .stat-col .val{
+    font-family:'Space Mono',monospace; font-weight:700; font-size:13.5px; color:var(--ink);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis; display:block;
+  }
+  .stat-col .lab{font-size:9px; letter-spacing:0.04em; text-transform:uppercase; color:var(--ink-faint); margin-top:3px;}
+  .empty-state{
+    grid-column:1/-1; text-align:center; color:var(--ink-faint); font-style:italic;
+    padding:48px 14px; background:var(--surface); border:1px solid var(--line); border-radius:8px;
+  }
+
+  /* ---------- swipe cards ---------- */
+  .swipe-toolbar{display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px;}
+  .status-btn{
+    font-family:'Space Mono',monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.04em;
+    background:var(--surface); border:1px solid var(--line); border-radius:99px; padding:6px 12px; cursor:pointer;
+    color:var(--ink-soft);
+  }
+  .status-btn[aria-pressed="true"]{background:var(--amber); color:#1B140A; border-color:var(--amber);}
+
+  .card-grid{display:grid; grid-template-columns:repeat(auto-fill, minmax(300px, 1fr)); gap:16px;}
+  .swipe-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:8px; overflow:hidden;
+    box-shadow:var(--shadow); display:flex; flex-direction:column;
+  }
+  .swipe-thumb-wrap{position:relative; aspect-ratio:16/9; background:var(--surface-2); display:block;}
+  .swipe-thumb-wrap img{width:100%; height:100%; object-fit:cover; display:block;}
+  .swipe-body-top{padding:8px 15px 12px; display:flex; flex-direction:column; flex:1;}
+  .swipe-eyebrow{font-family:'Space Mono',monospace; font-size:10px; letter-spacing:0.07em; text-transform:uppercase; color:var(--teal);}
+  .swipe-title{
+    font-family:'Work Sans',sans-serif; font-size:14px; font-weight:600; line-height:1.35; margin-top:6px; color:var(--ink);
+    display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden;
+  }
+  .swipe-meta{font-size:12px; color:var(--ink-soft); margin-top:6px;}
+  .swipe-meta .mono{color:var(--ink-soft);}
+  .swipe-chips{margin-top:9px;}
+  .status-chip{
+    font-family:'Space Mono',monospace; font-size:10.5px; text-transform:uppercase; letter-spacing:0.05em;
+    padding:4px 10px; border-radius:99px; white-space:nowrap; border:1px solid var(--line); color:var(--ink-soft);
+  }
+  .status-chip.adapted{background:var(--good-soft); color:var(--good); border-color:transparent;}
+  .status-chip.not-adapted{background:var(--amber-soft); color:var(--amber-strong); border-color:transparent;}
+
+  .swipe-details{margin-top:auto; border-top:1px solid var(--line);}
+  .swipe-details summary{
+    list-style:none; cursor:pointer; padding:10px 15px; font-family:'Space Mono',monospace;
+    font-size:10.5px; letter-spacing:0.03em; text-transform:uppercase; color:var(--ink-soft);
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+  }
+  .swipe-details summary::-webkit-details-marker{display:none;}
+  .swipe-details summary:hover{color:var(--ink);}
+  .swipe-details summary .chevron{transition:transform .15s; flex:none;}
+  .swipe-details[open] summary .chevron{transform:rotate(180deg);}
+  .swipe-body{display:grid; grid-template-columns:1fr; gap:14px; padding:0 15px 15px;}
+  .swipe-col{padding:12px 14px; border-radius:6px;}
+  .swipe-col.original{background:var(--surface-2);}
+  .swipe-col.translation{background:var(--teal-soft);}
+  .swipe-col h4{
+    font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase;
+    margin-bottom:8px; color:var(--ink-soft);
+  }
+  .swipe-col.translation h4{color:var(--teal);}
+  .swipe-col p{font-size:13px; line-height:1.6; margin:0 0 10px; color:var(--ink);}
+  .swipe-col p:last-child{margin-bottom:0;}
+  .swipe-col p b{font-weight:600;}
+  .swipe-col .field-label{font-size:11px; color:var(--ink-faint); display:block; margin-bottom:2px;}
+  .swipe-notes{font-size:12px; color:var(--ink-soft); padding-top:12px; border-top:1px dashed var(--line); line-height:1.6;}
+
+  .metric-note{font-size:12px; color:var(--ink-soft); line-height:1.55; margin:-12px 0 24px; max-width:90ch;}
+  .metric-note b{color:var(--ink);}
+
+  footer{margin-top:56px; padding-top:18px; border-top:1px solid var(--line); font-size:12px; color:var(--ink-faint);}
+
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div>
+      <div class="brand-eyebrow">Sparked &middot; Viral Video Intelligence</div>
+      <h1 class="title">
+        <svg class="title-mark" width="30" height="30" viewBox="0 0 30 30" fill="none" aria-hidden="true"><path d="M2 22L9 13L14 18L21 6L28 12" stroke="var(--amber)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/><circle cx="28" cy="12" r="3" fill="var(--amber)"/></svg>
+        Outlier Tracker
+      </h1>
+      <p class="sub">Every video that broke past its channel's own gravity, spotted weekly across the cold-approach niche and beyond, scored by how far it flew past the norm.</p>
+    </div>
+    <div class="last-scanned">Last synced<br><b id="last-scanned-date">Sep 26, 2026</b></div>
+  </header>
+
+  <div class="controls">
+    <div class="tabs" role="tablist" aria-label="Tracker sheet">
+      <button class="tab-btn" role="tab" data-tab="outliers" aria-selected="true">Niche Specific Long Form Outliers</button>
+      <button class="tab-btn" role="tab" data-tab="shorts" aria-selected="false">Niche Specific Short Form Outliers</button>
+      <button class="tab-btn" role="tab" data-tab="generalOutliers" aria-selected="false">General Long Form Outliers</button>
+      <button class="tab-btn" role="tab" data-tab="generalShorts" aria-selected="false">General Short Form Outliers</button>
+    </div>
+    <label class="search-box">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="search-input" placeholder="Search title, channel, niche&hellip;">
+    </label>
+  </div>
+
+  <div id="stats" class="stats"></div>
+  <p class="metric-note"><b>Outlier Score</b> is a metric calculated independently by Sparked from public YouTube view, subscriber and channel statistics (views vs. a 30,000-view floor, vs. the channel's average views, and vs. its subscriber count; the highest of the three is shown). It is not a YouTube metric. Views, Subscribers and Length come from the YouTube Data API and are re-verified at least every 30 days.</p>
+
+  <section class="panel active" id="panel-outliers" data-kind="sightings"></section>
+  <section class="panel" id="panel-shorts" data-kind="sightings"></section>
+  <section class="panel" id="panel-generalOutliers" data-kind="swipe"></section>
+  <section class="panel" id="panel-generalShorts" data-kind="swipe"></section>
+
+  <footer>
+    Sourced from a scheduled GitHub Actions scan across long-form and Shorts search terms in the cold-approach/dating niche &middot; all tabs refresh weekly on Sundays.
+  </footer>
+
+</div>
+
+<script>
+(function(){
+  var DATA = null;
+  var state = { tab:'outliers', query:'', sortKey:'score', sortDir:'desc', statusFilter:'all', formatFilter:'In-Person', verticalOnly:false };
+  // Tabs where the vertical-format toggle applies -- Shorts tabs are inherently
+  // vertical already, so the distinction only matters for long-form.
+  var VERTICAL_TOGGLE_TABS = { outliers:true, generalOutliers:true };
+
+  var TAB_CONFIG = {
+    outliers:        { kind:'sightings', noun:'long-form sighting', hasFormatToggle:true },
+    shorts:          { kind:'sightings', noun:'Shorts sighting',    hasFormatToggle:true },
+    generalOutliers: { kind:'swipe',     noun:'packaging pattern' },
+    generalShorts:   { kind:'swipe',     noun:'Shorts packaging pattern' }
+  };
+
+  function fmtInt(n){ return Math.round(n).toLocaleString('en-US'); }
+  function fmtScore(n){ return (Math.round(n*100)/100).toLocaleString('en-US'); }
+  function fmtCompact(n){
+    n = Math.round(n||0);
+    if(n>=1000000){ var v=n/1000000; return (v>=100?v.toFixed(0):v.toFixed(1)).replace(/\.0$/,'')+'M'; }
+    if(n>=1000){ var v2=n/1000; return (v2>=100?v2.toFixed(0):v2.toFixed(1)).replace(/\.0$/,'')+'K'; }
+    return String(n);
+  }
+  function esc(s){ return (s||'').replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+  function truncate(s, n){ s = s||''; return s.length > n ? s.slice(0,n-1)+'…' : s; }
+
+  function matchesQuery(item, kind, q){
+    if(!q) return true;
+    q = q.toLowerCase();
+    var hay = kind === 'sightings'
+      ? [item.title, item.channel, item.keyword]
+      : [item.title, item.channel, item.niche, item.pattern, item.coldTitle];
+    return hay.some(function(v){ return (v||'').toLowerCase().indexOf(q) !== -1; });
+  }
+
+  function getRows(tab){
+    var kind = TAB_CONFIG[tab].kind;
+    var rows = DATA[tab].filter(function(r){ return matchesQuery(r, kind, state.query); });
+    if(kind === 'sightings' && TAB_CONFIG[tab].hasFormatToggle && state.formatFilter !== 'all'){
+      rows = rows.filter(function(r){ return r.format === state.formatFilter; });
+    }
+    if(kind === 'swipe' && state.statusFilter !== 'all'){
+      rows = rows.filter(function(r){
+        var adapted = /adapted/i.test(r.status) && !/not adapted/i.test(r.status);
+        return state.statusFilter === 'adapted' ? adapted : !adapted;
+      });
+    }
+    if(VERTICAL_TOGGLE_TABS[tab] && state.verticalOnly){
+      rows = rows.filter(function(r){ return !!r.vertical; });
+    }
+    return rows;
+  }
+
+  function median(nums){
+    if(!nums.length) return 0;
+    var s = nums.slice().sort(function(a,b){return a-b;});
+    var mid = Math.floor(s.length/2);
+    return s.length % 2 ? s[mid] : (s[mid-1]+s[mid])/2;
+  }
+
+  // ---------------- stats ----------------
+  function renderStats(tab){
+    var kind = TAB_CONFIG[tab].kind;
+    var all = DATA[tab];
+    var el = document.getElementById('stats');
+    var tiles = [];
+
+    if(kind === 'sightings'){
+      var scores = all.map(function(r){return r.score;});
+      var views = all.map(function(r){return r.views;});
+      var channels = {}; all.forEach(function(r){ channels[r.channel] = true; });
+      var top = all.slice().sort(function(a,b){return b.score-a.score;})[0];
+      tiles = [
+        { label:'Sightings flagged', value: fmtInt(all.length), sub: 'this tab' },
+        { label:'Top outlier score', value: top ? fmtScore(top.score)+'x' : 'N/A', sub: top ? truncate(top.title, 40) : '', accent:true },
+        { label:'Median views', value: fmtInt(median(views)), sub:'across flagged videos' },
+        { label:'Channels represented', value: fmtInt(Object.keys(channels).length), sub:'unique creators' }
+      ];
+    } else {
+      var notAdapted = all.filter(function(r){ return /not adapted/i.test(r.status); }).length;
+      var adapted = all.length - notAdapted;
+      var niches = {}; all.forEach(function(r){ if(r.niche) niches[r.niche] = true; });
+      var topP = all.slice().sort(function(a,b){return b.scoreNum-a.scoreNum;})[0];
+      tiles = [
+        { label:'Patterns logged', value: fmtInt(all.length), sub: TAB_CONFIG[tab].noun+'s' },
+        { label:'Not yet produced', value: fmtInt(notAdapted), sub: adapted + ' produced so far (all have a written adaptation)', accent:true },
+        { label:'Top rarity score', value: topP ? fmtScore(topP.scoreNum)+'x' : 'N/A', sub: topP ? truncate(topP.title, 40) : '' },
+        { label:'Source niches', value: fmtInt(Object.keys(niches).length), sub:'cross-niche origins' }
+      ];
+    }
+
+    el.innerHTML = tiles.map(function(t){
+      return '<div class="stat-tile">'+
+        '<div class="stat-label">'+esc(t.label)+'</div>'+
+        '<div class="stat-value'+(t.accent?' accent':'')+'">'+t.value+'</div>'+
+        '<div class="stat-sub">'+esc(t.sub)+'</div>'+
+      '</div>';
+    }).join('');
+  }
+
+  // ---------------- sighting cards ----------------
+  var SORT_OPTIONS = {
+    score:   { label:'Highest score',  cmp:function(a,b){ return b.score-a.score; } },
+    views:   { label:'Most views',     cmp:function(a,b){ return b.views-a.views; } },
+    newest:  { label:'Newest first',   cmp:function(a,b){ return (Date.parse(b.publishedAt)||0)-(Date.parse(a.publishedAt)||0); } }
+  };
+
+  var FORMAT_OPTIONS = ['all', 'In-Person', 'Video Chat', 'Explainer Video'];
+
+  function renderSightingsPanel(tab, panel){
+    var hasFormatToggle = TAB_CONFIG[tab].hasFormatToggle;
+    var hasVerticalToggle = !!VERTICAL_TOGGLE_TABS[tab];
+    if(!panel.dataset.built){
+      panel.innerHTML =
+        '<div class="sight-toolbar">'+
+          '<div class="sight-count" id="count-'+tab+'"></div>'+
+          '<div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">'+
+            (hasFormatToggle ?
+              '<div class="format-toolbar" role="group" aria-label="Filter by format" id="format-'+tab+'">'+
+                FORMAT_OPTIONS.map(function(f){
+                  return '<button class="status-btn" data-format="'+esc(f)+'" aria-pressed="'+(f===state.formatFilter?'true':'false')+'">'+esc(f==='all'?'All':f)+'</button>';
+                }).join('')+
+              '</div>'
+            : '')+
+            (hasVerticalToggle ?
+              '<button class="status-btn" id="vertical-toggle-'+tab+'" aria-pressed="'+(state.verticalOnly?'true':'false')+'" title="Videos shot in vertical/portrait orientation, matching phone selfie-cam footage">Vertical Format Only</button>'
+            : '')+
+            '<select class="sort-select" id="sort-'+tab+'">'+
+              Object.keys(SORT_OPTIONS).map(function(k){ return '<option value="'+k+'">'+esc(SORT_OPTIONS[k].label)+'</option>'; }).join('')+
+            '</select>'+
+          '</div>'+
+        '</div>'+
+        '<div class="sight-grid" id="grid-'+tab+'"></div>';
+      panel.dataset.built = '1';
+      panel.querySelector('#sort-'+tab).addEventListener('change', function(e){
+        state.sortKey = e.target.value;
+        render();
+      });
+      if(hasFormatToggle){
+        panel.querySelectorAll('#format-'+tab+' .status-btn').forEach(function(btn){
+          btn.addEventListener('click', function(){
+            state.formatFilter = btn.getAttribute('data-format');
+            panel.querySelectorAll('#format-'+tab+' .status-btn').forEach(function(b){ b.setAttribute('aria-pressed', b===btn?'true':'false'); });
+            render();
+          });
+        });
+      }
+      if(hasVerticalToggle){
+        panel.querySelector('#vertical-toggle-'+tab).addEventListener('click', function(){
+          state.verticalOnly = !state.verticalOnly;
+          render();
+        });
+      }
+    }
+
+    if(!SORT_OPTIONS[state.sortKey]) state.sortKey = 'score';
+    panel.querySelector('#sort-'+tab).value = state.sortKey;
+    if(hasFormatToggle){
+      panel.querySelectorAll('#format-'+tab+' .status-btn').forEach(function(b){
+        b.setAttribute('aria-pressed', b.getAttribute('data-format') === state.formatFilter ? 'true' : 'false');
+      });
+    }
+    if(hasVerticalToggle){
+      panel.querySelector('#vertical-toggle-'+tab).setAttribute('aria-pressed', state.verticalOnly ? 'true' : 'false');
+    }
+
+    var all = DATA[tab];
+    var rows = getRows(tab).slice().sort(SORT_OPTIONS[state.sortKey].cmp);
+    panel.querySelector('#count-'+tab).innerHTML = '<b>'+rows.length+'</b> of '+all.length+' sightings';
+
+    var grid = panel.querySelector('#grid-'+tab);
+    if(!rows.length){
+      grid.innerHTML = '<div class="empty-state">No sightings match this search.</div>';
+      return;
+    }
+    grid.innerHTML = rows.map(function(r){
+      var thumbHtml = r.vid
+        ? '<img src="thumbs/'+esc(r.vid)+'.jpg" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'thumb-fallback\',textContent:\'No preview\'}))">'
+        : '<div class="thumb-fallback">No preview</div>';
+      return '<article class="sight-card">'+
+        '<a class="thumb-wrap" href="'+esc(r.videoUrl)+'" target="_blank" rel="noopener">'+
+          thumbHtml+
+        '</a>'+
+        '<div class="badge-row">'+
+          (r.format ? '<span class="format-badge">'+esc(r.format)+'</span>' : '')+
+          (r.vertical ? '<span class="format-badge" style="background:var(--good);">Vertical</span>' : '')+
+          '<span class="score-badge" title="Outlier Score is calculated independently by Sparked from public YouTube statistics. It is not a YouTube metric.">Outlier Score '+fmtScore(r.score)+'x</span>'+
+          (r.duration ? '<span class="duration-badge">Length '+esc(r.duration)+'</span>' : '')+
+        '</div>'+
+        '<div class="sight-body">'+
+          '<h3 class="sight-title"><a href="'+esc(r.videoUrl)+'" target="_blank" rel="noopener">'+esc(r.title)+'</a></h3>'+
+          '<div class="sight-meta">'+esc(r.channel)+' &middot; '+esc(r.publishedAt)+'</div>'+
+          '<div class="sight-reason">'+esc(r.reason)+'</div>'+
+          '<div class="stat-row">'+
+            '<div class="stat-col"><span class="val">'+fmtCompact(r.views)+'</span><span class="lab">Views</span></div>'+
+            '<div class="stat-col"><span class="val">'+fmtCompact(r.subscribers)+'</span><span class="lab">Subscribers</span></div>'+
+            '<div class="stat-col"><span class="val" title="'+esc(r.keyword)+'">'+esc(r.keyword)+'</span><span class="lab">Keyword</span></div>'+
+          '</div>'+
+        '</div>'+
+      '</article>';
+    }).join('');
+  }
+
+  // ---------------- swipe file cards ----------------
+  function renderSwipePanel(tab, panel){
+    var hasVerticalToggle = !!VERTICAL_TOGGLE_TABS[tab];
+    if(!panel.dataset.built){
+      panel.innerHTML =
+        '<div class="swipe-toolbar" role="group" aria-label="Filter by status" style="justify-content:space-between;">'+
+          '<div style="display:flex; gap:8px; flex-wrap:wrap;">'+
+            '<button class="status-btn" data-status="all" aria-pressed="true">All</button>'+
+            '<button class="status-btn" data-status="not-adapted" aria-pressed="false">Idea only</button>'+
+            '<button class="status-btn" data-status="adapted" aria-pressed="false">Produced</button>'+
+          '</div>'+
+          (hasVerticalToggle ?
+            '<button class="status-btn" id="vertical-toggle-'+tab+'" aria-pressed="'+(state.verticalOnly?'true':'false')+'" title="Videos shot in vertical/portrait orientation, matching phone selfie-cam footage">Vertical Format Only</button>'
+          : '')+
+        '</div>'+
+        '<div class="card-grid" id="cards-'+tab+'"></div>';
+      panel.dataset.built = '1';
+      panel.querySelectorAll('.swipe-toolbar .status-btn[data-status]').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          state.statusFilter = btn.getAttribute('data-status') === 'not-adapted' ? 'not-adapted' : btn.getAttribute('data-status');
+          panel.querySelectorAll('.swipe-toolbar .status-btn[data-status]').forEach(function(b){ b.setAttribute('aria-pressed', b===btn ? 'true':'false'); });
+          render();
+        });
+      });
+      if(hasVerticalToggle){
+        panel.querySelector('#vertical-toggle-'+tab).addEventListener('click', function(){
+          state.verticalOnly = !state.verticalOnly;
+          render();
+        });
+      }
+    }
+    if(hasVerticalToggle){
+      panel.querySelector('#vertical-toggle-'+tab).setAttribute('aria-pressed', state.verticalOnly ? 'true' : 'false');
+    }
+
+    var rows = getRows(tab).slice().sort(function(a,b){ return b.scoreNum - a.scoreNum; });
+    var grid = panel.querySelector('#cards-'+tab);
+    if(!rows.length){
+      grid.innerHTML = '<div class="swipe-card"><p style="color:var(--ink-faint); font-style:italic; margin:0;">No patterns match this search.</p></div>';
+      return;
+    }
+    grid.innerHTML = rows.map(function(r){
+      var adapted = /adapted/i.test(r.status) && !/not adapted/i.test(r.status);
+      var thumbHtml = r.vid
+        ? '<img src="thumbs/'+esc(r.vid)+'.jpg" alt="" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'thumb-fallback\',textContent:\'No preview\'}))">'
+        : '<div class="thumb-fallback">No preview</div>';
+      return '<article class="swipe-card">'+
+        '<a class="swipe-thumb-wrap" href="'+esc(r.videoUrl)+'" target="_blank" rel="noopener">'+
+          thumbHtml+
+        '</a>'+
+        '<div class="badge-row">'+
+          '<span class="score-badge" title="View count from YouTube at the last refresh.">'+esc(r.scoreRaw)+'</span>'+
+          (r.vertical ? '<span class="format-badge" style="background:var(--good);">Vertical</span>' : '')+
+          (r.duration ? '<span class="duration-badge">Length '+esc(r.duration)+'</span>' : '')+
+        '</div>'+
+        '<div class="swipe-body-top">'+
+          '<div class="swipe-eyebrow">'+esc(r.niche || 'Cross-niche')+'</div>'+
+          '<h3 class="swipe-title"><a href="'+esc(r.videoUrl)+'" target="_blank" rel="noopener" style="text-decoration:none;">'+esc(r.title)+'</a></h3>'+
+          '<div class="swipe-meta">'+esc(r.channel)+' &middot; '+fmtCompact(r.views||0)+' views</div>'+
+          '<div class="swipe-chips"><span class="status-chip '+(adapted?'adapted':'not-adapted')+'">'+(adapted?'Produced':'Idea only, adaptation written')+'</span></div>'+
+        '</div>'+
+        '<details class="swipe-details">'+
+          '<summary>Breakdown &amp; adaptation <span class="chevron">&#9662;</span></summary>'+
+          '<div class="swipe-body">'+
+            '<div class="swipe-col original">'+
+              '<h4>What made it work</h4>'+
+              '<p><span class="field-label">Packaging pattern</span>'+esc(r.pattern)+'</p>'+
+              '<p><span class="field-label">Psychological trigger</span>'+esc(r.trigger)+'</p>'+
+              '<p><span class="field-label">Title formula</span>'+esc(r.titleFormula)+'</p>'+
+            '</div>'+
+            '<div class="swipe-col translation">'+
+              '<h4>Cold-approach translation</h4>'+
+              '<p><span class="field-label">Concept</span>'+esc(r.translation)+'</p>'+
+              '<p><span class="field-label">Working title</span>“'+esc(r.coldTitle)+'”</p>'+
+              '<p><span class="field-label">Thumbnail concept</span>'+esc(r.coldThumbnail)+'</p>'+
+            '</div>'+
+            (r.notes ? '<div class="swipe-notes"><span class="field-label">Notes</span>'+esc(r.notes)+'</div>' : '')+
+          '</div>'+
+        '</details>'+
+      '</article>';
+    }).join('');
+  }
+
+  function render(){
+    var tab = state.tab;
+    renderStats(tab);
+    var panel = document.getElementById('panel-'+tab);
+    if(TAB_CONFIG[tab].kind === 'sightings') renderSightingsPanel(tab, panel);
+    else renderSwipePanel(tab, panel);
+  }
+
+  function init(data){
+    DATA = data;
+    document.querySelectorAll('.tab-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        document.querySelectorAll('.tab-btn').forEach(function(b){ b.setAttribute('aria-selected', b===btn?'true':'false'); });
+        document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
+        state.tab = btn.getAttribute('data-tab');
+        state.sortKey = 'score'; state.sortDir = 'desc'; state.statusFilter = 'all'; state.formatFilter = 'In-Person'; state.verticalOnly = false;
+        document.getElementById('panel-'+state.tab).classList.add('active');
+        var searchPh = TAB_CONFIG[state.tab].kind === 'sightings' ? 'Search title, channel, keyword…' : 'Search title, channel, niche…';
+        document.getElementById('search-input').placeholder = searchPh;
+        render();
+      });
+    });
+    document.getElementById('search-input').addEventListener('input', function(e){
+      state.query = e.target.value;
+      render();
+    });
+    render();
+  }
+
+  fetch('data.json').then(function(r){ return r.json(); }).then(init).catch(function(err){
+    document.getElementById('stats').innerHTML = '<div class="stat-tile"><div class="stat-label">Error</div><div class="stat-value">Could not load data.json</div></div>';
+    console.error(err);
+  });
+})();
+</script>
+
+</body></html>
