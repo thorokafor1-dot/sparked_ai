@@ -24,15 +24,8 @@ by_cat = {}
 for r in niche:
     by_cat.setdefault(ep.categorize(r, "niche"), []).append(r)
 
-# Per category: only the formats that make sense for it (formats.RELEVANT), with that category's own numbers.
-formats_by_cat = {}
-for cat, allowed in F.RELEVANT.items():
-    rows = by_cat.get(cat, [])
+def build_format_block(label, rows, allowed, used):
     cat_median = round(statistics.median(r["score"] for r in rows), 1) if rows else 0
-    used = {}
-    for i in ideas["categories"][cat]["ideas"]:
-        for f in i.get("formats", []):
-            used.setdefault(f, []).append({"id": i["id"], "title": i["title"], "rank": i["rank"]})
     entries = []
     for fid in allowed:
         hits = [r for r in rows if fid in F.detect(r["title"])]
@@ -48,10 +41,36 @@ for cat, allowed in F.RELEVANT.items():
             "thin": len(hits) < 3, "ideas": sorted(used.get(fid, []), key=lambda x: x["rank"]),
         })
     entries.sort(key=lambda x: (x["thin"], -x["median"]))
-    formats_by_cat[cat] = {"label": CAT_LABEL[cat], "videos": len(rows), "median": cat_median, "formats": entries}
+    return {"label": label, "videos": len(rows), "median": cat_median, "formats": entries}
+
+
+def used_in(cats):
+    used = {}
+    for cat in cats:
+        for i in ideas["categories"][cat]["ideas"]:
+            for f in i.get("formats", []):
+                used.setdefault(f, []).append({"id": i["id"], "title": i["title"], "rank": i["rank"], "cat": cat})
+    return used
+
+
+# Per category: only the formats that make sense for it (formats.RELEVANT), with that category's own numbers.
+formats_by_cat = {}
+for cat, allowed in F.RELEVANT.items():
+    formats_by_cat[cat] = build_format_block(CAT_LABEL[cat], by_cat.get(cat, []), allowed, used_in([cat]))
 for cat, block in formats_by_cat.items():
     for entry in block["formats"]:
         entry["also"] = [CAT_LABEL[c] for c, b in formats_by_cat.items() if c != cat and any(x["id"] == entry["id"] for x in b["formats"] if not x["thin"])]
+
+# A combined "all infield" view (daygame + bargame merged): the user asks for cold-approach
+# infield as one shoot type, not two, this is the formats panel for that framing. Ideas stay
+# split by sub-category (their ranks aren't comparable across daygame/bargame), the dashboard
+# renders both idea lists stacked under this pick instead of merging them.
+_infield_rows = by_cat.get("daygame", []) + by_cat.get("bargame", [])
+_infield_allowed = list(dict.fromkeys(F.RELEVANT["daygame"] + F.RELEVANT["bargame"]))
+formats_by_cat["infield"] = build_format_block("Infield (daygame + bargame)", _infield_rows, _infield_allowed, used_in(["daygame", "bargame"]))
+for entry in formats_by_cat["infield"]["formats"]:
+    entry["also"] = [CAT_LABEL[c] for c in ("video-chat-edates", "explainer") if c in formats_by_cat and any(x["id"] == entry["id"] for x in formats_by_cat[c]["formats"] if not x["thin"])]
+
 (HERE / "formats.json").write_text(json.dumps(formats_by_cat, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 data = {

@@ -79,6 +79,8 @@ h1{font-size:clamp(26px,5.5vw,36px);line-height:1;font-weight:800;padding-bottom
 .chip[aria-pressed="true"]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
 
 .section{display:flex;flex-direction:column;gap:10px}
+#ideas{display:flex;flex-direction:column;gap:10px}
+#ideas h3{color:var(--ink2);font-family:var(--mono);font-size:12px;letter-spacing:.06em;text-transform:uppercase}
 .section h2{font-size:17px;display:flex;align-items:center;gap:9px}
 .section h2::before{content:"";width:4px;height:16px;background:var(--accent);border-radius:2px}
 .section .hint{color:var(--muted);margin:0;font-size:12.5px}
@@ -174,11 +176,16 @@ const CATS = Object.keys(DATA.categories);
 // Three different shoots with different formats, kept visually separate so picking one never
 // surfaces another's ideas: in-person infield, video chat (a different medium, not infield),
 // and explainer (talking-head, no approach footage at all).
+// "infield" is a virtual pick, not a real idea category: it shows the combined daygame+bargame
+// formats panel (cold approach infield as one shoot type), with both categories' idea lists
+// stacked below it rather than merged into one ranking (their ranks aren't comparable).
+const VCATS = {"infield": "All Infield (daygame + bargame)"};
 const GROUPS = [
-  {label:"Infield (in-person, raw footage)", cats:["daygame","bargame"].filter(c=>CATS.includes(c))},
+  {label:"Infield (in-person, raw footage)", cats:["infield","daygame","bargame"].filter(c=>c==="infield"||CATS.includes(c))},
   {label:"Video chat e-dates", cats:CATS.filter(c=>c==="video-chat-edates")},
   {label:"Explainer (talking-head)", cats:CATS.filter(c=>c==="explainer")},
 ].filter(g=>g.cats.length);
+const catLabel = c => (DATA.categories[c] || {}).label || VCATS[c];
 let cat = null;
 let stars = new Set();
 try{ stars = new Set(JSON.parse(localStorage.getItem("ideaDeskStars")||"[]")); }catch(e){}
@@ -193,11 +200,17 @@ document.getElementById("foot").textContent = DATA.footnote;
 function topIdea(c){ return DATA.categories[c].ideas.slice().sort((a,b)=>a.rank-b.rank)[0]; }
 function bestEvidence(i){ return i.evidence.slice().sort((a,b)=>(b.score||0)-(a.score||0))[0]; }
 function pickCard(c){
-  const t = topIdea(c), ev = bestEvidence(t);
+  let vid, caption;
+  if(VCATS[c]){
+    const top = DATA.formats[c].formats[0];
+    vid = top.best_vid; caption = "Top format: "+top.label+" ("+top.median+"x)";
+  } else {
+    const t = topIdea(c); vid = bestEvidence(t).vid; caption = "#1: "+t.title;
+  }
   return '<button class="pick" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'
-    +'<img src="thumbs/'+esc(ev.vid)+'.jpg" alt="">'
-    +'<span class="pick-text"><span class="pick-name">'+esc(DATA.categories[c].label)+'</span>'
-    +'<span class="pick-best">#1: '+esc(t.title)+'</span></span></button>';
+    +'<img src="thumbs/'+esc(vid)+'.jpg" alt="">'
+    +'<span class="pick-text"><span class="pick-name">'+esc(catLabel(c))+'</span>'
+    +'<span class="pick-best">'+esc(caption)+'</span></span></button>';
 }
 function renderPicker(){
   document.getElementById("picker").outerHTML = '<div id="picker">'+GROUPS.map(g=>
@@ -208,7 +221,7 @@ function renderPicker(){
 function renderSwitcher(){
   document.getElementById("switcher").innerHTML = GROUPS.map(g=>
     '<div class="switcher-group">'+g.cats.map(c=>
-      '<button class="chip" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'+esc(DATA.categories[c].label)+'</button>'
+      '<button class="chip" data-pick="'+c+'" aria-pressed="'+(cat===c)+'">'+esc(catLabel(c))+'</button>'
     ).join("")+'</div>'
   ).join("");
 }
@@ -255,6 +268,14 @@ function ideaCard(i){
    +'</dl></div></details>';
 }
 function renderIdeas(){
+  if(VCATS[cat]){
+    document.getElementById("ideas").innerHTML = ["daygame","bargame"].filter(c=>CATS.includes(c)).map(c=>
+      '<h3 style="font-size:14px;margin:4px 0 8px">'+esc(catLabel(c))+'</h3>'
+      +'<div style="display:flex;flex-direction:column;gap:9px;margin-bottom:16px">'
+      +DATA.categories[c].ideas.slice().sort((a,b)=>a.rank-b.rank).map(ideaCard).join("")+'</div>'
+    ).join("");
+    return;
+  }
   const list = DATA.categories[cat].ideas.slice().sort((a,b)=>a.rank-b.rank);
   document.getElementById("ideas").innerHTML = list.map(ideaCard).join("");
 }
