@@ -18,10 +18,11 @@ import media  # noqa: E402
 from checks import EM_DASH  # noqa: E402
 
 HASHTAG_RX = re.compile(r"(?<!\w)#\w+")
+WOMEN_ADDRESSED_RX = re.compile(r"\b(works?|worked|land|lands) on you\b|\bladies\b|\bwould you (date|kiss|fall for) (him|me)\b", re.I)
 PLACEHOLDER_RX = re.compile(r"\b(TODO|TBD|FIXME|lorem ipsum)\b|\[INSERT|\[PLACEHOLDER|\{\{|\}\}|\?\?\?", re.I)
 
 CAPTION_MAX = {"instagram": 2200, "tiktok": 2200, "facebook": 5000}
-HASHTAG_RANGE = {"facebook": (1, 3), "instagram": (0, 30), "tiktok": (0, 30)}  # FB 1-3 is the user's rule; IG's 30 is a hard platform cap
+HASHTAG_RANGE = {"facebook": (1, 3), "instagram": (3, 5), "tiktok": (0, 30)}  # FB 1-3 is the user's rule; IG capped hashtags at 5 per post in late 2025 (playbook: 3-5)
 SHORT_MAX_SECONDS = {"instagram": 180, "facebook": 180, "tiktok": 600, "youtube": 180}
 
 
@@ -31,6 +32,8 @@ def text_problems(label: str, text: str) -> list[str]:
         problems.append(f"{label} is empty")
     if EM_DASH in text:
         problems.append(f"{label} contains an em dash; rewrite with a comma, period or parentheses")
+    if "\U0001F60F" in text:  # user, 2026-10-02: no smirk emoji in captions or titles
+        problems.append(f"{label} contains the smirk emoji, which the user doesn't want; drop it")
     m = PLACEHOLDER_RX.search(text)
     if m:
         problems.append(f"{label} still has a placeholder: '{m.group(0)}'")
@@ -48,6 +51,10 @@ def caption_problems(platform: str, caption: str) -> list[str]:
         problems.append(f"{platform} caption has {len(tags)} hashtags, use {lo}-{hi}")
     if len(set(t.lower() for t in tags)) != len(tags):
         problems.append(f"{platform} caption repeats a hashtag")
+    # The audience is men: a CTA asking whether a line "works on you" talks to the women receiving it
+    # (user correction 2026-10-01 on "Would this line work on you?").
+    if WOMEN_ADDRESSED_RX.search(caption):
+        problems.append(f"{platform} caption addresses women; the audience is men (ask whether they'd use the line)")
     return problems
 
 

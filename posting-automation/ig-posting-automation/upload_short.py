@@ -25,6 +25,7 @@ that, this script reuses the saved session automatically -- no repeated logins.
 import argparse
 import os
 import re
+import sys
 import tempfile
 from pathlib import Path
 
@@ -117,6 +118,18 @@ def select_cover_photo(page: Page, cover_image_path: Path) -> bool:
     screenshot. Using an exact pre-picked frame sidesteps guessing at which of
     Instagram's ~4 auto-generated thumbnail choices is best.
     """
+    # Preferred: the cover screen carries its own image file input (accept=image/jpeg,image/png, verified
+    # 2026-10-01), so set it directly. Clicking the link to get a file chooser failed when it ran before
+    # the screen finished loading.
+    try:
+        cover_input = page.locator('div[role="dialog"] input[type="file"][accept*="image"]').first
+        cover_input.wait_for(state="attached", timeout=20_000)
+        cover_input.set_input_files(str(cover_image_path))
+        page.wait_for_timeout(3_000)
+        print(f"  [ok] cover photo uploaded ({cover_image_path.name}, via the dialog's image input)", flush=True)
+        return True
+    except Exception:
+        pass
     try:
         link = page.get_by_text("Select from computer", exact=False).first
         link.scroll_into_view_if_needed(timeout=5_000)
@@ -232,9 +245,63 @@ def fill_caption(page: Page, caption: str) -> bool:
         return False
 
 
-def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_path: Path | None) -> None:
+def set_schedule(page: Page, when) -> bool:
+    """Verified live 2026-10-02 on the final (caption) screen: a 'Schedule content' toggle (the dialog's
+    second input[role=switch]; the first is 'Add AI label') reveals a Date dropdown button ("Fri, Oct 2,
+    2026") that opens a month grid of button[role=gridcell] days, and a Time field made of three
+    spinbuttons (aria-label Hours / Minutes / AM PM) that take typed digits ("07", "00", "P"). With the
+    toggle on, the dialog's Share button becomes Schedule, which stays the user's click."""
+    d = page.locator('div[role="dialog"]')
+    try:
+        switch = d.locator('input[role="switch"]').nth(1)
+        switch.scroll_into_view_if_needed()
+        if not switch.is_checked():
+            switch.click(force=True)
+            page.wait_for_timeout(1500)
+        hour12 = when.strftime("%I")
+        for label, value in (("Hours", hour12), ("Minutes", when.strftime("%M")), ("AM PM", when.strftime("%p")[0])):
+            d.locator(f'input[role="spinbutton"][aria-label="{label}"]').click()
+            page.keyboard.type(value, delay=80)
+            page.wait_for_timeout(300)
+        d.locator('div[role="button"]:has-text(", 20")').first.click()  # the date dropdown ("Fri, Oct 2, 2026")
+        page.wait_for_timeout(1200)
+        month = when.strftime("%B %Y")
+        if not page.get_by_text(month, exact=True).count():
+            print(f"  [warn] date picker isn't showing {month}; pick the date by hand", flush=True)
+            return False
+        page.locator('button[role="gridcell"][aria-disabled="false"]').filter(
+            has_text=re.compile(rf"^{when.day}$")
+        ).first.click()
+        page.wait_for_timeout(800)
+        date_text = d.locator('div[role="button"]:has-text(", 20")').first.inner_text().strip()
+        got = tuple(
+            d.locator(f'input[aria-label="{l}"]').get_attribute("aria-valuenow") for l in ("Hours", "Minutes")
+        )
+    except Exception as e:
+        print(f"  [warn] schedule fields: {e}", flush=True)
+        return False
+    want_date = f"{when.strftime('%a, %b')} {when.day}, {when.year}"
+    if date_text != want_date or got != (str(int(hour12)), str(when.minute)):
+        print(f"  [warn] schedule reads {date_text} {got}, wanted {want_date} {when:%I:%M %p}", flush=True)
+        return False
+    print(f"  [ok] scheduled for {date_text} {when:%I:%M %p}; the button now says Schedule", flush=True)
+    return True
+
+
+def upload_to_instagram(
+    page: Page, video_path: Path, caption: str, cover_image_path: Path | None, schedule_at=None
+) -> None:
     print("Opening Instagram...", flush=True)
     page.goto("https://www.instagram.com/", wait_until="domcontentloaded")
+    # An expired session lands on the login page; wait for the user to log in rather than clicking around
+    # it (a generic "Create" text match then hit a feed element and opened someone else's post).
+    try:
+        page.wait_for_selector('svg[aria-label="New post"]', timeout=10_000)
+    except Exception:
+        print("  [needs manual action] Log in to Instagram in the window that opened; continuing once the "
+              "home feed loads (up to 5 minutes).", flush=True)
+        page.wait_for_selector('svg[aria-label="New post"]', timeout=300_000)
+        page.goto("https://www.instagram.com/", wait_until="domcontentloaded")
 
     print("Step 1/5: opening the create-post dialog", flush=True)
     opened = click_first_match(
@@ -244,7 +311,6 @@ def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_
             'svg[aria-label="New post"]',
             '[aria-label="New post"]',
             'a[href="#"] svg[aria-label="New post"]',
-            'span:has-text("Create")',
         ],
     )
     if not opened:
@@ -308,6 +374,16 @@ def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_
         )
 
     print("Step 3/5: crop screen -- selecting original aspect ratio", flush=True)
+    # A "video posts are now shared as reels" notice with an OK button sits over the crop screen and
+    # swallows the clicks on the crop menu (verified 2026-10-01). Dismiss it first when it's there.
+    try:
+        ok = page.locator('div[role="dialog"] button:has-text("OK")').first
+        ok.wait_for(state="visible", timeout=8_000)
+        ok.click()
+        page.wait_for_timeout(800)
+        print("  [ok] dismissed the reels notice", flush=True)
+    except Exception:
+        pass
     select_original_aspect_ratio(page)
     advanced = click_first_match(
         page, "Next button (crop screen)", ['button:has-text("Next")', 'div[role="button"]:has-text("Next")']
@@ -329,14 +405,22 @@ def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_
     # Verify we actually reached the final share screen before trying to fill the caption --
     # otherwise a caption selector that's too loosely scoped can silently match some unrelated
     # contenteditable still on the cover/trim screen and report false success.
+    # Seen 2026-10-02: right after a cover upload the first Next click can be swallowed (the dialog is still
+    # busy with the image), leaving it on the Edit screen. Retry Next once before giving up.
     on_final_screen = False
-    for selector in ['text="New reel"', 'text="New post"']:
-        try:
-            page.locator(selector).first.wait_for(state="visible", timeout=8_000)
-            on_final_screen = True
+    for attempt in range(2):
+        for selector in ['text="New reel"', 'text="New post"']:
+            try:
+                page.locator(selector).first.wait_for(state="visible", timeout=8_000)
+                on_final_screen = True
+                break
+            except Exception:
+                continue
+        if on_final_screen or attempt:
             break
-        except Exception:
-            continue
+        print("  [retry] still on the cover/trim screen -- clicking Next again", flush=True)
+        page.wait_for_timeout(2_000)
+        click_first_match(page, "Next button (retry)", ['div[role="dialog"] div[role="button"]:has-text("Next")'], 10_000)
     if not on_final_screen:
         note_needs_manual_action(
             "confirm the final share screen was reached",
@@ -349,6 +433,12 @@ def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_
     elif not on_final_screen:
         print(f"  [needs manual action] Skipped caption fill -- not on the final screen. Caption:\n\n{caption}\n", flush=True)
 
+    if schedule_at is not None:
+        print(f"Step 6/6: scheduling for {schedule_at:%a %d %b %I:%M %p}", flush=True)
+        if not (on_final_screen and set_schedule(page, schedule_at)):
+            note_needs_manual_action(
+                "set the schedule", f"Turn on 'Schedule content' and pick {schedule_at:%a %d %b, %I:%M %p}."
+            )
     print(
         "\nReady to publish. The post is filled in but NOT shared yet -- switch to the "
         "browser window, double check everything (including the cover frame), and click "
@@ -367,7 +457,9 @@ def upload_to_instagram(page: Page, video_path: Path, caption: str, cover_image_
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Upload a short video to Instagram via browser automation.")
-    parser.add_argument("--drive-link", required=True, help="Google Drive share link (or file ID) for the video")
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument("--drive-link", help="Google Drive share link (or file ID) for the video")
+    source_group.add_argument("--video", help="Local video file (skips the Drive round-trip for a fresh render)")
     caption_group = parser.add_mutually_exclusive_group(required=True)
     caption_group.add_argument("--caption", help="Caption text for the post")
     caption_group.add_argument(
@@ -388,18 +480,36 @@ def main() -> None:
         default=None,
         help="Path to a local image file to upload as the cover photo via 'Select from computer'",
     )
+    parser.add_argument(
+        "--schedule",
+        default=None,
+        help='Local time "YYYY-MM-DD HH:MM" to schedule the reel for; the script fills it in, you click Schedule',
+    )
+    parser.add_argument(
+        "--debug-port",
+        type=int,
+        default=0,
+        help="Expose Chrome's DevTools port so a second process can inspect the live composer (selector work)",
+    )
     args = parser.parse_args()
+    # captions carry emoji; a redirected stdout on Windows defaults to cp1252 and crashed mid-flow
+    sys.stdout.reconfigure(encoding="utf-8")
     caption = args.caption if args.caption is not None else Path(args.caption_file).read_text(encoding="utf-8")
+    schedule_at = None
+    if args.schedule:
+        from datetime import datetime
+        schedule_at = datetime.fromisoformat(args.schedule)
+        if schedule_at <= datetime.now():
+            parser.error(f"--schedule {args.schedule} is in the past")
 
     # Project-wide pre-flight (qa/preflight_post.py): abort before anything is uploaded.
-    import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa"))
     from preflight_post import caption_problems, enforce, vertical_video_problems
     enforce(caption_problems("instagram", caption), "caption")
     cover_image_path = Path(args.cover_image) if args.cover_image else None
 
     with tempfile.TemporaryDirectory(prefix="upload_short_") as tmp_dir:
-        video_path = download_from_drive(args.drive_link, Path(tmp_dir))
+        video_path = Path(args.video).resolve() if args.video else download_from_drive(args.drive_link, Path(tmp_dir))
         enforce(vertical_video_problems("instagram", Path(video_path)), "video file")
 
         with sync_playwright() as p:
@@ -407,11 +517,12 @@ def main() -> None:
                 user_data_dir=args.chrome_user_data_dir,
                 channel="chrome",
                 headless=False,
-                args=[f"--profile-directory={args.profile_directory}"],
+                args=[f"--profile-directory={args.profile_directory}"]
+                + ([f"--remote-debugging-port={args.debug_port}"] if args.debug_port else []),
             )
             try:
                 page = context.new_page()
-                upload_to_instagram(page, video_path, caption, cover_image_path)
+                upload_to_instagram(page, video_path, caption, cover_image_path, schedule_at)
             finally:
                 try:
                     context.close()

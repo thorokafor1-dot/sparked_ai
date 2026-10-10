@@ -28,9 +28,23 @@ Coach Knox's title formula: `[Specific Topic] (TIER LIST)`, always a concrete sc
 9. Excuses Women Give When They're Not Interested (TIER LIST)
 10. The First 5 Seconds of an Approach (TIER LIST)
 
+### Austin uncut: looking for the love of my life (raw infield, user idea 2026-10-09)
+- **Angle:** the proven "realistic N minutes of approaching women (uncut)" format, with a twist: real stakes, because he's looking for the one, not chasing numbers. It's mature, fits the brand, and none of the uncut videos have it.
+- **Title candidates:**
+  - **90 Minutes of Looking for the Love of My Life in Austin (Uncut Infield)** (recommended)
+  - A Realistic 90 Minutes of Flirting With Women in Austin, Looking for the One (Uncut)
+- **Why now (demand check):**
+  - The uncut-minutes format is proven across male creators: Alex León "A Realistic 60 Minutes of Approaching Women (UNCUT INFIELD)" score 31; Pull University "A Realistic 41 Minutes of Cold Approaching Women in London (UNCUT)" score 27; Coach Kyle "A Realistic 74 Minutes..." 228K views (score 8); Chris Goldy "...in Toronto for 12 Hours Straight" score 14.
+  - A city in the title is part of the proven pattern (London, Toronto).
+  - "Looking for the love of my life" has little search demand of its own (autocomplete is mostly songs and movies). It's a curiosity and stakes twist, not a search play.
+  - Gap not measured yet: the infield inspiration set isn't pulled (do it in the infield thread).
+- **Watch-outs:** the title promises a search, not a result, so the footage doesn't need a girlfriend at the end. Do it as a series per city (Austin first). Thumbnail per the infield rules: a real frame of the best interaction, with the woman as the main draw.
+- **Format:** long-form, raw infield. Hand off to the infield idea-board thread.
+
 ## Promoted (has a full concept doc)
 - "10 Opening Lines" countdown Short → [ideation_10_openers.md](ideation_10_openers.md)
 - "Best Places to Cold Approach in Public (TIER LIST)" → [ideation_best_places_tier_list.md](ideation_best_places_tier_list.md)
+- "How I Cured My Approach Anxiety" (the #1 cure is facing the fear) → [ideation_approach_anxiety_cure.md](ideation_approach_anxiety_cure.md), script: [../script-writing/script_approach_anxiety_cure.md](../script-writing/script_approach_anxiety_cure.md)
 
 ## Parked / Rejected
 <!-- ideas that didn't pan out, with a one-line reason, so they don't get re-proposed blind -->

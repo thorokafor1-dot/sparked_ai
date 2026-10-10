@@ -30,6 +30,10 @@ fights, resumable upload built in.
 - `upload_video.py` -- uploads a video (`videos.insert`, resumable) with title,
   description, tags, category, and privacy status, then sets a custom thumbnail
   (`thumbnails.set`) if `--thumbnail` is given. Defaults to `--privacy private`.
+  `--publish-at "YYYY-MM-DD HH:MM"` schedules (local time). On an already-uploaded
+  video, `--video-id <id> --publish-at ...` (and/or `--thumbnail`) reschedules without
+  re-uploading. Scheduled/private videos can't take comments, so a pinned comment is
+  posted right after it goes public (or set Unlisted, pin, then Public).
 
 ## Quality gates (automatic, `qa/preflight_post.py`)
 The upload script runs a pre-flight on its own inputs and exits with code 2, before anything is downloaded or uploaded, if a check fails:

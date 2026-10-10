@@ -1,0 +1,67 @@
+{
+  "_note": "Curated big channels whose long-form audience skews adult men 18-35 (the channel's target audience) and whose scripting/retention craft is worth stealing. Grouped by what we borrow from them. Add/remove freely; find_general_outliers.py skips handles that fail to resolve.",
+  "social_experiment": {
+    "why": "Stranger interaction, social risk and real reactions on camera: closest big-channel analogue to infield/video-chat footage.",
+    "handles": [
+      "@MaxFosh",
+      "@YesTheory",
+      "@JoshPieters"
+    ],
+    "min_views": 500000
+  },
+  "mens_self_improvement": {
+    "why": "Talking-head persuasion scripted for men: the explainer format's retention ceiling.",
+    "handles": [
+      "@CharismaonCommand",
+      "@HealthyGamerGG",
+      "@Hamza97",
+      "@ImanGadzhi",
+      "@AlexHormozi",
+      "@ChrisWillx",
+      "@IAmMarkManson",
+      "@DanKoeTalks",
+      "@ImprovementPill",
+      "@mattdavella"
+    ]
+  },
+  "story_explainer": {
+    "why": "Documentary-style narrative scripting: open loops, chaptering, payoff placement.",
+    "handles": [
+      "@johnnyharris",
+      "@MagnatesMedia",
+      "@JeffNippard",
+      "@aliabdaal"
+    ]
+  },
+  "niche_authorities": {
+    "why": "The user's reference cold-approach and video-chat creators (see memory project_niche_channels_cold_approach). Lower view floor, longer lookback: these are niche-sized channels.",
+    "min_views": 50000,
+    "lookback_days": 1095,
+    "handles": [
+      "@CoachKyle",
+      "@ToddVDating",
+      "@DiegoDay",
+      "@SocialStoic",
+      "@IansRoom",
+      "@AlexLeon",
+      "@OfficialTreyStar",
+      "@CoachKnox",
+      "@Jameer",
+      "@LilPraisey",
+      "@JayThrock",
+      "@UglyTV"
+    ]
+  },
+  "_excluded": {
+    "@airrack": "Airrack: audience skews teen, outside the 18-35 adult-male target (2026-10-01)",
+    "@MrBeast": "MrBeast: audience skews teen, outside the 18-35 adult-male target (2026-10-01)",
+    "@BetaSquad": "Beta Squad: audience skews teen, outside the 18-35 adult-male target (2026-10-01)",
+    "@Niko": "Niko Omilana: audience skews teen, outside the 18-35 adult-male target (2026-10-01)"
+  },
+  "craft_only": {
+    "why": "Elite story structure, stakes and pacing, but audience may skew younger than 18-35. Borrow structure only, never tone, topics or humor.",
+    "handles": [
+      "@ryan"
+    ]
+  }
+}

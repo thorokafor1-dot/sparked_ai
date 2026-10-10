@@ -8,6 +8,7 @@ Single job of this folder: hold full, word-for-word, production-ready scripts fo
 ## Quality gates (automatic, see `qa/checks_text.py`)
 `script-structure` runs on every save of `script_*.md`:
 - It cites the `hook_patterns.md` + archetype it's built on in the first lines.
+- It cites `long-form-script-research/beat_maps/<category>.md` and at least 2 reference video ids from it near the top (the script is modeled on real outliers in its category).
 - Timestamped `## [m:ss-m:ss] NAME` sections start at 0:00, run with no gaps or overlaps, and open on the HOOK, which must land by 0:10.
 - Spoken VO/LINE words stay at 3.5 words/sec or less per section, so everything can be delivered naturally.
 - No woman's dialogue is written or quoted (describe her reaction directionally), and no TODO/TBD placeholders.

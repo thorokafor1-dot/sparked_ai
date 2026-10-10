@@ -88,16 +88,17 @@ First 30 seconds, built from `long-form-hook-research/hook_patterns.md` (Type A,
 - **0:20-0:30** Cut into opener #10 on the countdown (first item), body begins.
 
 ## Countdown Order (weakest to strongest, #1 lands last)
+Ranked by actual reaction strength, not clustered by category (solo/group/friend-dependent lines are mixed in wherever they land). Locked in `script-writing/script_10_openers.md`.
 10. #4 (acknowledge-busy-anyway)
 9. #5 (gym guess)
-8. #9 (wing-assisted, needs a friend present, good mid-list twist)
+8. #1 (outfit, generic compliment)
 7. #2 (vibing too hard, group)
 6. #10 (good style, group)
-5. #1 (outfit, generic compliment)
-4. #7 (chill walk vibe-read)
-3. #3 (catwalk, most memorable/funny)
-2. #6 (jacket, teaches specific > generic compliment)
-1. #8 (caught my attention, most-proven line, crowns the countdown)
+5. #7 (chill walk vibe-read)
+4. #9 (friend-assisted, needs a friend present)
+3. #6 (jacket, teaches specific > generic compliment)
+2. #3 (catwalk, most memorable/funny)
+1. #8 (caught my attention, go-to line, crowns the countdown)
 
 ## Open Questions / Next Steps
 - [x] Pull exact clip timestamps per opener from the swipe file for a shot list

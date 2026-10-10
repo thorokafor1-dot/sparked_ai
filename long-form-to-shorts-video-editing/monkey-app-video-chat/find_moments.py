@@ -94,15 +94,19 @@ def windows(words: list[dict]) -> list[dict]:
 
 def score_windows(client: anthropic.Anthropic, batch: list[dict]) -> list[dict]:
     body = "\n\n".join(f"=== WINDOW {w['id']} ({w['start']:.0f}s-{w['end']:.0f}s) ===\n{w['text']}" for w in batch)
-    msg = client.messages.create(model=MODEL, max_tokens=4000, messages=[{"role": "user", "content": PROMPT.format(
-        n=len(batch), min_clip=MIN_CLIP, max_clip=MAX_CLIP, windows=body)}])
-    text = "".join(b.text for b in msg.content if b.type == "text").strip()
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
-    try:
-        return json.loads(text)["moments"]
-    except (json.JSONDecodeError, KeyError):
-        print(f"could not parse moments for windows {[w['id'] for w in batch]}:\n{text[:500]}")
-        return []
+    # 4000 tokens cut the first batch's JSON off mid-moment, so every --auto run silently lost the
+    # first ~5 minutes of the call (found 2026-10-04). Room to spare now, plus one retry on bad JSON.
+    for attempt in range(2):
+        msg = client.messages.create(model=MODEL, max_tokens=16000, messages=[{"role": "user", "content": PROMPT.format(
+            n=len(batch), min_clip=MIN_CLIP, max_clip=MAX_CLIP, windows=body)}])
+        text = "".join(b.text for b in msg.content if b.type == "text").strip()
+        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text)
+        try:
+            return json.loads(text)["moments"]
+        except (json.JSONDecodeError, KeyError):
+            print(f"could not parse moments for windows {[w['id'] for w in batch]} "
+                  f"(attempt {attempt + 1}, stop_reason={msg.stop_reason}):\n{text[-300:]}")
+    return []
 
 
 def snap(m: dict, words: list[dict]) -> dict | None:

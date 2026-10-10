@@ -1,0 +1,209 @@
+[
+ {
+  "slug": "01_bingo",
+  "woman": "reference/women_pool/pins/pin_4797c34cd150.jpg",
+  "me": "reference/self/videochat/2025-11-05_P1020053.JPG",
+  "grade": "amber",
+  "widgets": [
+   {
+    "type": "bingo",
+    "timer": "02:14.45"
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "02_zero_rizz_friend",
+  "woman": "reference/women_pool/pins/pin_97ca5555f5fb.jpg",
+  "me": "reference/self/videochat/2025-11-05_P1020071.JPG",
+  "grade": "teal",
+  "me_focus": [
+   0.5,
+   0.25
+  ],
+  "bubble": "WAIT, HE'S GOOD NOW",
+  "widgets": [
+   {
+    "type": "before_after"
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "03_worst_fit",
+  "woman": "reference/women_pool/pins/pin_d47040dd6146.jpg",
+  "me": "reference/self/videochat/2025-12-21_P1020294.JPG",
+  "grade": "red",
+  "bubble": "YOU'RE FUNNY",
+  "widgets": [
+   {
+    "type": "tags",
+    "tags": [
+     {
+      "xy": [
+       1500,
+       880
+      ],
+      "text": "MY WORST FIT"
+     }
+    ]
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "04_beard_vs_clean",
+  "woman": "reference/women_pool/pins/pin_4a1d2c03d84f.jpg",
+  "me": "reference/self/videochat/2025-12-21_P1020321.JPG",
+  "grade": "sunset",
+  "widgets": [
+   {
+    "type": "vs",
+    "a": "BEARD",
+    "b": "CLEAN"
+   }
+  ],
+  "bubble": "THE BEARD. 100%",
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "05_women_score_me",
+  "woman": "reference/women_pool/pins/pin_3a41c67db386.jpg",
+  "me": "reference/self/videochat/2025-11-05_P1020077.JPG",
+  "grade": "teal",
+  "widgets": [
+   {
+    "type": "scorecard",
+    "score": "?/10",
+    "xy": [
+     110,
+     330
+    ]
+   },
+   {
+    "type": "buttons"
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "06_skip_then_back",
+  "woman": "reference/women_pool/pins/pin_fda005daf8f6.jpg",
+  "me": "reference/self/videochat/2025-08-05_P1010174.JPG",
+  "grade": "none",
+  "bubble": "WAIT, HE WAS FINE...",
+  "widgets": [
+   {
+    "type": "skip"
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "07_best_of_explained",
+  "woman": "reference/women_pool/pins/pin_55b43f147997.jpg",
+  "me": "reference/self/videochat/2025-08-05_P1010185.JPG",
+  "grade": "amber",
+  "emoji": "😍",
+  "widgets": [
+   {
+    "type": "tags",
+    "tags": [
+     {
+      "xy": [
+       480,
+       980
+      ],
+      "text": "THE TEASE"
+     },
+     {
+      "xy": [
+       1440,
+       980
+      ],
+      "text": "PUSH-PULL"
+     }
+    ]
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "08_fix_viewer_lines",
+  "woman": "reference/women_pool/pins/pin_1d35f2d512c8.jpg",
+  "me": "reference/self/videochat/2025-11-05_P1020042.JPG",
+  "grade": "red",
+  "widgets": [
+   {
+    "type": "comment"
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "09_name_guess",
+  "woman": "reference/women_pool/pins/pin_af03e41e61e7.jpg",
+  "me": "reference/self/videochat/2026-03-06_P1020507.JPG",
+  "grade": "teal",
+  "bubble": "HOW DID YOU KNOW",
+  "widgets": [
+   {
+    "type": "tags",
+    "tags": [
+     {
+      "xy": [
+       1440,
+       960
+      ],
+      "text": "\"YOU'RE A SOFIA\""
+     }
+    ]
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ },
+ {
+  "slug": "10_spiderman_mask",
+  "woman": "reference/women_pool/pins/pin_25bd506947a5.jpg",
+  "me": "reference/self/videochat/2026-03-06_P1020502.JPG",
+  "grade": "red",
+  "emoji": "😍",
+  "widgets": [
+   {
+    "type": "mask",
+    "text": "MASK ON. WORDS ONLY."
+   }
+  ],
+  "woman_focus": [
+   0.5,
+   0.35
+  ]
+ }
+]

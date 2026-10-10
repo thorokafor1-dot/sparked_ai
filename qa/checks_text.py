@@ -8,7 +8,7 @@ from __future__ import annotations
 import re
 from pathlib import Path
 
-from checks import check, read_text
+from checks import check, read_text, rel_path
 
 TS = r"(\d+):(\d{2})"
 SECTION_RX = re.compile(rf"^##\s*\[{TS}\s*-\s*{TS}\]\s*(.*)$")
@@ -54,6 +54,19 @@ def script_structure(path: Path) -> list[str]:
     if not any("hook_patterns.md" in line for line in lines[:12]):
         problems.append("no citation of the hook_patterns.md + archetype it's built on in the first lines "
                         "(script-writer rule: keep scripts traceable to the research)")
+    # Every script mirrors real outliers in its category (long-form-script-research/beat_maps/<cat>.md):
+    # at least 2 reference video ids from that beat map, cited near the top.
+    head = "\n".join(lines[:25])
+    bm = re.search(r"beat_maps/(infield|video-chat|explainer)\.md", head)
+    if not bm:
+        problems.append("no citation of long-form-script-research/beat_maps/<category>.md in the first lines "
+                        "(script-writer rule: model the beats on real outliers in this category)")
+    else:
+        bm_path = Path(__file__).resolve().parent.parent / "long-form-script-research" / "beat_maps" / f"{bm[1]}.md"
+        known = set(re.findall(r"`([A-Za-z0-9_-]{11})`", bm_path.read_text(encoding="utf-8"))) if bm_path.exists() else set()
+        cited = set(re.findall(r"[A-Za-z0-9_-]{11}", head)) & known
+        if len(cited) < 2:
+            problems.append(f"cite at least 2 reference video ids from beat_maps/{bm[1]}.md near the top (found {len(cited)})")
     sections = []  # (start, end, title, body_lines)
     for line in lines:
         m = SECTION_RX.match(line)
@@ -86,6 +99,30 @@ def script_structure(path: Path) -> list[str]:
             need = words / 2.8
             problems.append(f"'{title}' packs {words} spoken words into {end - start}s ({rate:.1f} w/s, max "
                             f"{MAX_WORDS_PER_SEC}); cut the VO or give it about {need:.0f}s")
+    problems += _footage_gaps(timed)
+    return problems
+
+
+MAX_NO_FOOTAGE = 90  # seconds of talking head in a row before a footage-led script feels like a lecture
+
+
+def _footage_gaps(timed: list) -> list[str]:
+    """Talking head + infield scripts need footage breaking up the talking head (critic catch, 2026-09-30:
+    a script ran 0:07-3:40 with no infield at all). Only applies once a script uses FOOTAGE: lines."""
+    has_footage = [any(re.match(r"\s*FOOTAGE\b", line) for line in body) for _, _, _, body in timed]
+    if not any(has_footage):
+        return []
+    problems, run_start, run_titles = [], None, []
+    for (start, end, title, _), foot in zip(timed + [(None, None, None, None)], has_footage + [True]):
+        if not foot:
+            run_start = start if run_start is None else run_start
+            run_titles.append(title)
+            run_end = end
+            continue
+        if run_start is not None and run_end - run_start > MAX_NO_FOOTAGE:
+            problems.append(f"{run_end - run_start}s of talking head with no FOOTAGE ({run_start}s-{run_end}s: "
+                            f"{', '.join(run_titles)}); add infield B-roll to break it under {MAX_NO_FOOTAGE}s")
+        run_start, run_titles = None, []
     return problems
 
 
@@ -170,4 +207,79 @@ def hook_patterns_doc(path: Path) -> list[str]:
     low = text.lower()
     if "archetype" not in low:
         problems.append("no named archetypes; the doc must name hook archetypes with real examples")
+    return problems
+
+
+@check("longform-hormozi-captions", paths=["long-form-video-editing/*/work/captions.ass"], exts={".ass"})
+def longform_hormozi_captions(path: Path) -> list[str]:
+    """Long-form spoken captions follow the user's Hormozi style (feedback 2026-10-01): caps, 1-3 words,
+    a heavy font, at most one highlighted word per chunk."""
+    text = path.read_text(encoding="utf-8-sig")
+    problems = []
+    styles = re.findall(r"^Style: ([^,]+),([^,]+),(\d+)", text, re.M)
+    for name, font, size in styles:
+        if "montserrat" not in font.lower() or int(size) < 80:
+            problems.append(f"{rel_path(path)}: style {name} uses '{font}' {size}px; Hormozi captions need Montserrat Black "
+                            f">= 80px (set CAPTION_STYLE = 'hormozi' in render.py)")
+    for i, line in enumerate(l for l in text.splitlines() if l.startswith("Dialogue:")):
+        body = line.split(",", 9)[9]  # ASS: the text is everything after the 9th comma
+        plain = re.sub(r"\{[^}]*\}", "", body)
+        words = plain.split()
+        if len(words) > 3:
+            problems.append(f"{rel_path(path)}: caption #{i + 1} '{plain}' has {len(words)} words; keep chunks to 1-3")
+        if plain != plain.upper():
+            problems.append(f"{rel_path(path)}: caption #{i + 1} '{plain}' is not ALL CAPS")
+        if body.count(r"\c&H0073D8FF&") > 1:
+            problems.append(f"{rel_path(path)}: caption #{i + 1} highlights more than one word")
+        if len(problems) >= 8:
+            break
+    return problems
+
+
+@check("yt-description-tags", paths=["posting-automation/youtube-posting-automation/description.txt"], exts={".txt"})
+def yt_description_tags(path: Path) -> list[str]:
+    """Critic, 2026-10-02: on a Short, #shorts is wasted (it's already a Short) and YouTube only surfaces
+    the first 3 hashtags, so the slot goes to a real topic tag."""
+    tags = [w.lower() for w in path.read_text(encoding="utf-8").split() if w.startswith("#")]
+    problems = []
+    if "#shorts" in tags:
+        problems.append("#shorts in the YouTube description wastes one of the 3 surfaced hashtags; drop it")
+    if len(tags) > 3:
+        problems.append(f"{len(tags)} hashtags; YouTube surfaces only the first 3, keep the strongest 3")
+    return problems
+
+
+@check("caption-banned-emoji", paths=["posting-automation/*/caption.txt", "posting-automation/youtube-posting-automation/description.txt"], exts={".txt"})
+def caption_banned_emoji(path: Path) -> list[str]:
+    """User, 2026-10-02: no smirk emoji in posting copy (captions, titles)."""
+    return ["smirk emoji in posting copy; the user doesn't want it, drop it"] if "\U0001F60F" in path.read_text(encoding="utf-8") else []
+
+
+_VC_TITLE_BANNED = re.compile(r"monkey|omegle|ome\.?tv|azar|chatroulette|baddie|\?|\U0001F60F"
+                              r"|caught on|actually works|\bviral\b", re.I)  # consent / over-promise phrases (critic)
+
+
+@check("videochat-title-words", paths=["video-ideation/video-ideas/monkey-app-video-chat/*.md"], exts={".md"})
+def videochat_title_words(path: Path) -> list[str]:
+    """E-date titles never name the app, never say 'baddies', no viewer questions, no smirk
+    emoji (brand rules). Only the title column is checked; proof columns quote models."""
+    text = read_text(path)
+    if text is None:
+        return []
+    problems, col = [], None
+    for n, line in enumerate(text.splitlines(), 1):
+        if not line.startswith("|"):
+            col = None
+            continue
+        cells = [c.strip() for c in re.split(r"(?<!\\)\|", line.strip().strip("|"))]  # \| is a literal pipe
+        if col is None:
+            col = next((i for i, c in enumerate(cells) if c.lower() in ("title", "sparked title formula")), -1)
+            continue
+        if col < 0 or col >= len(cells) or set(cells[col]) <= set("-: "):
+            continue
+        hit = _VC_TITLE_BANNED.search(cells[col])
+        if hit:
+            problems.append(f"{rel_path(path)}:{n}: title '{cells[col]}' contains '{hit.group(0)}'. "
+                            "E-date titles say 'e-dates', never the app, 'women' not 'baddies', are statements, "
+                            "and avoid 'caught on' / 'actually works' / 'viral' (consent, over-promise)")
     return problems

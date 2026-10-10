@@ -29,6 +29,7 @@ script reuses the saved session automatically -- no repeated logins.
 import argparse
 import os
 import re
+import sys
 import tempfile
 from pathlib import Path
 
@@ -219,8 +220,19 @@ def select_cover_photo(page: Page, cover_image_path: Path, debug_dir: Path) -> b
         # the visible "Edit" (e.g. a screen-reader-only label) -- exact=False
         # (substring match) is needed to find it, with the x<400 filter still
         # doing the work of rejecting the "Edit profile" decoy.
+        # Verified live 2026-10-04: the badge is a div[role=button] inside the Reel settings dialog whose text
+        # is "Edit" plus whitespace (an exact match misses it). Try that first; the text scan below is the
+        # older fallback.
         edit_badge = None
+        badge = page.locator('[role="dialog"] div[role="button"]').filter(has_text=re.compile(r"^\s*Edit\s*$"))
+        try:
+            badge.first.wait_for(state="visible", timeout=10_000)
+            edit_badge = badge.first
+        except Exception:
+            pass
         for text in ("Edit", "Choose photo", "Custom thumbnail", "Add thumbnail", "Change thumbnail"):
+            if edit_badge is not None:
+                break
             candidates = page.get_by_text(text, exact=False)
             try:
                 count = candidates.count()
@@ -319,11 +331,30 @@ def select_cover_photo(page: Page, cover_image_path: Path, debug_dir: Path) -> b
                 pass
             raise RuntimeError("cover picker opened but no upload trigger found in it")
 
-        with page.expect_file_chooser(timeout=10_000) as fc_info:
-            human_click(page, upload_trigger)
-        fc_info.value.set_files(str(cover_image_path))
-        page.wait_for_timeout(2_500)
-        print(f"  [ok] cover photo uploaded via secondary picker ({cover_image_path.name})", flush=True)
+        # The "Edit thumbnail" dialog's Upload button feeds a hidden image file input and never raises a
+        # file-chooser event (verified 2026-10-01: the chooser wait timed out every time). Set that input
+        # directly; fall back to the chooser only if no such input exists.
+        # Fixed 2026-10-02 (the "cover doesn't stick" bug): the input's accept is ".png,.jpg,.jpeg", not
+        # "image/*", so the old accept*="image" selector never matched and the run fell through to a
+        # chooser wait. Verified live: setting this input swaps the preview and turns Upload into Remove.
+        image_input = page.locator(
+            'div[role="dialog"] input[type="file"][accept*="png" i], div[role="dialog"] input[type="file"][accept*="image" i]'
+        )
+        if image_input.count() > 0:
+            image_input.last.set_input_files(str(cover_image_path))
+        else:
+            with page.expect_file_chooser(timeout=10_000) as fc_info:
+                human_click(page, upload_trigger)
+            fc_info.value.set_files(str(cover_image_path))
+        page.wait_for_timeout(3_000)
+        remove = page.locator('div[role="dialog"] div[role="button"]:has-text("Remove")')
+        if remove.count() == 0:
+            raise RuntimeError("thumbnail preview didn't take the upload (no Remove button appeared)")
+        # The thumbnail dialog stays open until Save; left open, it covers the description box and the
+        # caption step fails too.
+        page.locator('div[role="dialog"] div[role="button"][aria-label="Save"]').last.click(timeout=10_000)
+        page.wait_for_timeout(2_000)
+        print(f"  [ok] cover photo uploaded and saved ({cover_image_path.name}, preview confirmed)", flush=True)
         return True
     except Exception as exc:
         note_needs_manual_action(
@@ -383,12 +414,79 @@ def build_reels_url(page_url: str) -> str:
     return page_url.rstrip("/") + "/reels"
 
 
+def dump_controls(page: Page, debug_dir: Path, name: str) -> None:
+    """Saves every visible button/input/combobox label on the page, so selectors for a new step
+    (scheduling) can be written from the live DOM instead of guessed."""
+    try:
+        items = page.evaluate("""() => [...document.querySelectorAll(
+            'button,[role=button],input,[role=combobox],[role=switch],[role=radio],[role=checkbox],label,[role=tab]')]
+            .filter(e => e.offsetParent !== null)
+            .map(e => [e.tagName, e.getAttribute('role'), e.getAttribute('type'), e.getAttribute('aria-label'),
+                       e.getAttribute('placeholder'), (e.innerText || e.value || '').trim().slice(0, 60)].join(' | '))""")
+        debug_dir.mkdir(parents=True, exist_ok=True)
+        (debug_dir / f"{name}.txt").write_text("\n".join(items), encoding="utf-8")
+    except Exception as e:
+        print(f"  (couldn't dump controls: {e})", flush=True)
+
+
+def set_schedule(page: Page, when, debug_dir: Path) -> bool:
+    """Verified live 2026-10-02: the Share screen has a 'Scheduling options' row (reads "Publish now")
+    that opens a sub-dialog with two text comboboxes, Date ("Oct 3, 2026") and Time ("7:00 PM"), and a
+    "Schedule for later" button. This fills both and stops there: the user clicks "Schedule for later"
+    and the final button, same rule as Publish. Returns False if the fields didn't take the values."""
+    opened = click_first_match(
+        page, "Scheduling options", ['[role="dialog"] div[role="button"]:has-text("Scheduling options")'], 15_000
+    )
+    if not opened:
+        dump_controls(page, debug_dir, "09_share_controls_no_schedule")
+        return False
+    page.wait_for_timeout(1500)
+    boxes = page.locator('[role="dialog"] input[role="combobox"]')
+    wanted = (f"{when.strftime('%b')} {when.day}, {when.year}", when.strftime("%I:%M %p").lstrip("0"))
+    try:
+        for i, value in enumerate(wanted):
+            box = boxes.nth(i)
+            box.click()
+            page.wait_for_timeout(400)
+            box.press("Control+A")
+            box.type(value, delay=60)
+            page.wait_for_timeout(300)
+            box.press("Enter")
+            page.wait_for_timeout(800)
+        got = tuple(boxes.nth(i).input_value() for i in range(2))
+    except Exception as e:
+        print(f"  [warn] schedule fields: {e}", flush=True)
+        dump_controls(page, debug_dir, "10_schedule_controls")
+        return False
+    debug_screenshot(page, debug_dir, "10_schedule_filled")
+    if got != wanted:
+        print(f"  [warn] schedule fields read {got}, wanted {wanted}", flush=True)
+        return False
+    print(f"  [ok] schedule set to {got[0]} {got[1]}; click 'Schedule for later', then the final button", flush=True)
+    return True
+
+
 def upload_to_facebook(
-    page: Page, page_url: str, video_path: Path, caption: str, cover_image_path: Path | None, debug_dir: Path
+    page: Page, page_url: str, video_path: Path, caption: str, cover_image_path: Path | None, debug_dir: Path,
+    schedule_at=None,
 ) -> None:
     reels_url = build_reels_url(page_url)
     print(f"Opening Facebook Page: {reels_url}", flush=True)
     page.goto(reels_url, wait_until="domcontentloaded")
+    # An expired session shows a login form instead of the Page (seen 2026-10-01); wait for the user to
+    # sign in in this window, then reload the Reels tab, instead of failing every step after it.
+    page.wait_for_timeout(3_000)
+    def _on_login() -> bool:
+        return "login" in page.url or page.locator('input[name="email"], input[name="pass"]').count() > 0
+    if _on_login():
+        print("  [needs manual action] Sign in to Facebook in the window that opened; continuing once you're "
+              "logged in (up to 5 minutes).", flush=True)
+        for _ in range(150):
+            page.wait_for_timeout(2_000)
+            if not _on_login():
+                break
+        page.wait_for_timeout(3_000)
+        page.goto(reels_url, wait_until="domcontentloaded")
 
     # A modest scroll to get the Reels panel roughly into view (belt-and-suspenders
     # in case any part of it needs to be near-viewport to finish rendering) --
@@ -437,7 +535,7 @@ def upload_to_facebook(
     # the same manual click that just failed.
     def _dialog_opened() -> bool:
         try:
-            page.locator('text="Add video"').first.wait_for(state="visible", timeout=20_000)
+            page.locator('text="Add video"').first.wait_for(state="visible", timeout=45_000)  # 20s missed a slow load (2026-10-02)
             return True
         except Exception:
             return False
@@ -536,6 +634,13 @@ def upload_to_facebook(
         note_needs_manual_action("enter the caption/description", f"Paste this yourself:\n\n{caption}\n")
     debug_screenshot(page, debug_dir, "08_after_caption")
 
+    if schedule_at is not None:
+        print(f"Step 9/9: scheduling for {schedule_at.strftime('%a %d %b %I:%M %p')}", flush=True)
+        if not set_schedule(page, schedule_at, debug_dir):
+            note_needs_manual_action(
+                "set the schedule",
+                f"Open 'Scheduling options' and pick {schedule_at.strftime('%a %d %b, %I:%M %p')}.",
+            )
     print(
         "\nReady to publish. The post is filled in but NOT shared yet -- switch to the "
         "browser window, double check everything (including that it's posting as the "
@@ -559,7 +664,9 @@ def main() -> None:
         required=True,
         help="URL of the Facebook Page to post as, e.g. https://www.facebook.com/SparkedThor",
     )
-    parser.add_argument("--drive-link", required=True, help="Google Drive share link (or file ID) for the video")
+    source_group = parser.add_mutually_exclusive_group(required=True)
+    source_group.add_argument("--drive-link", help="Google Drive share link (or file ID) for the video")
+    source_group.add_argument("--video", help="Local video file (skips the Drive round-trip for a fresh render)")
     caption_group = parser.add_mutually_exclusive_group(required=True)
     caption_group.add_argument("--caption", help="Caption/description text for the post")
     caption_group.add_argument(
@@ -581,24 +688,42 @@ def main() -> None:
         help="Path to a local image file to upload as the cover/thumbnail photo",
     )
     parser.add_argument(
+        "--schedule",
+        default=None,
+        help='Local time "YYYY-MM-DD HH:MM" to schedule the Reel for; the script fills it in, you click Schedule',
+    )
+    parser.add_argument(
+        "--debug-port",
+        type=int,
+        default=0,
+        help="Expose Chrome's DevTools port so a second process can inspect the live composer (selector work)",
+    )
+    parser.add_argument(
         "--debug-dir",
         default=None,
         help="Directory to save a screenshot after each step (for fixing selectors against the live site). "
         "Defaults to a 'debug_screenshots' folder next to this script.",
     )
     args = parser.parse_args()
+    # captions carry emoji; a redirected stdout on Windows defaults to cp1252 and crashes mid-flow
+    sys.stdout.reconfigure(encoding="utf-8")
     caption = args.caption if args.caption is not None else Path(args.caption_file).read_text(encoding="utf-8")
 
     # Project-wide pre-flight (qa/preflight_post.py): abort before anything is uploaded.
-    import sys
     sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa"))
     from preflight_post import caption_problems, enforce, vertical_video_problems
     enforce(caption_problems("facebook", caption), "caption")
     cover_image_path = Path(args.cover_image) if args.cover_image else None
+    schedule_at = None
+    if args.schedule:
+        from datetime import datetime
+        schedule_at = datetime.fromisoformat(args.schedule)
+        if schedule_at <= datetime.now():
+            parser.error(f"--schedule {args.schedule} is in the past")
     debug_dir = Path(args.debug_dir) if args.debug_dir else Path(__file__).parent / "debug_screenshots"
 
     with tempfile.TemporaryDirectory(prefix="upload_short_") as tmp_dir:
-        video_path = download_from_drive(args.drive_link, Path(tmp_dir))
+        video_path = Path(args.video).resolve() if args.video else download_from_drive(args.drive_link, Path(tmp_dir))
         enforce(vertical_video_problems("facebook", Path(video_path)), "video file")
 
         with sync_playwright() as p:
@@ -606,11 +731,12 @@ def main() -> None:
                 user_data_dir=args.chrome_user_data_dir,
                 channel="chrome",
                 headless=False,
-                args=[f"--profile-directory={args.profile_directory}"],
+                args=[f"--profile-directory={args.profile_directory}"]
+                + ([f"--remote-debugging-port={args.debug_port}"] if args.debug_port else []),
             )
             try:
                 page = context.new_page()
-                upload_to_facebook(page, args.page_url, video_path, caption, cover_image_path, debug_dir)
+                upload_to_facebook(page, args.page_url, video_path, caption, cover_image_path, debug_dir, schedule_at)
             finally:
                 try:
                     context.close()

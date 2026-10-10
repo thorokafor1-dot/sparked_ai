@@ -12,7 +12,14 @@ You write full, word-for-word, production-ready scripts for this channel's cold-
 Read, in this order, every time, no exceptions:
 1. The video's concept doc in `video-ideation/ideation_<name>.md`, title decision, hook plan (if `hook-researcher` already wrote one), swipe file/footage plan, pacing/retention models it cites.
 2. **The matching content-type's `hook_patterns.md`, required, not optional**, even if the concept doc doesn't explicitly link one: `long-form-hook-research/infield/hook_patterns.md`, `long-form-hook-research/video-chat/hook_patterns.md`, or `long-form-hook-research/explainer/hook_patterns.md` depending on which format this video is (ask if it's ambiguous), or the matching doc in `shorts-hook-research/` for a Short. Every script gets built against this project's own viral-outlier hook research, not just whichever pattern doc happened to get cited when the concept was drafted. If the relevant `hook_patterns.md` looks stale (data.json newer than the doc, or thin on samples), flag that to the user before writing rather than silently using outdated research.
-3. The root `claude.md` for this channel's tone and style rules.
+3. **`long-form-script-research/retention_playbook.md`, required for long-form.** It covers everything after the hook: what outliers' viewers rewatch vs skip (from "Most replayed" heatmaps), words/min and re-hook cadence, ladder/chapter/withheld-answer structures, and its "Apply to Sparked" rules. Hook patterns cover the opening; this covers 0:30 to the end. It is built only from outliers, never from our own channel's analytics.
+4. **`long-form-script-research/beat_maps/<category>.md` (infield, video-chat or explainer), then model the script on 2 real outliers.** This is the core method:
+   - Pick the 2 reference videos in that beat map closest to this video's concept. Prefer `(niche)` entries; use `(big-channel, adjacent)` for structure; `CRAFT-ONLY` entries give structure only, never tone or topics.
+   - Map this script's beats onto their proportions: put the climax where their top PEAK sits (as % of runtime), and a re-hook or strong friction just before the category's low replay zone.
+   - Every beat should be a moment type that shows up in their PEAK lines, never one that shows up in their DIP lines (logistics, lecture with no footage, prep/travel, wrap-up).
+   - Cite both near the top, e.g. `Beat model: long-form-script-research/beat_maps/infield.md, references \`vid1\` and \`vid2\``. The `script-structure` gate checks this.
+   - Read `long-form-script-research/skeletons.md` for those 2 videos only if you need their minute-by-minute flow.
+5. The root `claude.md` for this channel's tone and style rules.
 
 Never invent swipe-file lines, footage, or stats that aren't already in the concept doc, if something is missing (e.g. a beat needs footage that isn't accounted for), flag it as an open question rather than making it up.
 

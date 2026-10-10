@@ -1,0 +1,14 @@
+To support symlinks on Windows, you either need to activate Developer Mode or to run Python as an administrator. In order to activate developer mode, see this article: https://docs.microsoft.com/en-us/windows/apps/get-started/enable-your-device-for-development
+skip 05goHpSY8gw (measured)
+skip DOM5-ur_Rg4 (measured)
+XUBoAzAlrFU 29.7min cuts/min 10.3 (hook 32.0) shot median 3.69s wpm 203.4 dead air 9% heatmap yes
+kHr3RrRTGBw 11.2min cuts/min 13.5 (hook 24.0) shot median 3.61s wpm 186.5 dead air 3% heatmap no
+MhYIVfvm2dQ 22.0min cuts/min 10.1 (hook 6.0) shot median 5.55s wpm 168.0 dead air 6% heatmap yes
+cg8609P_IaQ 8.0min cuts/min 0.7 (hook 0.0) shot median 37.13s wpm 206.3 dead air 0% heatmap yes
+kurZS8M6-rI 20.3min cuts/min 0.0 (hook 0.0) shot median 1215.41s wpm 179.7 dead air 5% heatmap yes
+bTBJ9vF_oC0 20.0min cuts/min 22.7 (hook 34.0) shot median 1.96s wpm 210.0 dead air 6% heatmap yes
+ERROR: unable to download video data: HTTP Error 403: Forbidden
+
+zgNon3wMpgM 20.8min cuts/min 15.7 (hook 16.0) shot median 1.46s wpm 210.2 dead air 1% heatmap yes
+ERROR: unable to download video data: HTTP Error 403: Forbidden
+

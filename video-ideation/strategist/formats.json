@@ -1,0 +1,1442 @@
+{
+  "daygame": {
+    "label": "Daygame",
+    "videos": 39,
+    "median": 6.6,
+    "formats": [
+      {
+        "id": "trust-tag",
+        "label": "Trust tag (Realistic, Uncut, Real Infield)",
+        "n": 4,
+        "median": 17.5,
+        "best_title": "A Realistic 60 Minutes of Approaching Women (UNCUT INFIELD)",
+        "best_score": 31,
+        "best_url": "https://www.youtube.com/watch?v=8nPnxQKnVto",
+        "best_vid": "8nPnxQKnVto",
+        "best_thumb": "https://i.ytimg.com/vi/8nPnxQKnVto/mqdefault.jpg",
+        "thumb_note": "Keep it unstaged and a little rough around the edges, a polished shot undercuts 'Real Infield Uncut'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-60-min-uncut",
+            "title": "A Realistic 60 Minutes Of Approaching Women (Uncut Infield)",
+            "rank": 3,
+            "cat": "daygame"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "series",
+        "label": "Numbered series (Part 2, #52, Day 3)",
+        "n": 3,
+        "median": 11.9,
+        "best_title": "Cold Approaching Intimidating Baddies In Walmart (Part 3)",
+        "best_score": 22,
+        "best_url": "https://www.youtube.com/watch?v=rpvyNC9_AMc",
+        "best_vid": "rpvyNC9_AMc",
+        "best_thumb": "https://i.ytimg.com/vi/rpvyNC9_AMc/mqdefault.jpg",
+        "thumb_note": "Include a small episode marker (Part 2, #52), it signals a series worth subscribing for.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-intimidating",
+            "title": "Cold Approaching The Most Intimidating Women At The Mall (Part 1)",
+            "rank": 5,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-compilation",
+            "title": "20 Approach Reactions Caught On Camera | Best Of The Week #1",
+            "rank": 6,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-new-city",
+            "title": "Approaching Women In A City I've Never Been To (Day 1, Uncut)",
+            "rank": 8,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "challenge",
+        "label": "Challenge with a count or time box (100 girls, 12 hours, 30 days)",
+        "n": 8,
+        "median": 10.6,
+        "best_title": "A Realistic 60 Minutes of Approaching Women (UNCUT INFIELD)",
+        "best_score": 31,
+        "best_url": "https://www.youtube.com/watch?v=8nPnxQKnVto",
+        "best_vid": "8nPnxQKnVto",
+        "best_thumb": "https://i.ytimg.com/vi/8nPnxQKnVto/mqdefault.jpg",
+        "thumb_note": "Make the count or clock visible (a badge, a scoreboard), it's the whole promise of the title.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-60-min-uncut",
+            "title": "A Realistic 60 Minutes Of Approaching Women (Uncut Infield)",
+            "rank": 3,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Bargame",
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "breakdown",
+        "label": "Infield breakdown or review",
+        "n": 11,
+        "median": 10.0,
+        "best_title": "Kissing two best friends - Jack Manley Pua’s #infield #seduccion #bestfriend #kiss",
+        "best_score": 112,
+        "best_url": "https://www.youtube.com/watch?v=xgO2xSLvVm0",
+        "best_vid": "xgO2xSLvVm0",
+        "best_thumb": "https://i.ytimg.com/vi/xgO2xSLvVm0/mqdefault.jpg",
+        "thumb_note": "A paused, slightly annotated feel (a freeze-frame look) matches the 'let's break this down' promise.",
+        "thin": false,
+        "ideas": [],
+        "also": [
+          "Bargame"
+        ]
+      },
+      {
+        "id": "i-tried",
+        "label": "I tried / I tested / I asked",
+        "n": 8,
+        "median": 7.9,
+        "best_title": "I Tried to Impress a Random Beautiful Girl with a Twist | Zaid Chulbula",
+        "best_score": 22,
+        "best_url": "https://www.youtube.com/watch?v=1h_aQaOPcXk",
+        "best_vid": "1h_aQaOPcXk",
+        "best_thumb": "https://i.ytimg.com/vi/1h_aQaOPcXk/mqdefault.jpg",
+        "thumb_note": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-ask-women",
+            "title": "I Asked 10 Women How They Want To Be Approached (Then Tried It)",
+            "rank": 4,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Bargame",
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "place",
+        "label": "Place or origin in the title (city, country, venue)",
+        "n": 16,
+        "median": 7.9,
+        "best_title": "Cold Approaching Intimidating Baddies In Walmart (Part 3)",
+        "best_score": 22,
+        "best_url": "https://www.youtube.com/watch?v=rpvyNC9_AMc",
+        "best_vid": "rpvyNC9_AMc",
+        "best_thumb": "https://i.ytimg.com/vi/rpvyNC9_AMc/mqdefault.jpg",
+        "thumb_note": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-intimidating",
+            "title": "Cold Approaching The Most Intimidating Women At The Mall (Part 1)",
+            "rank": 5,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-places-tier",
+            "title": "Best Places to Cold Approach in Public (TIER LIST)",
+            "rank": 7,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-new-city",
+            "title": "Approaching Women In A City I've Never Been To (Day 1, Uncut)",
+            "rank": 8,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Bargame",
+          "Video chat e-dates",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "how-to",
+        "label": "How-to",
+        "n": 7,
+        "median": 2.9,
+        "best_title": "How To Create Sexual Tension During Cold Approach (Infield Breakdown)",
+        "best_score": 30,
+        "best_url": "https://www.youtube.com/watch?v=NUQS-v1DWZM",
+        "best_vid": "NUQS-v1DWZM",
+        "best_thumb": "https://i.ytimg.com/vi/NUQS-v1DWZM/mqdefault.jpg",
+        "thumb_note": "Show the moment of doing the thing, not you explaining it.",
+        "thin": false,
+        "ideas": [],
+        "also": [
+          "Bargame",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "game",
+        "label": "Game with a visible score or rules",
+        "n": 1,
+        "median": 22.2,
+        "best_title": "I Tried to Impress a Random Beautiful Girl with a Twist | Zaid Chulbula",
+        "best_score": 22,
+        "best_url": "https://www.youtube.com/watch?v=1h_aQaOPcXk",
+        "best_vid": "1h_aQaOPcXk",
+        "best_thumb": "https://i.ytimg.com/vi/1h_aQaOPcXk/mqdefault.jpg",
+        "thumb_note": "Show the score, the rule, or the stakes visibly, the mechanic is the hook.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "reaction",
+        "label": "Her reaction / real reactions",
+        "n": 1,
+        "median": 19.6,
+        "best_title": "PICKING UP ATTRACTIVE GIRLS IN PUBLIC (Wholesome Reactions)",
+        "best_score": 20,
+        "best_url": "https://www.youtube.com/watch?v=0NT6DluYfww",
+        "best_vid": "0NT6DluYfww",
+        "best_thumb": "https://i.ytimg.com/vi/0NT6DluYfww/mqdefault.jpg",
+        "thumb_note": "Her face, mid-reaction, is the entire thumbnail, everything else is secondary.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "dg-compilation",
+            "title": "20 Approach Reactions Caught On Camera | Best Of The Week #1",
+            "rank": 6,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-almost-failed",
+            "title": "6 Times An Approach Almost Went Wrong (And How I Recovered)",
+            "rank": 9,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": []
+      }
+    ]
+  },
+  "bargame": {
+    "label": "Bargame",
+    "videos": 22,
+    "median": 12.7,
+    "formats": [
+      {
+        "id": "i-tried",
+        "label": "I tried / I tested / I asked",
+        "n": 6,
+        "median": 37.2,
+        "best_title": "I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible)",
+        "best_score": 142,
+        "best_url": "https://www.youtube.com/watch?v=O0m2XGCkJD8",
+        "best_vid": "O0m2XGCkJD8",
+        "best_thumb": "https://i.ytimg.com/vi/O0m2XGCkJD8/mqdefault.jpg",
+        "thumb_note": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-30-days",
+            "title": "I Tried Cold Approaching Women At Bars For 30 Days (Here's What Changed)",
+            "rank": 3,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-line-reaction",
+            "title": "I Said This At The Bar... Her Reaction",
+            "rank": 4,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-10-lines",
+            "title": "I Tested 10 Openers At The Bar (Ranked By Her Reaction)",
+            "rank": 5,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-ask-bar",
+            "title": "I Asked Women At The Bar What Makes A Good Opener",
+            "rank": 8,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "challenge",
+        "label": "Challenge with a count or time box (100 girls, 12 hours, 30 days)",
+        "n": 4,
+        "median": 18.0,
+        "best_title": "I tried to 'Cold Approach' 100 girls without any experience (Introvert vs Girls)",
+        "best_score": 80,
+        "best_url": "https://www.youtube.com/watch?v=sMr1ddukSQ4",
+        "best_vid": "sMr1ddukSQ4",
+        "best_thumb": "https://i.ytimg.com/vi/sMr1ddukSQ4/mqdefault.jpg",
+        "thumb_note": "Make the count or clock visible (a badge, a scoreboard), it's the whole promise of the title.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-30-days",
+            "title": "I Tried Cold Approaching Women At Bars For 30 Days (Here's What Changed)",
+            "rank": 3,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-10-lines",
+            "title": "I Tested 10 Openers At The Bar (Ranked By Her Reaction)",
+            "rank": 5,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "place",
+        "label": "Place or origin in the title (city, country, venue)",
+        "n": 12,
+        "median": 16.2,
+        "best_title": "Asking Girls at the Bar, Kiss or Slap?!",
+        "best_score": 120,
+        "best_url": "https://www.youtube.com/watch?v=hdgJ8Qc_oWo",
+        "best_vid": "hdgJ8Qc_oWo",
+        "best_thumb": "https://i.ytimg.com/vi/hdgJ8Qc_oWo/mqdefault.jpg",
+        "thumb_note": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-alone",
+            "title": "How To Go To A Bar Alone And Actually Meet Women (Real Footage)",
+            "rank": 1,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-tier-bars",
+            "title": "Ranking Every Type Of Bar To Meet Women (TIER LIST)",
+            "rank": 10,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Video chat e-dates",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "breakdown",
+        "label": "Infield breakdown or review",
+        "n": 7,
+        "median": 15.4,
+        "best_title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+        "best_score": 58,
+        "best_url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+        "best_vid": "RgDCIvRnfcI",
+        "best_thumb": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+        "thumb_note": "A paused, slightly annotated feel (a freeze-frame look) matches the 'let's break this down' promise.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-breakdown",
+            "title": "Watching My Own Bar Approaches Back: What Worked And What Didn't",
+            "rank": 2,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame"
+        ]
+      },
+      {
+        "id": "how-to",
+        "label": "How-to",
+        "n": 6,
+        "median": 2.3,
+        "best_title": "Asking Strangers How to Approach a Girl",
+        "best_score": 10,
+        "best_url": "https://www.youtube.com/watch?v=2CvI6hOP8vE",
+        "best_vid": "2CvI6hOP8vE",
+        "best_thumb": "https://i.ytimg.com/vi/2CvI6hOP8vE/mqdefault.jpg",
+        "thumb_note": "Show the moment of doing the thing, not you explaining it.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-alone",
+            "title": "How To Go To A Bar Alone And Actually Meet Women (Real Footage)",
+            "rank": 1,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "game",
+        "label": "Game with a visible score or rules",
+        "n": 1,
+        "median": 142.0,
+        "best_title": "I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible)",
+        "best_score": 142,
+        "best_url": "https://www.youtube.com/watch?v=O0m2XGCkJD8",
+        "best_vid": "O0m2XGCkJD8",
+        "best_thumb": "https://i.ytimg.com/vi/O0m2XGCkJD8/mqdefault.jpg",
+        "thumb_note": "Show the score, the rule, or the stakes visibly, the mechanic is the hook.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "bg-truth-drink",
+            "title": "Truth Or Drink With A Stranger At The Bar",
+            "rank": 6,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "pov",
+        "label": "POV framing",
+        "n": 1,
+        "median": 57.9,
+        "best_title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+        "best_score": 58,
+        "best_url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+        "best_vid": "RgDCIvRnfcI",
+        "best_thumb": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+        "thumb_note": "Frame it like the viewer is standing where you are, her reaction faces the camera.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "trust-tag",
+        "label": "Trust tag (Realistic, Uncut, Real Infield)",
+        "n": 2,
+        "median": 29.5,
+        "best_title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+        "best_score": 58,
+        "best_url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+        "best_vid": "RgDCIvRnfcI",
+        "best_thumb": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+        "thumb_note": "Keep it unstaged and a little rough around the edges, a polished shot undercuts 'Real Infield Uncut'.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Daygame"
+        ]
+      },
+      {
+        "id": "series",
+        "label": "Numbered series (Part 2, #52, Day 3)",
+        "n": 1,
+        "median": 17.1,
+        "best_title": "Picking Up Girls in Belo Horizonte, Fortaleza & Salvador, Brazil 🇧🇷 | Infield #57",
+        "best_score": 17,
+        "best_url": "https://www.youtube.com/watch?v=V-vtMInqme0",
+        "best_vid": "V-vtMInqme0",
+        "best_thumb": "https://i.ytimg.com/vi/V-vtMInqme0/mqdefault.jpg",
+        "thumb_note": "Include a small episode marker (Part 2, #52), it signals a series worth subscribing for.",
+        "thin": true,
+        "ideas": [],
+        "also": [
+          "Daygame",
+          "Video chat e-dates"
+        ]
+      }
+    ]
+  },
+  "video-chat-edates": {
+    "label": "Video chat e-dates",
+    "videos": 100,
+    "median": 54.1,
+    "formats": [
+      {
+        "id": "online-to-real",
+        "label": "Online to real life (met in real life, found love)",
+        "n": 7,
+        "median": 163.7,
+        "best_title": "I Gifted Mystry Box TO MY LOVE I FOUND ON OMEGLE 😍 || MET IN REAL LIFE",
+        "best_score": 224,
+        "best_url": "https://www.youtube.com/watch?v=kjKo-JAlNck",
+        "best_vid": "kjKo-JAlNck",
+        "best_thumb": "https://i.ytimg.com/vi/kjKo-JAlNck/mqdefault.jpg",
+        "thumb_note": "A split or before/after framing (screen vs. in-person) sells the arc faster than either half alone.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-real-life",
+            "title": "I Met My Best E-Date In Real Life (First Date Reaction)",
+            "rank": 2,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-10-edates",
+            "title": "I Went On 10 Video Chat E-Dates In One Night (Ranked By Conversation)",
+            "rank": 3,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-wingman",
+            "title": "I Found My Best Friend A Date On Video Chat",
+            "rank": 4,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "game",
+        "label": "Game with a visible score or rules",
+        "n": 3,
+        "median": 131.9,
+        "best_title": "Kalogeras Sisters SPEED DATE ON OMEGLE!",
+        "best_score": 152,
+        "best_url": "https://www.youtube.com/watch?v=9HUZCGT2a7Y",
+        "best_vid": "9HUZCGT2a7Y",
+        "best_thumb": "https://i.ytimg.com/vi/9HUZCGT2a7Y/mqdefault.jpg",
+        "thumb_note": "Show the score, the rule, or the stakes visibly, the mechanic is the hook.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-hype",
+            "title": "I Let My Friends Hype Me Up On Video Chat E-Dates",
+            "rank": 5,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-truth-drink",
+            "title": "Truth Or Drink E-Date: 10 Questions With A Stranger",
+            "rank": 8,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-guess",
+            "title": "Guessing Strangers' Names On Video Chat: How Many Can I Get Right?",
+            "rank": 9,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "series",
+        "label": "Numbered series (Part 2, #52, Day 3)",
+        "n": 5,
+        "median": 105.4,
+        "best_title": "I Can't Believe She's a MAFIA's DAUGHTER! and She's Wild! | BANDANA MAN IS BACK on AZAR! (",
+        "best_score": 216,
+        "best_url": "https://www.youtube.com/watch?v=3AWiVhqqUtw",
+        "best_vid": "3AWiVhqqUtw",
+        "best_thumb": "https://i.ytimg.com/vi/3AWiVhqqUtw/mqdefault.jpg",
+        "thumb_note": "Include a small episode marker (Part 2, #52), it signals a series worth subscribing for.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-country",
+            "title": "E-Dating Women From 10 Different Countries In One Night",
+            "rank": 1,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-3am",
+            "title": "3 AM E-Dates: The Conversations That Actually Went Somewhere",
+            "rank": 10,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": [
+          "Daygame"
+        ]
+      },
+      {
+        "id": "place",
+        "label": "Place or origin in the title (city, country, venue)",
+        "n": 8,
+        "median": 99.0,
+        "best_title": "Finding love with russian girl i MET on OMEGLE 😍",
+        "best_score": 150,
+        "best_url": "https://www.youtube.com/watch?v=MpQBhgDkeW0",
+        "best_vid": "MpQBhgDkeW0",
+        "best_thumb": "https://i.ytimg.com/vi/MpQBhgDkeW0/mqdefault.jpg",
+        "thumb_note": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-country",
+            "title": "E-Dating Women From 10 Different Countries In One Night",
+            "rank": 1,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Bargame",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "challenge",
+        "label": "Challenge with a count or time box (100 girls, 12 hours, 30 days)",
+        "n": 3,
+        "median": 84.5,
+        "best_title": "DATING 10 GIRLS I MET ON OMEGLE 😍 | OMEGLE TO REAL LIFE | FT @adarshuc @AnkitaSingh_1029",
+        "best_score": 172,
+        "best_url": "https://www.youtube.com/watch?v=B1xTXIvnA6o",
+        "best_vid": "B1xTXIvnA6o",
+        "best_thumb": "https://i.ytimg.com/vi/B1xTXIvnA6o/mqdefault.jpg",
+        "thumb_note": "Make the count or clock visible (a badge, a scoreboard), it's the whole promise of the title.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-country",
+            "title": "E-Dating Women From 10 Different Countries In One Night",
+            "rank": 1,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-10-edates",
+            "title": "I Went On 10 Video Chat E-Dates In One Night (Ranked By Conversation)",
+            "rank": 3,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-rate-me",
+            "title": "10 Strangers Rate My First Impression On Video Chat (Brutally Honest)",
+            "rank": 7,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-guess",
+            "title": "Guessing Strangers' Names On Video Chat: How Many Can I Get Right?",
+            "rank": 9,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-3am",
+            "title": "3 AM E-Dates: The Conversations That Actually Went Somewhere",
+            "rank": 10,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Bargame"
+        ]
+      },
+      {
+        "id": "guest",
+        "label": "Creator or celebrity on the platform",
+        "n": 3,
+        "median": 58.7,
+        "best_title": "IShowSpeed Goes On Omegle",
+        "best_score": 170,
+        "best_url": "https://www.youtube.com/watch?v=z0bVolxirl0",
+        "best_vid": "z0bVolxirl0",
+        "best_thumb": "https://i.ytimg.com/vi/z0bVolxirl0/mqdefault.jpg",
+        "thumb_note": "If a recognizable person is in it, keep both faces clearly readable at thumbnail size.",
+        "thin": false,
+        "ideas": [],
+        "also": []
+      },
+      {
+        "id": "i-tried",
+        "label": "I tried / I tested / I asked",
+        "n": 9,
+        "median": 41.2,
+        "best_title": "I Gifted Mystry Box TO MY LOVE I FOUND ON OMEGLE 😍 || MET IN REAL LIFE",
+        "best_score": 224,
+        "best_url": "https://www.youtube.com/watch?v=kjKo-JAlNck",
+        "best_vid": "kjKo-JAlNck",
+        "best_thumb": "https://i.ytimg.com/vi/kjKo-JAlNck/mqdefault.jpg",
+        "thumb_note": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "vc-real-life",
+            "title": "I Met My Best E-Date In Real Life (First Date Reaction)",
+            "rank": 2,
+            "cat": "video-chat-edates"
+          },
+          {
+            "id": "vc-rate-me",
+            "title": "10 Strangers Rate My First Impression On Video Chat (Brutally Honest)",
+            "rank": 7,
+            "cat": "video-chat-edates"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Bargame"
+        ]
+      },
+      {
+        "id": "how-to",
+        "label": "How-to",
+        "n": 2,
+        "median": 48.3,
+        "best_title": "HOW TO RIZZ BADDIES EASILY 😎 (MONKEY APP)",
+        "best_score": 85,
+        "best_url": "https://www.youtube.com/watch?v=imny7n9lcME",
+        "best_vid": "imny7n9lcME",
+        "best_thumb": "https://i.ytimg.com/vi/imny7n9lcME/mqdefault.jpg",
+        "thumb_note": "Show the moment of doing the thing, not you explaining it.",
+        "thin": true,
+        "ideas": [],
+        "also": [
+          "Daygame",
+          "Bargame",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "reaction",
+        "label": "Her reaction / real reactions",
+        "n": 1,
+        "median": 16.4,
+        "best_title": "Rejecting BADDIES To See How They React On Monkey App... 🤣",
+        "best_score": 16,
+        "best_url": "https://www.youtube.com/watch?v=xxBpbV5qoiM",
+        "best_vid": "xxBpbV5qoiM",
+        "best_thumb": "https://i.ytimg.com/vi/xxBpbV5qoiM/mqdefault.jpg",
+        "thumb_note": "Her face, mid-reaction, is the entire thumbnail, everything else is secondary.",
+        "thin": true,
+        "ideas": [],
+        "also": []
+      }
+    ]
+  },
+  "explainer": {
+    "label": "Explainers",
+    "videos": 141,
+    "median": 16.9,
+    "formats": [
+      {
+        "id": "hidden",
+        "label": "Hidden / secret / most men miss",
+        "n": 16,
+        "median": 46.6,
+        "best_title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | S",
+        "best_score": 594,
+        "best_url": "https://www.youtube.com/watch?v=YXvo995yAFU",
+        "best_vid": "YXvo995yAFU",
+        "best_thumb": "https://i.ytimg.com/vi/YXvo995yAFU/mqdefault.jpg",
+        "thumb_note": "Bold, high-contrast callout text earns its place here, 'secret'/'hidden' pulls the eye even over a busy frame.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "ex-7-signs",
+            "title": "7 Signs She Wants You To Approach Her (Real Footage Proof)",
+            "rank": 1,
+            "cat": "explainer"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "psychology",
+        "label": "Psychology or science explained",
+        "n": 60,
+        "median": 42.9,
+        "best_title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | S",
+        "best_score": 594,
+        "best_url": "https://www.youtube.com/watch?v=YXvo995yAFU",
+        "best_vid": "YXvo995yAFU",
+        "best_thumb": "https://i.ytimg.com/vi/YXvo995yAFU/mqdefault.jpg",
+        "thumb_note": "Clean and minimal, one clear expression, this audience responds to clarity over drama.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "ex-robert-greene",
+            "title": "I Tested Robert Greene's Rules Of Seduction In Real Conversations",
+            "rank": 2,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-unforgettable",
+            "title": "How To Be Unforgettable In A 5 Minute Conversation (Real Examples)",
+            "rank": 3,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-how-women-flirt",
+            "title": "How Women Actually Flirt (The Science Plus Real Footage)",
+            "rank": 7,
+            "cat": "explainer"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "superlative",
+        "label": "Best / worst / every / must watch",
+        "n": 10,
+        "median": 38.1,
+        "best_title": "Every Older Man Must Watch This | The Psychology of Love & Attraction Explained",
+        "best_score": 215,
+        "best_url": "https://www.youtube.com/watch?v=zbMj6pmVR3Y",
+        "best_vid": "zbMj6pmVR3Y",
+        "best_thumb": "https://i.ytimg.com/vi/zbMj6pmVR3Y/mqdefault.jpg",
+        "thumb_note": "Go bigger and bolder than your usual thumbnail, 'best/worst/every' titles earn a more dramatic treatment.",
+        "thin": false,
+        "ideas": [],
+        "also": []
+      },
+      {
+        "id": "number-list",
+        "label": "Numbered list (7 signs, 12 ways)",
+        "n": 33,
+        "median": 21.3,
+        "best_title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | S",
+        "best_score": 594,
+        "best_url": "https://www.youtube.com/watch?v=YXvo995yAFU",
+        "best_vid": "YXvo995yAFU",
+        "best_thumb": "https://i.ytimg.com/vi/YXvo995yAFU/mqdefault.jpg",
+        "thumb_note": "Leave room for a number badge, the count is often the hook.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "ex-7-signs",
+            "title": "7 Signs She Wants You To Approach Her (Real Footage Proof)",
+            "rank": 1,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-attractive-signs",
+            "title": "7 Signs You're More Attractive Than You Think (Real Reactions I've Filmed)",
+            "rank": 5,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-flirt-no-cheese",
+            "title": "How To Flirt Without Being Cheesy (5 Moves I Filmed Live)",
+            "rank": 6,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-second-date",
+            "title": "5 Signs She Wants To See You Again (Filmed After Real First Conversations)",
+            "rank": 8,
+            "cat": "explainer"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "signs",
+        "label": "'Signs she ...' titles",
+        "n": 28,
+        "median": 17.9,
+        "best_title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | S",
+        "best_score": 594,
+        "best_url": "https://www.youtube.com/watch?v=YXvo995yAFU",
+        "best_vid": "YXvo995yAFU",
+        "best_thumb": "https://i.ytimg.com/vi/YXvo995yAFU/mqdefault.jpg",
+        "thumb_note": "Show the specific cue named in the title happening on her, not a generic close-up.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "ex-7-signs",
+            "title": "7 Signs She Wants You To Approach Her (Real Footage Proof)",
+            "rank": 1,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-attractive-signs",
+            "title": "7 Signs You're More Attractive Than You Think (Real Reactions I've Filmed)",
+            "rank": 5,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-second-date",
+            "title": "5 Signs She Wants To See You Again (Filmed After Real First Conversations)",
+            "rank": 8,
+            "cat": "explainer"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "how-to",
+        "label": "How-to",
+        "n": 30,
+        "median": 13.0,
+        "best_title": "How to Make Her WANT You, Even When She’s Not Interested",
+        "best_score": 400,
+        "best_url": "https://www.youtube.com/watch?v=89KhJYbEDnc",
+        "best_vid": "89KhJYbEDnc",
+        "best_thumb": "https://i.ytimg.com/vi/89KhJYbEDnc/mqdefault.jpg",
+        "thumb_note": "Show the moment of doing the thing, not you explaining it.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "ex-unforgettable",
+            "title": "How To Be Unforgettable In A 5 Minute Conversation (Real Examples)",
+            "rank": 3,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-not-interested",
+            "title": "Interested Or Just Polite? How To Tell (And When To Let It Go)",
+            "rank": 4,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-flirt-no-cheese",
+            "title": "How To Flirt Without Being Cheesy (5 Moves I Filmed Live)",
+            "rank": 6,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-talk-anyone",
+            "title": "How To Talk To Any Woman, Anywhere (Real Examples, Uncut)",
+            "rank": 9,
+            "cat": "explainer"
+          },
+          {
+            "id": "ex-10-seconds",
+            "title": "How I Create Attraction In The First 10 Seconds (Infield Breakdown)",
+            "rank": 10,
+            "cat": "explainer"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Bargame"
+        ]
+      },
+      {
+        "id": "place",
+        "label": "Place or origin in the title (city, country, venue)",
+        "n": 8,
+        "median": 9.5,
+        "best_title": "How to Go to a Bar Alone",
+        "best_score": 50,
+        "best_url": "https://www.youtube.com/watch?v=3abQ0Pxqt7E",
+        "best_vid": "3abQ0Pxqt7E",
+        "best_thumb": "https://i.ytimg.com/vi/3abQ0Pxqt7E/mqdefault.jpg",
+        "thumb_note": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+        "thin": false,
+        "ideas": [],
+        "also": [
+          "Daygame",
+          "Bargame",
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "i-tried",
+        "label": "I tried / I tested / I asked",
+        "n": 1,
+        "median": 32.5,
+        "best_title": "I Asked 100 Married Couples for Dating Advice and Learned...",
+        "best_score": 32,
+        "best_url": "https://www.youtube.com/watch?v=8T-W5ObEIjo",
+        "best_vid": "8T-W5ObEIjo",
+        "best_thumb": "https://i.ytimg.com/vi/8T-W5ObEIjo/mqdefault.jpg",
+        "thumb_note": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "ex-robert-greene",
+            "title": "I Tested Robert Greene's Rules Of Seduction In Real Conversations",
+            "rank": 2,
+            "cat": "explainer"
+          }
+        ],
+        "also": [
+          "Daygame",
+          "Bargame",
+          "Video chat e-dates"
+        ]
+      }
+    ]
+  },
+  "infield": {
+    "label": "Infield (daygame + bargame)",
+    "videos": 61,
+    "median": 7.6,
+    "formats": [
+      {
+        "id": "trust-tag",
+        "label": "Trust tag (Realistic, Uncut, Real Infield)",
+        "n": 6,
+        "median": 17.5,
+        "best_title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+        "best_score": 58,
+        "best_url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+        "best_vid": "RgDCIvRnfcI",
+        "best_thumb": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+        "thumb_note": "Keep it unstaged and a little rough around the edges, a polished shot undercuts 'Real Infield Uncut'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-60-min-uncut",
+            "title": "A Realistic 60 Minutes Of Approaching Women (Uncut Infield)",
+            "rank": 3,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "series",
+        "label": "Numbered series (Part 2, #52, Day 3)",
+        "n": 4,
+        "median": 14.5,
+        "best_title": "Cold Approaching Intimidating Baddies In Walmart (Part 3)",
+        "best_score": 22,
+        "best_url": "https://www.youtube.com/watch?v=rpvyNC9_AMc",
+        "best_vid": "rpvyNC9_AMc",
+        "best_thumb": "https://i.ytimg.com/vi/rpvyNC9_AMc/mqdefault.jpg",
+        "thumb_note": "Include a small episode marker (Part 2, #52), it signals a series worth subscribing for.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-intimidating",
+            "title": "Cold Approaching The Most Intimidating Women At The Mall (Part 1)",
+            "rank": 5,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-compilation",
+            "title": "20 Approach Reactions Caught On Camera | Best Of The Week #1",
+            "rank": 6,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-new-city",
+            "title": "Approaching Women In A City I've Never Been To (Day 1, Uncut)",
+            "rank": 8,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "challenge",
+        "label": "Challenge with a count or time box (100 girls, 12 hours, 30 days)",
+        "n": 12,
+        "median": 11.4,
+        "best_title": "I tried to 'Cold Approach' 100 girls without any experience (Introvert vs Girls)",
+        "best_score": 80,
+        "best_url": "https://www.youtube.com/watch?v=sMr1ddukSQ4",
+        "best_vid": "sMr1ddukSQ4",
+        "best_thumb": "https://i.ytimg.com/vi/sMr1ddukSQ4/mqdefault.jpg",
+        "thumb_note": "Make the count or clock visible (a badge, a scoreboard), it's the whole promise of the title.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-60-min-uncut",
+            "title": "A Realistic 60 Minutes Of Approaching Women (Uncut Infield)",
+            "rank": 3,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-30-days",
+            "title": "I Tried Cold Approaching Women At Bars For 30 Days (Here's What Changed)",
+            "rank": 3,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-10-lines",
+            "title": "I Tested 10 Openers At The Bar (Ranked By Her Reaction)",
+            "rank": 5,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "breakdown",
+        "label": "Infield breakdown or review",
+        "n": 18,
+        "median": 11.0,
+        "best_title": "Kissing two best friends - Jack Manley Pua’s #infield #seduccion #bestfriend #kiss",
+        "best_score": 112,
+        "best_url": "https://www.youtube.com/watch?v=xgO2xSLvVm0",
+        "best_vid": "xgO2xSLvVm0",
+        "best_thumb": "https://i.ytimg.com/vi/xgO2xSLvVm0/mqdefault.jpg",
+        "thumb_note": "A paused, slightly annotated feel (a freeze-frame look) matches the 'let's break this down' promise.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-breakdown",
+            "title": "Watching My Own Bar Approaches Back: What Worked And What Didn't",
+            "rank": 2,
+            "cat": "bargame"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "i-tried",
+        "label": "I tried / I tested / I asked",
+        "n": 14,
+        "median": 9.9,
+        "best_title": "I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible)",
+        "best_score": 142,
+        "best_url": "https://www.youtube.com/watch?v=O0m2XGCkJD8",
+        "best_vid": "O0m2XGCkJD8",
+        "best_thumb": "https://i.ytimg.com/vi/O0m2XGCkJD8/mqdefault.jpg",
+        "thumb_note": "A candid, mid-attempt moment reads better than a posed one, the format sells on 'this is really happening'.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-100-women",
+            "title": "I Approached 100 Women In One Day (Uncut, Every Reaction)",
+            "rank": 2,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-30-days",
+            "title": "I Tried Cold Approaching Women At Bars For 30 Days (Here's What Changed)",
+            "rank": 3,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-ask-women",
+            "title": "I Asked 10 Women How They Want To Be Approached (Then Tried It)",
+            "rank": 4,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-line-reaction",
+            "title": "I Said This At The Bar... Her Reaction",
+            "rank": 4,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-10-lines",
+            "title": "I Tested 10 Openers At The Bar (Ranked By Her Reaction)",
+            "rank": 5,
+            "cat": "bargame"
+          },
+          {
+            "id": "bg-ask-bar",
+            "title": "I Asked Women At The Bar What Makes A Good Opener",
+            "rank": 8,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "place",
+        "label": "Place or origin in the title (city, country, venue)",
+        "n": 28,
+        "median": 9.9,
+        "best_title": "Asking Girls at the Bar, Kiss or Slap?!",
+        "best_score": 120,
+        "best_url": "https://www.youtube.com/watch?v=hdgJ8Qc_oWo",
+        "best_vid": "hdgJ8Qc_oWo",
+        "best_thumb": "https://i.ytimg.com/vi/hdgJ8Qc_oWo/mqdefault.jpg",
+        "thumb_note": "A recognizable landmark or setting detail is doing real work in this format, don't crop it out.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-alone",
+            "title": "How To Go To A Bar Alone And Actually Meet Women (Real Footage)",
+            "rank": 1,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-intimidating",
+            "title": "Cold Approaching The Most Intimidating Women At The Mall (Part 1)",
+            "rank": 5,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-places-tier",
+            "title": "Best Places to Cold Approach in Public (TIER LIST)",
+            "rank": 7,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-new-city",
+            "title": "Approaching Women In A City I've Never Been To (Day 1, Uncut)",
+            "rank": 8,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-tier-bars",
+            "title": "Ranking Every Type Of Bar To Meet Women (TIER LIST)",
+            "rank": 10,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates",
+          "Explainers"
+        ]
+      },
+      {
+        "id": "how-to",
+        "label": "How-to",
+        "n": 13,
+        "median": 2.8,
+        "best_title": "How To Create Sexual Tension During Cold Approach (Infield Breakdown)",
+        "best_score": 30,
+        "best_url": "https://www.youtube.com/watch?v=NUQS-v1DWZM",
+        "best_vid": "NUQS-v1DWZM",
+        "best_thumb": "https://i.ytimg.com/vi/NUQS-v1DWZM/mqdefault.jpg",
+        "thumb_note": "Show the moment of doing the thing, not you explaining it.",
+        "thin": false,
+        "ideas": [
+          {
+            "id": "bg-alone",
+            "title": "How To Go To A Bar Alone And Actually Meet Women (Real Footage)",
+            "rank": 1,
+            "cat": "bargame"
+          }
+        ],
+        "also": [
+          "Explainers"
+        ]
+      },
+      {
+        "id": "game",
+        "label": "Game with a visible score or rules",
+        "n": 2,
+        "median": 82.1,
+        "best_title": "I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible)",
+        "best_score": 142,
+        "best_url": "https://www.youtube.com/watch?v=O0m2XGCkJD8",
+        "best_vid": "O0m2XGCkJD8",
+        "best_thumb": "https://i.ytimg.com/vi/O0m2XGCkJD8/mqdefault.jpg",
+        "thumb_note": "Show the score, the rule, or the stakes visibly, the mechanic is the hook.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "dg-handicap",
+            "title": "I Cold Approached Women Using Only Questions (Difficulty: Hard)",
+            "rank": 1,
+            "cat": "daygame"
+          },
+          {
+            "id": "bg-truth-drink",
+            "title": "Truth Or Drink With A Stranger At The Bar",
+            "rank": 6,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": [
+          "Video chat e-dates"
+        ]
+      },
+      {
+        "id": "pov",
+        "label": "POV framing",
+        "n": 1,
+        "median": 57.9,
+        "best_title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+        "best_score": 58,
+        "best_url": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+        "best_vid": "RgDCIvRnfcI",
+        "best_thumb": "https://i.ytimg.com/vi/RgDCIvRnfcI/mqdefault.jpg",
+        "thumb_note": "Frame it like the viewer is standing where you are, her reaction faces the camera.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "bg-pov",
+            "title": "POV: I Talked To Every Woman At The Bar. Real Infield (Uncut)",
+            "rank": 7,
+            "cat": "bargame"
+          }
+        ],
+        "also": []
+      },
+      {
+        "id": "reaction",
+        "label": "Her reaction / real reactions",
+        "n": 1,
+        "median": 19.6,
+        "best_title": "PICKING UP ATTRACTIVE GIRLS IN PUBLIC (Wholesome Reactions)",
+        "best_score": 20,
+        "best_url": "https://www.youtube.com/watch?v=0NT6DluYfww",
+        "best_vid": "0NT6DluYfww",
+        "best_thumb": "https://i.ytimg.com/vi/0NT6DluYfww/mqdefault.jpg",
+        "thumb_note": "Her face, mid-reaction, is the entire thumbnail, everything else is secondary.",
+        "thin": true,
+        "ideas": [
+          {
+            "id": "bg-line-reaction",
+            "title": "I Said This At The Bar... Her Reaction",
+            "rank": 4,
+            "cat": "bargame"
+          },
+          {
+            "id": "dg-compilation",
+            "title": "20 Approach Reactions Caught On Camera | Best Of The Week #1",
+            "rank": 6,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-almost-failed",
+            "title": "6 Times An Approach Almost Went Wrong (And How I Recovered)",
+            "rank": 9,
+            "cat": "daygame"
+          },
+          {
+            "id": "dg-eye-contact",
+            "title": "I Held Eye Contact With 10 Strangers For 60 Seconds (Here's What Happened)",
+            "rank": 10,
+            "cat": "daygame"
+          }
+        ],
+        "also": []
+      }
+    ]
+  }
+}

@@ -267,10 +267,7 @@
 <script>
 (function(){
   var DATA = null;
-  var state = { tab:'outliers', query:'', sortKey:'score', sortDir:'desc', statusFilter:'all', formatFilter:'In-Person', verticalOnly:false };
-  // Tabs where the vertical-format toggle applies -- Shorts tabs are inherently
-  // vertical already, so the distinction only matters for long-form.
-  var VERTICAL_TOGGLE_TABS = { outliers:true, generalOutliers:true };
+  var state = { tab:'outliers', query:'', sortKey:'score', sortDir:'desc', statusFilter:'all', formatFilter:'In-Person' };
 
   var TAB_CONFIG = {
     outliers:        { kind:'sightings', noun:'long-form sighting', hasFormatToggle:true },
@@ -310,9 +307,6 @@
         var adapted = /adapted/i.test(r.status) && !/not adapted/i.test(r.status);
         return state.statusFilter === 'adapted' ? adapted : !adapted;
       });
-    }
-    if(VERTICAL_TOGGLE_TABS[tab] && state.verticalOnly){
-      rows = rows.filter(function(r){ return !!r.vertical; });
     }
     return rows;
   }
@@ -371,11 +365,10 @@
     newest:  { label:'Newest first',   cmp:function(a,b){ return (Date.parse(b.publishedAt)||0)-(Date.parse(a.publishedAt)||0); } }
   };
 
-  var FORMAT_OPTIONS = ['all', 'In-Person', 'Video Chat', 'Explainer Video'];
+  var FORMAT_OPTIONS = ['all', 'In-Person', 'Video Chat', 'Explainer Video', 'Texting'];
 
   function renderSightingsPanel(tab, panel){
     var hasFormatToggle = TAB_CONFIG[tab].hasFormatToggle;
-    var hasVerticalToggle = !!VERTICAL_TOGGLE_TABS[tab];
     if(!panel.dataset.built){
       panel.innerHTML =
         '<div class="sight-toolbar">'+
@@ -387,9 +380,6 @@
                   return '<button class="status-btn" data-format="'+esc(f)+'" aria-pressed="'+(f===state.formatFilter?'true':'false')+'">'+esc(f==='all'?'All':f)+'</button>';
                 }).join('')+
               '</div>'
-            : '')+
-            (hasVerticalToggle ?
-              '<button class="status-btn" id="vertical-toggle-'+tab+'" aria-pressed="'+(state.verticalOnly?'true':'false')+'" title="Videos shot in vertical/portrait orientation, matching phone selfie-cam footage">Vertical Format Only</button>'
             : '')+
             '<select class="sort-select" id="sort-'+tab+'">'+
               Object.keys(SORT_OPTIONS).map(function(k){ return '<option value="'+k+'">'+esc(SORT_OPTIONS[k].label)+'</option>'; }).join('')+
@@ -411,12 +401,6 @@
           });
         });
       }
-      if(hasVerticalToggle){
-        panel.querySelector('#vertical-toggle-'+tab).addEventListener('click', function(){
-          state.verticalOnly = !state.verticalOnly;
-          render();
-        });
-      }
     }
 
     if(!SORT_OPTIONS[state.sortKey]) state.sortKey = 'score';
@@ -425,9 +409,6 @@
       panel.querySelectorAll('#format-'+tab+' .status-btn').forEach(function(b){
         b.setAttribute('aria-pressed', b.getAttribute('data-format') === state.formatFilter ? 'true' : 'false');
       });
-    }
-    if(hasVerticalToggle){
-      panel.querySelector('#vertical-toggle-'+tab).setAttribute('aria-pressed', state.verticalOnly ? 'true' : 'false');
     }
 
     var all = DATA[tab];
@@ -449,7 +430,7 @@
         '</a>'+
         '<div class="badge-row">'+
           (r.format ? '<span class="format-badge">'+esc(r.format)+'</span>' : '')+
-          (r.vertical ? '<span class="format-badge" style="background:var(--good);">Vertical</span>' : '')+
+          (r.vertical ? '<span class="format-badge" style="background:var(--good);" title="Long-form shot vertically, like your POV recordings">Vertical</span>' : '')+
           '<span class="score-badge" title="Outlier Score is calculated independently by Sparked from public YouTube statistics. It is not a YouTube metric.">Outlier Score '+fmtScore(r.score)+'x</span>'+
           (r.duration ? '<span class="duration-badge">Length '+esc(r.duration)+'</span>' : '')+
         '</div>'+
@@ -469,7 +450,6 @@
 
   // ---------------- swipe file cards ----------------
   function renderSwipePanel(tab, panel){
-    var hasVerticalToggle = !!VERTICAL_TOGGLE_TABS[tab];
     if(!panel.dataset.built){
       panel.innerHTML =
         '<div class="swipe-toolbar" role="group" aria-label="Filter by status" style="justify-content:space-between;">'+
@@ -478,9 +458,6 @@
             '<button class="status-btn" data-status="not-adapted" aria-pressed="false">Idea only</button>'+
             '<button class="status-btn" data-status="adapted" aria-pressed="false">Produced</button>'+
           '</div>'+
-          (hasVerticalToggle ?
-            '<button class="status-btn" id="vertical-toggle-'+tab+'" aria-pressed="'+(state.verticalOnly?'true':'false')+'" title="Videos shot in vertical/portrait orientation, matching phone selfie-cam footage">Vertical Format Only</button>'
-          : '')+
         '</div>'+
         '<div class="card-grid" id="cards-'+tab+'"></div>';
       panel.dataset.built = '1';
@@ -491,15 +468,6 @@
           render();
         });
       });
-      if(hasVerticalToggle){
-        panel.querySelector('#vertical-toggle-'+tab).addEventListener('click', function(){
-          state.verticalOnly = !state.verticalOnly;
-          render();
-        });
-      }
-    }
-    if(hasVerticalToggle){
-      panel.querySelector('#vertical-toggle-'+tab).setAttribute('aria-pressed', state.verticalOnly ? 'true' : 'false');
     }
 
     var rows = getRows(tab).slice().sort(function(a,b){ return b.scoreNum - a.scoreNum; });
@@ -519,7 +487,7 @@
         '</a>'+
         '<div class="badge-row">'+
           '<span class="score-badge" title="View count from YouTube at the last refresh.">'+esc(r.scoreRaw)+'</span>'+
-          (r.vertical ? '<span class="format-badge" style="background:var(--good);">Vertical</span>' : '')+
+          (r.vertical ? '<span class="format-badge" style="background:var(--good);" title="Long-form shot vertically, like your POV recordings">Vertical</span>' : '')+
           (r.duration ? '<span class="duration-badge">Length '+esc(r.duration)+'</span>' : '')+
         '</div>'+
         '<div class="swipe-body-top">'+
@@ -565,7 +533,7 @@
         document.querySelectorAll('.tab-btn').forEach(function(b){ b.setAttribute('aria-selected', b===btn?'true':'false'); });
         document.querySelectorAll('.panel').forEach(function(p){ p.classList.remove('active'); });
         state.tab = btn.getAttribute('data-tab');
-        state.sortKey = 'score'; state.sortDir = 'desc'; state.statusFilter = 'all'; state.formatFilter = 'In-Person'; state.verticalOnly = false;
+        state.sortKey = 'score'; state.sortDir = 'desc'; state.statusFilter = 'all'; state.formatFilter = 'In-Person';
         document.getElementById('panel-'+state.tab).classList.add('active');
         var searchPh = TAB_CONFIG[state.tab].kind === 'sightings' ? 'Search title, channel, keyword…' : 'Search title, channel, niche…';
         document.getElementById('search-input').placeholder = searchPh;

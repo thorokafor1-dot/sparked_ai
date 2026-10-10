@@ -67,6 +67,7 @@ from common import (  # noqa: E402
     get_channel_stats,
     is_short_video,
     is_english_title,
+    is_south_asian_content,
     pick_thumbnail,
     is_vertical_format,
     is_made_for_kids,
@@ -174,6 +175,9 @@ def scan_candidates(cfg: Dict[str, Any], existing_vids: set) -> List[Dict[str, A
             if _is_spam_channel(channel_title):
                 continue
             if is_made_for_kids(stats, channel_title):
+                continue
+            if is_south_asian_content(title, channel_title, stats.get("snippet", {}).get("tags"),
+                                      stats.get("snippet", {})):
                 continue
 
             tags = stats.get("snippet", {}).get("tags", []) or []

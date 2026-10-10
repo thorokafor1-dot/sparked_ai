@@ -98,6 +98,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import cv2
+import numpy as np
 
 FACE_MODEL_PATH = str(Path(__file__).parent / "models" / "face_detection_yunet.onnx")
 _detector: cv2.FaceDetectorYN | None = None
@@ -113,6 +114,9 @@ def _get_detector() -> cv2.FaceDetectorYN:
     return _detector
 
 
+MIN_FACE_PX = 45  # see _best_face: smaller "faces" are UI icons (her badge avatar), never a person
+
+
 def _best_face(detector: cv2.FaceDetectorYN, bgr_region):
     """Largest detected face in bgr_region as (x, y, w, h, score), or None.
     YuNet takes BGR directly (no grayscale conversion, no manual upscaling
@@ -124,6 +128,12 @@ def _best_face(detector: cv2.FaceDetectorYN, bgr_region):
     _, faces = detector.detect(bgr_region)
     if faces is None or len(faces) == 0:
         return None
+    # Her name badge's avatar icon (~29px, top-left of her pane) detects as a face at 0.89 confidence; when
+    # her real face blurs mid-movement it was the only face left and dragged the crop to x~86 (short_5_v3
+    # opening). Real faces in this layout are 100px+, even in a narrow pane.
+    faces = [f for f in faces if f[2] >= MIN_FACE_PX]
+    if not faces:
+        return None
     best = max(faces, key=lambda f: f[2] * f[3])
     return best[0], best[1], best[2], best[3], best[-1]
 
@@ -134,7 +144,61 @@ CUTAWAY_TOP_BAR_MAX_MEAN = 40  # real call footage measured 104-130 here; a chec
 CUTAWAY_SAT_MIN_MEAN = 100  # real call footage measured 54-73 here; a checked cutaway measured 145-147
 
 
+# Primary cutaway test (2026-10-02): his room's two posters (lion, lightning)
+# are visible in every call frame whatever the layout (his full-screen, his
+# pane, or the thin strip beside her full-screen) and never in a meme insert.
+# ORB-match them against assets/host_room_ref.png. The brightness/saturation
+# test below misfired both ways on 5:24-6:22 of this source: her warm
+# yellow-lit room (sat 120-170) and his green-LED close-up read as "meme" and
+# rendered as a letterboxed side-by-side, while Tom and Jerry (sat 85) and a
+# pillarboxed clip slipped through. Measured on ~75 hand-labelled frames:
+# every meme scored <= 6 inliers, every call frame >= 20 (a near-black call
+# frame included), so 12 sits in the gap. CLAHE first so dim frames still
+# yield keypoints; the scale bound rejects chance matches at absurd scales.
+HOST_ROOM_REF = Path(__file__).parent / "assets" / "host_room_ref.png"
+HOST_ROOM_BOXES = [(100, 800, 120, 620), (150, 700, 1100, 1650)]  # y0, y1, x0, x1 of the two posters in the ref
+HOST_ROOM_MIN_INLIERS = 12
+_room_ref = None
+
+
+def _room_prep(frame):
+    return cv2.createCLAHE(2.0, (8, 8)).apply(cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY))
+
+
+def _host_room_inliers(frame) -> int | None:
+    """RANSAC inliers matching the reference posters into frame, or None when
+    the reference asset is missing (caller falls back to the old heuristic)."""
+    global _room_ref
+    if _room_ref is None:
+        ref = cv2.imread(str(HOST_ROOM_REF))
+        if ref is None:
+            return None
+        g = _room_prep(ref)
+        mask = np.zeros_like(g)
+        for y0, y1, x0, x1 in HOST_ROOM_BOXES:
+            mask[y0:y1, x0:x1] = 255
+        orb = cv2.ORB_create(3000)
+        _room_ref = (orb, *orb.detectAndCompute(g, mask))
+    orb, kr, dr = _room_ref
+    k, d = orb.detectAndCompute(_room_prep(frame), None)
+    if d is None or len(k) < 6:
+        return 0
+    matches = cv2.BFMatcher(cv2.NORM_HAMMING).knnMatch(dr, d, k=2)
+    good = [m[0] for m in matches if len(m) == 2 and m[0].distance < 0.8 * m[1].distance]
+    if len(good) < 6:
+        return len(good)
+    src = np.float32([kr[m.queryIdx].pt for m in good])
+    dst = np.float32([k[m.trainIdx].pt for m in good])
+    H, inl = cv2.estimateAffinePartial2D(src, dst, method=cv2.RANSAC, ransacReprojThreshold=3)
+    if H is None or not 0.15 < np.hypot(H[0, 0], H[1, 0]) < 1.6:
+        return 0
+    return int(inl.sum())
+
+
 def _looks_like_cutaway(frame) -> bool:
+    inliers = _host_room_inliers(frame)
+    if inliers is not None:
+        return inliers < HOST_ROOM_MIN_INLIERS
     bar_h = int(frame.shape[0] * CUTAWAY_TOP_BAR_FRAC)
     top_mean = cv2.cvtColor(frame[:bar_h, :], cv2.COLOR_BGR2GRAY).mean()
     if top_mean < CUTAWAY_TOP_BAR_MAX_MEAN:
@@ -217,7 +281,10 @@ def detect_regions_over_time(
         # falls on rather than reporting a false "split".
         same_face_gap = 350
         if main_x is not None and host_x is not None and abs(main_x - host_x) < same_face_gap:
-            center = (main_x + host_x) / 2
+            # Trust the more complete detection, not the average: the region that only sees part of the
+            # face (cut off at its search edge) reports a shifted centre. Averaging put her at x=1077
+            # when she was at 971 (short_5 opening), leaving her half out of the crop.
+            center = main_x if main_face[2] >= host_face[2] else host_x
             if center < split_x:
                 state, main_x, host_x = "main", center, None
             else:
@@ -281,6 +348,26 @@ def smooth_states(samples: list[Sample], radius: int = 5) -> list[Sample]:
         fs_window = full_screens[max(0, i - radius) : i + radius + 1]
         majority_fs = sum(fs_window) > len(fs_window) / 2
         smoothed.append(Sample(s.t, majority, s.main_x, s.host_x, majority_fs))
+    # A clip that ends on its payoff often ends on a short new shot (short_3:
+    # her 0.8s kiss close-up after a long split). The window is one-sided
+    # there, so the earlier shot outvotes it and the render holds the old
+    # layout over the new content, then flashes the right crop for a few
+    # frames. Trust a consistent raw run of >= 3 samples that reaches the
+    # end (allowing one stray transition sample after it).
+    n = len(samples)
+    for tail in (0, 1):
+        end = n - tail
+        if end < 3:
+            break
+        j = end
+        while j > 0 and states[j - 1] == states[end - 1]:
+            j -= 1
+        if end - j >= 3 and states[end - 1] != "none":
+            if smoothed[end - 1].state != states[end - 1]:
+                r = samples[end - 1]
+                for k in range(j, n):
+                    smoothed[k] = Sample(samples[k].t, r.state, samples[k].main_x, samples[k].host_x, r.full_screen)
+            break
     return smoothed
 
 

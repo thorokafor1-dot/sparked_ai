@@ -17,7 +17,7 @@ Playbook: `.claude/skills/monkey-longform/SKILL.md`.
 
 ## Layout constants (render.py)
 Browser recording 1280x720: Monkey video area is `crop=1280:614:0:72`. Her name/age badge sits in the
-top-left 330x80 of that crop and is always blurred. Zoom presets are `(zoom, cx, cy)` in crop coordinates.
+top-left of that crop and is shown, not blurred (user, 2026-10-02; see monkey-app-longform-02/render.py badge lift). Zoom presets are `(zoom, cx, cy)` in crop coordinates.
 
 ## Quality gates
 Outputs in `out/*.mp4` go through `qa/checks_video.py` (video-specs, video-content):

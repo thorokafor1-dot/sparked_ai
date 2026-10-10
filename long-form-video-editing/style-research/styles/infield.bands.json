@@ -1,0 +1,85 @@
+{
+ "type": "infield",
+ "n": 7,
+ "sources": [
+  "1h_aQaOPcXk Zaid Chulbula (678,657 views)",
+  "j2pDzG_oUHg Jak Piggott (816,327 views)",
+  "Lbwf1upIplg Benjamin Seda (156,559 views)",
+  "PllBSP2Q_G4 Official Trey Star  (185,047 views)",
+  "rpvyNC9_AMc Chris Bizness (234,867 views)",
+  "t6TPHYSkUeo Cold Approach Rizz (1,114,958 views)",
+  "V-vtMInqme0 Brad Dating Lifestyle (112,090 views)"
+ ],
+ "bands": {
+  "cuts_per_min": {
+   "p25": 6.45,
+   "median": 12.2,
+   "p75": 15.45,
+   "min": 3.2,
+   "max": 18.7
+  },
+  "hook_cuts_per_min": {
+   "p25": 5.0,
+   "median": 40.0,
+   "p75": 49.0,
+   "min": 0.0,
+   "max": 72.0
+  },
+  "setup_cuts_per_min": {
+   "p25": 8.65,
+   "median": 10.0,
+   "p75": 13.0,
+   "min": 6.0,
+   "max": 24.7
+  },
+  "body_cuts_per_min": {
+   "p25": 5.15,
+   "median": 11.3,
+   "p75": 15.85,
+   "min": 2.5,
+   "max": 17.4
+  },
+  "shot_median_secs": {
+   "p25": 1.98,
+   "median": 2.75,
+   "p75": 3.42,
+   "min": 1.5,
+   "max": 11.73
+  },
+  "shot_p90_secs": {
+   "p25": 9.0,
+   "median": 11.7,
+   "p75": 29.29,
+   "min": 6.15,
+   "max": 52.32
+  },
+  "longest_shot_secs": {
+   "p25": 42.9,
+   "median": 60.0,
+   "p75": 84.35,
+   "min": 12.4,
+   "max": 133.6
+  },
+  "words_per_min": {
+   "p25": 122.15,
+   "median": 165.5,
+   "p75": 173.3,
+   "min": 75.0,
+   "max": 249.1
+  },
+  "dead_air_share": {
+   "p25": 0.17,
+   "median": 0.25,
+   "p75": 0.42,
+   "min": 0.0,
+   "max": 0.59
+  },
+  "duration_min": {
+   "p25": 11.15,
+   "median": 12.3,
+   "p75": 15.7,
+   "min": 8.42,
+   "max": 34.44
+  }
+ }
+}

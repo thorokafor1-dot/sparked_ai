@@ -2,6 +2,8 @@
 
 Written from `video-ideation/ideation_10_openers.md` (Hook Plan + Countdown Order) and `long-form-hook-research/infield/hook_patterns.md` (Type A archetype: zero-setup cold open, early subscribe ask, stated escalation promise).
 
+**Full-script structure modeled on `long-form-script-research/beat_maps/infield.md`**, the two closest references (both niche, lines-and-technique format like this video, not raw uncut approach footage): Coach Kyle's "How to make small talk so fun, it's hard to end the conversation" (`05goHpSY8gw`) and Todd V's "HOW TO FLIRT (No BS Beginner's Guide)" (`ZVG-wBNZeu8`). The infield replay curve dips hardest at 20-30% of runtime and peaks at 70-80% and 80-90% (tied at 0.25), applied here against this script's real 5:15 runtime: openers #9 and #8 (0:55-1:45, roughly 17-33% of runtime) sit across that 20-30% dip window on purpose, named explicitly as the floor of the list rather than padding, and the proven go-to line (#1) lands at 4:20-4:50 (82-92% of runtime), inside the 80-90% peak band, right before the close.
+
 Runtime target: ~5-6 min, matching the Attractive Man model video this concept is closest to.
 
 **Visual structure per countdown item:** talking head delivers the setup VO ("Number X...") and the LINE, cut to the real FOOTAGE clip for the approach + REACTION/OUTCOME, then back to talking head for the "why it works" VO and on-screen tag before the next number. This alternation (talking head -> real clip -> talking head) repeats for all 10 items, keep cutaways tight (~10-15 sec of the ~25 sec item) so it doesn't feel like a slideshow of clips.
@@ -36,7 +38,7 @@ ON-SCREEN: no logo, no title card yet, straight into footage.
 FOOTAGE: hHRg3bU-Jf8 @ 1:58, opener #8 from the swipe file ("You kind of caught my attention, so I had to come say hi"), cut to her genuine reaction beat, natural clip audio plays as-is, nothing scripted or attributed to her.
 
 ## [0:05-0:16] PROMISE
-VO: "The number one thing holding guys back from approaching is just not knowing what to say. So here's exactly what to say, ten real lines, all actually used on real approaches, in the moment, not staged, not reenacted, ranked from solid to one of my go-tos."
+VO: "The number one thing holding guys back is not knowing what to say. So here's exactly that, ten real lines, all actually used on real approaches, not staged, not reenacted, ranked from solid to one of my go-tos."
 ON-SCREEN: Title card, "10 CONVERSATION STARTERS (THAT ACTUALLY WORK)". Small on-screen counter appears bottom corner: "10 -> 1" to visually anchor the countdown promise.
 FOOTAGE: quick flash-cuts, one beat from each of the 4 source videos, establishing "this is all real footage."
 
@@ -58,15 +60,15 @@ LINE (verbatim): "You kind of look super busy, but for some reason I feel like I
 FOOTAGE: fPDiHlzGt_M @ 0:11.
 REACTION/OUTCOME: brief, polite exchange, she's moving fast but stops for a beat.
 VO (why it works): "Naming the obvious before it gets awkward, that's what takes the tension out of the room."
-ON-SCREEN TAG: "RESPONSE RATE: LOW-MEDIUM" (small, corner, non-intrusive).
+ON-SCREEN TAG: "ACKNOWLEDGE-BUSY-ANYWAY | RESPONSE RATE: LOW-MEDIUM" (small, corner, non-intrusive).
 
 ## [0:55-1:20] #9 - SITUATIONAL GUESS
 VO: "Number 9. Reading the situation and guessing out loud."
 LINE (verbatim): "Excuse me. Look at you, you just came from the gym or something?"
 FOOTAGE: fPDiHlzGt_M @ 0:23.
-REACTION/OUTCOME: she engages, mentions she's actually coming from class.
+REACTION/OUTCOME: she engages, keeps the conversation going.
 VO (why it works): "A guess gives her something easy to correct, and correcting you is basically an invitation to keep talking."
-ON-SCREEN TAG: "RESPONSE RATE: MEDIUM"
+ON-SCREEN TAG: "SITUATIONAL GUESS | RESPONSE RATE: MEDIUM"
 
 ## [1:20-1:45] #8 - GENERIC OUTFIT COMPLIMENT
 VO: "Number 8. The classic. Compliment the outfit, give the reason."
@@ -74,7 +76,7 @@ LINE (verbatim): "Excuse me. I like the outfit, it kind of caught my attention."
 FOOTAGE: fPDiHlzGt_M @ 0:00.
 REACTION/OUTCOME: quick thank you, short but friendly exchange.
 VO (why it works): "It's the most repeated line in this whole list because it's low-risk, but that same safety is why it only lands at number 8."
-ON-SCREEN TAG: "RESPONSE RATE: MEDIUM-HIGH"
+ON-SCREEN TAG: "GENERIC OUTFIT COMPLIMENT | RESPONSE RATE: MEDIUM-HIGH"
 
 ## [1:45-2:10] #7 - GROUP ENERGY CALLOUT
 VO: "Number 7. Calling out the energy in the group before you even say hi."
@@ -82,15 +84,15 @@ LINE (verbatim): "Excuse me, you guys are vibing way too hard not to say hello."
 FOOTAGE: UmJOTFiqEa0 @ 0:00.
 REACTION/OUTCOME: immediate smiles, she confirms the vibe, easy entry.
 VO (why it works): "Complimenting the group's energy instead of one person means nobody feels put on the spot."
-ON-SCREEN TAG: "BEST FOR: GROUPS"
+ON-SCREEN TAG: "GROUP ENERGY CALLOUT | BEST FOR: GROUPS"
 
 ## [2:10-2:35] #6 - GROUP STYLE COMPLIMENT
 VO: "Number 6. Same idea, but on how they look instead of how they're acting."
 LINE (verbatim): "You guys have a very good style, that's why I wanted to come and say hello."
 FOOTAGE: 2sEWBsOFFZA @ 4:43.
-REACTION/OUTCOME: warm response, group opens up about their day.
+REACTION/OUTCOME: warm response, group stays engaged and keeps talking.
 VO (why it works): "Naming their style instead of just 'you look nice' proves you actually looked before you spoke."
-ON-SCREEN TAG: "RESPONSE RATE: MEDIUM-HIGH"
+ON-SCREEN TAG: "GROUP STYLE COMPLIMENT | RESPONSE RATE: MEDIUM-HIGH"
 
 ## [2:35-3:00] #5 - VIBE READ
 VO: "Number 5. Instead of complimenting something about her, you just read the energy and say that."
@@ -98,15 +100,15 @@ LINE (verbatim): "You look like you're having the most chill walk of your life."
 FOOTAGE: UmJOTFiqEa0 @ 0:58.
 REACTION/OUTCOME: she laughs, agrees, keeps walking together talking.
 VO (why it works): "Reading her mood instead of just saying something surface-level feels more personal, like you're actually paying attention to her."
-ON-SCREEN TAG: "RESPONSE RATE: HIGH"
+ON-SCREEN TAG: "VIBE READ | RESPONSE RATE: HIGH"
 
 ## [3:00-3:30] #4 - FRIEND-ASSISTED
-VO: "Number 4. This one only works if you've got a friend with you."
+VO: "Number 4. This one only works if you've got a friend with you, watch how fast it breaks the ice."
 LINE (verbatim): "Excuse me? My friend has something he wants to say to you."
 FOOTAGE: UmJOTFiqEa0 @ 2:12.
 REACTION/OUTCOME: group laughs, tension breaks immediately, easier group conversation follows.
 VO (why it works): "Having a friend back you up makes it land softer, a group vouching for you beats walking up alone."
-ON-SCREEN TAG: "NEEDS: A FRIEND WITH YOU"
+ON-SCREEN TAG: "FRIEND-ASSISTED | NEEDS: A FRIEND WITH YOU"
 
 ## [3:30-3:55] #3 - SPECIFIC COMPLIMENT
 VO: "Number 3. Same move as number 8, but leveling it up when you've actually got something specific to point to."
@@ -114,15 +116,15 @@ LINE (verbatim): "Excuse me... I like the jacket."
 FOOTAGE: fPDiHlzGt_M @ 0:58.
 REACTION/OUTCOME: she lights up, clearly into it.
 VO (why it works): "Number 8 is easier to say without thinking, this one takes a second longer to notice, but naming the exact item proves you actually looked."
-ON-SCREEN TAG: "RESPONSE RATE: HIGH"
+ON-SCREEN TAG: "SPECIFIC COMPLIMENT | RESPONSE RATE: HIGH"
 
 ## [3:55-4:20] #2 - PLAYFUL BIT
-VO: "Number 2. My personal favorite, because it's just funny."
+VO: "Number 2. My personal favorite, because it's just funny, watch what happens when I say this."
 LINE (verbatim): "You kinda walk like you're always on a catwalk."
 FOOTAGE: fPDiHlzGt_M @ 0:07.
 REACTION/OUTCOME: genuine laugh, best reaction of the reel so far.
 VO (why it works): "Humor gets her laughing before she's even decided whether to engage, and a laugh is a much lower wall than a compliment."
-ON-SCREEN TAG: "RESPONSE RATE: HIGH"
+ON-SCREEN TAG: "PLAYFUL BIT | RESPONSE RATE: HIGH"
 
 ## [4:20-4:50] #1 - GO-TO LINE
 VO: "And number 1. One of my go-tos."
@@ -130,7 +132,7 @@ LINE (verbatim): "You kind of caught my attention, so I had to come say hi."
 FOOTAGE: hHRg3bU-Jf8 @ 1:58 (also used near-verbatim in 2sEWBsOFFZA @ 7:25, shown as a quick side-by-side flash to prove it's not a one-off).
 REACTION/OUTCOME: strong, immediate engagement in both clips.
 VO (why it works): "No gimmick, no compliment to get right, just the truth about why you walked over, and it's shown up more than once in my own footage, so it's not a fluke."
-ON-SCREEN TAG: "RESPONSE RATE: PROVEN, USED 2X"
+ON-SCREEN TAG: "GO-TO LINE | USED 2X"
 
 ---
 

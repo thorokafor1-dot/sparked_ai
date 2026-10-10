@@ -1,0 +1,2373 @@
+{
+ "buckets": {
+  "general:mens_self_improvement": {
+   "n": 4,
+   "minutes": 21.05,
+   "wpm": 220.0,
+   "first_30s_words": 102.5,
+   "open_loop_per_min": 0.04,
+   "re_hook_per_min": 0.19,
+   "stakes_per_min": 0.09,
+   "direct_address_per_min": 4.46,
+   "pivot_per_min": 5.8,
+   "question_per_min": 1.16,
+   "list_marker_per_min": 0.58,
+   "median_secs_between_rehooks": 40,
+   "cta_count": 1.0
+  },
+  "general:niche_authorities": {
+   "n": 1,
+   "minutes": 20.9,
+   "wpm": 250,
+   "first_30s_words": 129,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.19,
+   "stakes_per_min": 0.14,
+   "direct_address_per_min": 3.53,
+   "pivot_per_min": 5.63,
+   "question_per_min": 0.81,
+   "list_marker_per_min": 0.91,
+   "median_secs_between_rehooks": 209,
+   "cta_count": 0
+  },
+  "general:social_experiment": {
+   "n": 7,
+   "minutes": 24.5,
+   "wpm": 156,
+   "first_30s_words": 92,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.04,
+   "stakes_per_min": 0.16,
+   "direct_address_per_min": 0.88,
+   "pivot_per_min": 2.97,
+   "question_per_min": 2.26,
+   "list_marker_per_min": 0.49,
+   "median_secs_between_rehooks": 112,
+   "cta_count": 0
+  },
+  "general:story_explainer": {
+   "n": 3,
+   "minutes": 34.1,
+   "wpm": 202,
+   "first_30s_words": 103,
+   "open_loop_per_min": 0.09,
+   "re_hook_per_min": 0.12,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 3.96,
+   "pivot_per_min": 3.46,
+   "question_per_min": 0.45,
+   "list_marker_per_min": 0.4,
+   "median_secs_between_rehooks": 140,
+   "cta_count": 3
+  },
+  "niche:Explainer Video": {
+   "n": 4,
+   "minutes": 16.3,
+   "wpm": 170.0,
+   "first_30s_words": 91.0,
+   "open_loop_per_min": 0.03,
+   "re_hook_per_min": 0.04,
+   "stakes_per_min": 0.09,
+   "direct_address_per_min": 2.54,
+   "pivot_per_min": 2.71,
+   "question_per_min": 0.61,
+   "list_marker_per_min": 0.67,
+   "median_secs_between_rehooks": 116.5,
+   "cta_count": 0.0
+  },
+  "niche:In-Person": {
+   "n": 8,
+   "minutes": 29.65,
+   "wpm": 163.5,
+   "first_30s_words": 93.0,
+   "open_loop_per_min": 0.01,
+   "re_hook_per_min": 0.02,
+   "stakes_per_min": 0.14,
+   "direct_address_per_min": 2.8,
+   "pivot_per_min": 3.52,
+   "question_per_min": 3.49,
+   "list_marker_per_min": 0.2,
+   "median_secs_between_rehooks": 171.5,
+   "cta_count": 1.0
+  },
+  "niche:Preferred:coach knox": {
+   "n": 1,
+   "minutes": 35.1,
+   "wpm": 198,
+   "first_30s_words": 90,
+   "open_loop_per_min": 0.03,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.06,
+   "direct_address_per_min": 4.76,
+   "pivot_per_min": 4.88,
+   "question_per_min": 0.09,
+   "list_marker_per_min": 0.4,
+   "median_secs_between_rehooks": 693,
+   "cta_count": 0
+  },
+  "niche:Preferred:coach kyle": {
+   "n": 1,
+   "minutes": 10.9,
+   "wpm": 226,
+   "first_30s_words": 132,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.18,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 4.58,
+   "pivot_per_min": 4.77,
+   "question_per_min": 1.83,
+   "list_marker_per_min": 0.46,
+   "median_secs_between_rehooks": 37,
+   "cta_count": 0
+  },
+  "niche:Preferred:jameer": {
+   "n": 1,
+   "minutes": 37.0,
+   "wpm": 74,
+   "first_30s_words": 49,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.11,
+   "direct_address_per_min": 1.38,
+   "pivot_per_min": 1.22,
+   "question_per_min": 1.89,
+   "list_marker_per_min": 0.11,
+   "median_secs_between_rehooks": 814,
+   "cta_count": 0
+  },
+  "niche:Preferred:jay throck": {
+   "n": 1,
+   "minutes": 14.6,
+   "wpm": 139,
+   "first_30s_words": 87,
+   "open_loop_per_min": 0.07,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.27,
+   "direct_address_per_min": 2.75,
+   "pivot_per_min": 2.2,
+   "question_per_min": 1.99,
+   "list_marker_per_min": 0.55,
+   "median_secs_between_rehooks": 90,
+   "cta_count": 3
+  },
+  "niche:Preferred:social stoic": {
+   "n": 1,
+   "minutes": 15.7,
+   "wpm": 184,
+   "first_30s_words": 108,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.06,
+   "direct_address_per_min": 3.18,
+   "pivot_per_min": 4.13,
+   "question_per_min": 3.18,
+   "list_marker_per_min": 0.13,
+   "cta_count": 1
+  },
+  "niche:Preferred:todd v": {
+   "n": 1,
+   "minutes": 14.7,
+   "wpm": 246,
+   "first_30s_words": 124,
+   "open_loop_per_min": 0.2,
+   "re_hook_per_min": 0.2,
+   "stakes_per_min": 0.07,
+   "direct_address_per_min": 6.32,
+   "pivot_per_min": 5.85,
+   "question_per_min": 0.75,
+   "list_marker_per_min": 0.75,
+   "median_secs_between_rehooks": 56,
+   "cta_count": 2
+  },
+  "niche:Preferred:trey star": {
+   "n": 1,
+   "minutes": 15.0,
+   "wpm": 165,
+   "first_30s_words": 112,
+   "open_loop_per_min": 0.13,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 3.86,
+   "pivot_per_min": 3.4,
+   "question_per_min": 5.33,
+   "list_marker_per_min": 0.13,
+   "median_secs_between_rehooks": 502,
+   "cta_count": 0
+  },
+  "niche:Video Chat": {
+   "n": 6,
+   "minutes": 18.65,
+   "wpm": 135.0,
+   "first_30s_words": 87.0,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.04,
+   "direct_address_per_min": 1.94,
+   "pivot_per_min": 1.77,
+   "question_per_min": 4.45,
+   "list_marker_per_min": 0.09,
+   "median_secs_between_rehooks": 219,
+   "cta_count": 0.5
+  }
+ },
+ "videos": [
+  {
+   "vid": "05goHpSY8gw",
+   "title": "How to make small talk so fun, it's hard to end the conversation",
+   "channel": "Coach Kyle",
+   "views": 335771,
+   "group": "Preferred:coach kyle",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=05goHpSY8gw",
+   "bucket": "niche:Preferred:coach kyle",
+   "minutes": 10.9,
+   "wpm": 226,
+   "wpm_by_fifth": [
+    239,
+    214,
+    238,
+    200,
+    228
+   ],
+   "first_30s_words": 132,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.18,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 4.58,
+   "pivot_per_min": 4.77,
+   "question_per_min": 1.83,
+   "list_marker_per_min": 0.46,
+   "median_secs_between_rehooks": 37,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 53,
+     "value": 1.0,
+     "said": "So let's get into the beginning of this interaction. Come on in guys, welcome. Where you headed? 42, please. 42, I like your flowers. So the very first thing to note is that when they're coming into the elevator, I'm alr"
+    },
+    {
+     "at": 198,
+     "value": 0.633,
+     "said": "Now let me show you where this goes. I like your flowers. They're not for you. Oh, you got them for you? Okay. Are they real? I think so. You just got the fresh water from"
+    },
+    {
+     "at": 277,
+     "value": 0.454,
+     "said": "occasion? Her birthday. Oh, okay. Nice. Are you visiting or you live here too? We're going to the same birthday. Okay. Where'd you come in from? Work. Oh, I thought you were visiting like here."
+    }
+   ],
+   "dips": [
+    {
+     "at": 231,
+     "value": 0.0,
+     "said": "interactions of the day. But the other thing is it's okay to ask questions. You can ask a couple questions. You give a little bit of input. You sprinkle in a joke or you relate it back to a story"
+    },
+    {
+     "at": 323,
+     "value": 0.008,
+     "said": "not women that I'm that attracted to. They're not women that I want to date. But that doesn't mean they're not people that I can start conversation with and start to become a better conversation list and practice opening"
+    },
+    {
+     "at": 540,
+     "value": 0.025,
+     "said": "skill set of giving out greetings, giving out a compliment, assuming the burden of carrying the conversation, giving yourself permission to do that with people you're not even attracted to."
+    }
+   ]
+  },
+  {
+   "vid": "07TNr9EtksE",
+   "title": "A Realistic 41 Minutes of Cold Approaching Women in London (UNCUT)",
+   "channel": "Pull University",
+   "views": 26349,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=07TNr9EtksE",
+   "bucket": "niche:In-Person",
+   "minutes": 41.6,
+   "wpm": 205,
+   "wpm_by_fifth": [
+    191,
+    190,
+    191,
+    229,
+    223
+   ],
+   "first_30s_words": 88,
+   "open_loop_per_min": 0.02,
+   "re_hook_per_min": 0.1,
+   "stakes_per_min": 0.34,
+   "direct_address_per_min": 2.72,
+   "pivot_per_min": 7.0,
+   "question_per_min": 3.51,
+   "list_marker_per_min": 0.77,
+   "median_secs_between_rehooks": 112,
+   "first_cta_sec": 164,
+   "cta_count": 2,
+   "has_heatmap": false
+  },
+  {
+   "vid": "0NHMRxeknp0",
+   "title": "I Snuck An 8 Year Old Into Professional Roast Battle",
+   "channel": "@MaxFosh",
+   "views": 5000000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=0NHMRxeknp0",
+   "bucket": "general:social_experiment",
+   "minutes": 12.3,
+   "wpm": 164,
+   "wpm_by_fifth": [
+    193,
+    180,
+    196,
+    124,
+    125
+   ],
+   "first_30s_words": 119,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.16,
+   "stakes_per_min": 0.16,
+   "direct_address_per_min": 1.63,
+   "pivot_per_min": 2.6,
+   "question_per_min": 2.85,
+   "list_marker_per_min": 0.65,
+   "median_secs_between_rehooks": 210,
+   "first_cta_sec": 348,
+   "cta_count": 1,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 283,
+     "value": 1.0,
+     "said": "Good. No, that's great disappointment. I've got one more. You've got one more, one more. I'm Indian. She's Indian. I can't really comment on that one, Shield, but that's good."
+    },
+    {
+     "at": 379,
+     "value": 0.984,
+     "said": "The place was packed to the rafters and shellacos in the building. You made it! Hello! How you feeling? Yeah! You still have no idea. Absolutely not a single group."
+    },
+    {
+     "at": 536,
+     "value": 0.903,
+     "said": "Oh my god, none of that. What is he? Vision! Try it! This is me realizing I'd created a monster."
+    }
+   ],
+   "dips": [
+    {
+     "at": 201,
+     "value": 0.0,
+     "said": "to prepare. Here we go. Right. My prodigy will be sat there, make sure they're prepared and we all right. Material. I'm not going from there."
+    },
+    {
+     "at": 350,
+     "value": 0.003,
+     "said": "And it'll create an SEO optimized description. Think of Sidekick as your new AI co-founder, who is able to provide real insights you can ask for analysis in all aspects of your business."
+    },
+    {
+     "at": 97,
+     "value": 0.008,
+     "said": "If I found a school kid and entered them into a roast battle, would that be against the rules?"
+    }
+   ]
+  },
+  {
+   "vid": "20eV8Z2krq8",
+   "title": "3 Words Older Men Use to Attract Women (Most Men Ignore This) | Female Psychology",
+   "channel": "MAGDA KY MINDSET",
+   "views": 200204,
+   "group": "Explainer Video",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=20eV8Z2krq8",
+   "bucket": "niche:Explainer Video",
+   "minutes": 6.8,
+   "wpm": 158,
+   "wpm_by_fifth": [
+    154,
+    155,
+    169,
+    156,
+    151
+   ],
+   "first_30s_words": 90,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.15,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 5.01,
+   "pivot_per_min": 3.39,
+   "question_per_min": 1.03,
+   "list_marker_per_min": 1.03,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": false
+  },
+  {
+   "vid": "3AWiVhqqUtw",
+   "title": "I Can't Believe She's a MAFIA's DAUGHTER! and She's Wild! | BANDANA MAN IS BACK on AZAR! (PART 3)",
+   "channel": "MarcusT",
+   "views": 6473383,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=3AWiVhqqUtw",
+   "bucket": "niche:Video Chat",
+   "minutes": 23.5,
+   "wpm": 82,
+   "wpm_by_fifth": [
+    84,
+    102,
+    57,
+    71,
+    93
+   ],
+   "first_30s_words": 73,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.09,
+   "direct_address_per_min": 2.38,
+   "pivot_per_min": 1.74,
+   "question_per_min": 0.0,
+   "list_marker_per_min": 0.17,
+   "median_secs_between_rehooks": 219,
+   "first_cta_sec": 361,
+   "cta_count": 3,
+   "has_heatmap": false
+  },
+  {
+   "vid": "4R5WhS9yQ1M",
+   "title": "Signs She Likes You (TIER LIST)",
+   "channel": "Coach Knox",
+   "views": 89119,
+   "group": "Preferred:coach knox",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=4R5WhS9yQ1M",
+   "bucket": "niche:Preferred:coach knox",
+   "minutes": 35.1,
+   "wpm": 198,
+   "wpm_by_fifth": [
+    176,
+    186,
+    197,
+    214,
+    214
+   ],
+   "first_30s_words": 90,
+   "open_loop_per_min": 0.03,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.06,
+   "direct_address_per_min": 4.76,
+   "pivot_per_min": 4.88,
+   "question_per_min": 0.09,
+   "list_marker_per_min": 0.4,
+   "median_secs_between_rehooks": 693,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1160,
+     "value": 0.78,
+     "said": "what i don't they doubt she loves you gang now if it's so obvious that you see how she talks to one person and then you see how she talks to you and she talks super high voice submissive she had like a baby voice even to"
+    },
+    {
+     "at": 1772,
+     "value": 0.744,
+     "said": "i don't want everyone else to know that i like your face you know what i'm saying so ideally she likes your post bro it doesn't mean shit bro you know this is common sense what who who added this shit to the tier list i "
+    },
+    {
+     "at": 1983,
+     "value": 0.664,
+     "said": "sport next up is she tries to roast you bro she loves you bro if she's overly on your meat well let's say she's like i said i've already made a shit test video if she says long now you're so short why is your name in her"
+    }
+   ],
+   "dips": [
+    {
+     "at": 506,
+     "value": 0.0,
+     "said": "that works right and you have asking you make your own shot. It's the equivalent to trying to learn carry Irving Handles and his own shot making creation and you put your own sauce on it and it being surprised when it do"
+    },
+    {
+     "at": 422,
+     "value": 0.005,
+     "said": "fuck I don't. How do you get. Now I'm from the viewed image and let's look at the full the full screenshot. Then we follow up with give me your number and I'll tell you on the phone. The only reason this works is because"
+    },
+    {
+     "at": 274,
+     "value": 0.027,
+     "said": "and your old girlfriend look at the messages. She's gonna see the fact that the girl liked your story. She's gonna see the fact that you didn't just DM her for no reason the girl showed an indicator of interest that's wh"
+    }
+   ]
+  },
+  {
+   "vid": "5K9QhkPww44",
+   "title": "What Every Body Fat % Actually Looks Like (50% to 5%)",
+   "channel": "@JeffNippard",
+   "views": 16000000,
+   "group": "story_explainer",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=5K9QhkPww44",
+   "bucket": "general:story_explainer",
+   "minutes": 34.1,
+   "wpm": 202,
+   "wpm_by_fifth": [
+    208,
+    200,
+    196,
+    193,
+    214
+   ],
+   "first_30s_words": 103,
+   "open_loop_per_min": 0.09,
+   "re_hook_per_min": 0.21,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 3.96,
+   "pivot_per_min": 3.46,
+   "question_per_min": 1.26,
+   "list_marker_per_min": 0.09,
+   "median_secs_between_rehooks": 149,
+   "first_cta_sec": 628,
+   "cta_count": 3,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1761,
+     "value": 1.0,
+     "said": "can cause people to act in ways they no longer recognize. After filming this video, Lachlan ran into Ollie, our 9% subject, at the gym, acted completely out of line. My studio is proposing and for other stuff, not to be "
+    },
+    {
+     "at": 635,
+     "value": 0.971,
+     "said": "Okay, so this is what 30% body fat looks like on a male, and this is what 30% body fat looks like on a female. This is Brecken, and she measured at 28.4% body fat on DEXA, and 28.2% body fat on BIA, so just a little unde"
+    },
+    {
+     "at": 1208,
+     "value": 0.812,
+     "said": "How many out of the 9,000 do you think we're under 12% body fat? 200. Maybe 500. 500? 500. 9,000 people. 400 people. One person. What? One? One person. Oh my goodness. So does it show like how lean that really is when yo"
+    }
+   ],
+   "dips": [
+    {
+     "at": 246,
+     "value": 0.006,
+     "said": "While speaking with people at this level, I realized that even simple day-to-day activities can be a struggle. I'm always tired. Like, I'm not, like, I want to sleep all day, but I'm always fatigued. This is the heaviest"
+    },
+    {
+     "at": 1106,
+     "value": 0.008,
+     "said": "you're going to look like them. I saw a YouTube personality the way that she was aiming for, said that was sustainable for her, was way too late compared to me. But because we were the same height and had similar goals, "
+    },
+    {
+     "at": 1864,
+     "value": 0.008,
+     "said": "You know what I mean? Like I don't know if roid rage is like a real thing or not. Like I haven't seen much in the way of like actual science about it. But anecdotally, like you do tend to see that like the higher dosage "
+    }
+   ]
+  },
+  {
+   "vid": "7MykFJ7TByM",
+   "title": "Analyzing The Lindsay Clancy Case",
+   "channel": "@HealthyGamerGG",
+   "views": 2700000,
+   "group": "mens_self_improvement",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=7MykFJ7TByM",
+   "bucket": "general:mens_self_improvement",
+   "minutes": 29.4,
+   "wpm": 186,
+   "wpm_by_fifth": [
+    182,
+    188,
+    180,
+    182,
+    195
+   ],
+   "first_30s_words": 77,
+   "open_loop_per_min": 0.03,
+   "re_hook_per_min": 0.2,
+   "stakes_per_min": 0.14,
+   "direct_address_per_min": 1.26,
+   "pivot_per_min": 5.2,
+   "question_per_min": 2.42,
+   "list_marker_per_min": 0.44,
+   "median_secs_between_rehooks": 40,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": false
+  },
+  {
+   "vid": "89KhJYbEDnc",
+   "title": "How to Make Her WANT You — Even When She’s Not Interested",
+   "channel": "Feminine Connection",
+   "views": 103581,
+   "group": "Explainer Video",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=89KhJYbEDnc",
+   "bucket": "niche:Explainer Video",
+   "minutes": 16.8,
+   "wpm": 181,
+   "wpm_by_fifth": [
+    181,
+    175,
+    184,
+    180,
+    181
+   ],
+   "first_30s_words": 84,
+   "open_loop_per_min": 0.06,
+   "re_hook_per_min": 0.06,
+   "stakes_per_min": 0.18,
+   "direct_address_per_min": 1.37,
+   "pivot_per_min": 2.03,
+   "question_per_min": 0.12,
+   "list_marker_per_min": 0.42,
+   "median_secs_between_rehooks": 137,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": false
+  },
+  {
+   "vid": "8nPnxQKnVto",
+   "title": "A Realistic 60 Minutes of Approaching Women (UNCUT INFIELD)",
+   "channel": "Alex León",
+   "views": 89163,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=8nPnxQKnVto",
+   "bucket": "niche:In-Person",
+   "minutes": 43.2,
+   "wpm": 137,
+   "wpm_by_fifth": [
+    138,
+    159,
+    117,
+    126,
+    144
+   ],
+   "first_30s_words": 47,
+   "open_loop_per_min": 0.02,
+   "re_hook_per_min": 0.02,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 2.2,
+   "pivot_per_min": 3.5,
+   "question_per_min": 3.38,
+   "list_marker_per_min": 0.23,
+   "median_secs_between_rehooks": 1255,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": false
+  },
+  {
+   "vid": "DMEg6imC6Q4",
+   "title": "Kalogeras Sisters VIDEO CHAT WITH STRANGERS!",
+   "channel": "Kalogeras Sisters ",
+   "views": 7119807,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=DMEg6imC6Q4",
+   "bucket": "niche:Video Chat",
+   "minutes": 24.6,
+   "wpm": 138,
+   "wpm_by_fifth": [
+    131,
+    125,
+    136,
+    148,
+    150
+   ],
+   "first_30s_words": 92,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 2.07,
+   "pivot_per_min": 1.67,
+   "question_per_min": 6.87,
+   "list_marker_per_min": 0.77,
+   "median_secs_between_rehooks": 271,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 74,
+     "value": 1.0,
+     "said": "Can I stop for you? Cap yourself. It keeps on saying that someone's trying to FaceTime us and I don't know what the [ __ ] that means and I'm scared. Just answer it. Are you guys fake?"
+    },
+    {
+     "at": 400,
+     "value": 0.934,
+     "said": "have I seen you before? Where have we seen you before? I feel like we know you. I feel Wait, you're from Cincinnati? Me, too. Nah, you ain't from Cincinnati. I'm from Shut up. You know, shut up. Hey yo, can you Hey yo, c"
+    },
+    {
+     "at": 814,
+     "value": 0.616,
+     "said": "Where are you guys from? Come here. London. From the UK, it I feel like I know you. I feel like I know you. [ __ ] you. [ __ ] you, Lydia. I think he said you're cute. Wake"
+    }
+   ],
+   "dips": [
+    {
+     "at": 237,
+     "value": 0.0,
+     "said": "Y'all sisters. No, we're friends. Just friends. Everyone think like just friends. Nah. Are y'all sisters? No, we're not. Everyone thinks we look alikes. That is crazy, bro. Mhm. Different mom daddy. I ain't a for real qu"
+    },
+    {
+     "at": 977,
+     "value": 0.014,
+     "said": "You first. You first. Hey, my name is Chad. Hey. Yeah. Really cool. Okay. I don't go to work, but I go to school. Hey, that was good. You got all you got? Yeah, that was good. Y'all's turn."
+    },
+    {
+     "at": 696,
+     "value": 0.031,
+     "said": "crazy. Hi. Yo, yo, what you sipping on that drink? Good. Y'all are y'all triplets? What the hell? Thanks, y'all. [ __ ] No, this is a wig, obviously."
+    }
+   ]
+  },
+  {
+   "vid": "MBPHU7aaklM",
+   "title": "Success Is Hard Until You Build Systems Like This",
+   "channel": "@aliabdaal",
+   "views": 1600000,
+   "group": "story_explainer",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=MBPHU7aaklM",
+   "bucket": "general:story_explainer",
+   "minutes": 25.9,
+   "wpm": 264,
+   "wpm_by_fifth": [
+    247,
+    273,
+    260,
+    277,
+    261
+   ],
+   "first_30s_words": 137,
+   "open_loop_per_min": 0.04,
+   "re_hook_per_min": 0.12,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 6.91,
+   "pivot_per_min": 4.71,
+   "question_per_min": 0.15,
+   "list_marker_per_min": 0.46,
+   "median_secs_between_rehooks": 140,
+   "first_cta_sec": 36,
+   "cta_count": 4,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 902,
+     "value": 1.0,
+     "said": "And it's a good way of making sure that I'm continually realigning to the goals that I want to achieve and making changes to my schedule if life happens. System number three that I think would benefit most people in thei"
+    },
+    {
+     "at": 529,
+     "value": 0.844,
+     "said": "Now, if you are making up those actions every time, depending on how you feel, you're a lot less likely to get to any particular goal compared to if you have a system or a set of processes that you're following every tim"
+    },
+    {
+     "at": 622,
+     "value": 0.772,
+     "said": "And so for example, my process starts with like vision where there's like a life compa section where you figure out like what you actually want your life to look like very long term and what your core values and that kin"
+    }
+   ],
+   "dips": [
+    {
+     "at": 1338,
+     "value": 0.0,
+     "said": "that you know. And so we really suck at this, but like, I've got some friends who are really good at sending an annual Christmas card. And it's amazing how such a small thing can actually sustain a friendship for decades"
+    },
+    {
+     "at": 389,
+     "value": 0.025,
+     "said": "They've also recently launched their trading two one two card, which gives you up to 10% cash back on your everyday spending with no monthly fees, no hidden charges and currency conversion at the true Interbank rate, whi"
+    },
+    {
+     "at": 264,
+     "value": 0.039,
+     "said": "When the doctor examines you and listens to your heart and like examines your abdomen and all of that kind of stuff, again, they are following a system. They are not just making shit up as they go along. If they have lot"
+    }
+   ]
+  },
+  {
+   "vid": "MaV7wlO-GmE",
+   "title": "Flirting with the HOT GIRL at the Store (See How I Do It)",
+   "channel": "@ToddVDating",
+   "views": 62000,
+   "group": "niche_authorities",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=MaV7wlO-GmE",
+   "bucket": "general:niche_authorities",
+   "minutes": 20.9,
+   "wpm": 250,
+   "wpm_by_fifth": [
+    246,
+    265,
+    265,
+    236,
+    232
+   ],
+   "first_30s_words": 129,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.19,
+   "stakes_per_min": 0.14,
+   "direct_address_per_min": 3.53,
+   "pivot_per_min": 5.63,
+   "question_per_min": 0.81,
+   "list_marker_per_min": 0.91,
+   "median_secs_between_rehooks": 209,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 996,
+     "value": 1.0,
+     "said": "I'm Todd. Nice to meet you. You seem like you could be an interesting person. I mean I've known you for 30 seconds so like it's not, it's not Russia what you're not. He doesn't have anything. Like he said. Wow. And so th"
+    },
+    {
+     "at": 858,
+     "value": 0.74,
+     "said": "Remember this is a huge advantage you have in these situations. I was very amused that you were counting the washes. Yeah. I get to figure out how many were stolen in the last. You know I would hope none but it's all the"
+    },
+    {
+     "at": 1072,
+     "value": 0.427,
+     "said": "That's a good sign. So I don't want to distract you from your duties but I do find you intriguing. So here I pointed out to her that if she needs to do her work she can't I gauged her reaction."
+    }
+   ],
+   "dips": [
+    {
+     "at": 63,
+     "value": 0.0,
+     "said": "So in this video, I'm going to give you my step-by-step system to meet those hot girls who are busy doing hot girl jobs. Winter Girl is at work. A lot of things are exactly the same as any other scenario in game, but a f"
+    },
+    {
+     "at": 542,
+     "value": 0.018,
+     "said": "There's a very critical distinction here which is in this case you and the girl are on the same page. You're basically saying, hey, listen, I'm not actually buying this shirt. I just want you to pretend to sell it to me "
+    },
+    {
+     "at": 315,
+     "value": 0.033,
+     "said": "You have plenty of disadvantages. But you do have one incredible advantage, which is that these very hot girls that you normally have to call the approach and who might not even be that easy to open on a cold approach if"
+    }
+   ]
+  },
+  {
+   "vid": "NUQS-v1DWZM",
+   "title": "How To Create Sexual Tension During Cold Approach (Infield Breakdown)",
+   "channel": "ApproachCraft",
+   "views": 44617,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=NUQS-v1DWZM",
+   "bucket": "niche:In-Person",
+   "minutes": 15.8,
+   "wpm": 142,
+   "wpm_by_fifth": [
+    137,
+    153,
+    131,
+    148,
+    137
+   ],
+   "first_30s_words": 89,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.13,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 3.41,
+   "pivot_per_min": 3.54,
+   "question_per_min": 3.48,
+   "list_marker_per_min": 0.06,
+   "median_secs_between_rehooks": 80,
+   "first_cta_sec": 940,
+   "cta_count": 2,
+   "has_heatmap": false
+  },
+  {
+   "vid": "O0m2XGCkJD8",
+   "title": "I tried to 'Cold Approach' girls as an Introvert (Difficulty: Impossible)",
+   "channel": "Dylan McKnight",
+   "views": 4260367,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=O0m2XGCkJD8",
+   "bucket": "niche:In-Person",
+   "minutes": 11.4,
+   "wpm": 156,
+   "wpm_by_fifth": [
+    229,
+    198,
+    224,
+    87,
+    41
+   ],
+   "first_30s_words": 101,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.26,
+   "direct_address_per_min": 2.46,
+   "pivot_per_min": 3.08,
+   "question_per_min": 0.0,
+   "list_marker_per_min": 0.18,
+   "median_secs_between_rehooks": 27,
+   "first_cta_sec": 343,
+   "cta_count": 2,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 288,
+     "value": 1.0,
+     "said": "you got good risk wait did who dared you to come over here who dared me to come over here why you don't think I just walked up to you you have a group of friends here where are they okay Sophie"
+    },
+    {
+     "at": 370,
+     "value": 0.894,
+     "said": "see you you don't you're not very good atos I'm not lie I was going for a handshake see you Sophie so we had this crazy idea to"
+    },
+    {
+     "at": 75,
+     "value": 0.597,
+     "said": "are you selling these scooters I am do you think uh girls would be into me if I bought one of these I think so you think so honestly I'm not in the market to buy"
+    }
+   ],
+   "dips": [
+    {
+     "at": 418,
+     "value": 0.016,
+     "said": "it would take a lot for me to do this again okay but if this video gets 10,000 likes 10,000 likes we will make a return"
+    },
+    {
+     "at": 130,
+     "value": 0.038,
+     "said": "under the swe it's like a pump cover bro under the sweater you're sleeper I can tell I don't know do you work out of Vasa Vasa yes I go back in I feel like I've seen you have Vasa really do you go"
+    },
+    {
+     "at": 329,
+     "value": 0.045,
+     "said": "YouTube or what I'm a YouTuber yeah it's just what do right now that's funny yeah but like I never cold approach or go up to girls like I'm terrible at it so"
+    }
+   ]
+  },
+  {
+   "vid": "PllBSP2Q_G4",
+   "title": "I tried to ‘Cold Approach’ college Girls as an Introvert | (Unexpected Results ) ",
+   "channel": "Official Trey Star ",
+   "views": 175161,
+   "group": "Preferred:trey star",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=PllBSP2Q_G4",
+   "bucket": "niche:Preferred:trey star",
+   "minutes": 15.0,
+   "wpm": 165,
+   "wpm_by_fifth": [
+    172,
+    152,
+    158,
+    133,
+    208
+   ],
+   "first_30s_words": 112,
+   "open_loop_per_min": 0.13,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 3.86,
+   "pivot_per_min": 3.4,
+   "question_per_min": 5.33,
+   "list_marker_per_min": 0.13,
+   "median_secs_between_rehooks": 502,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 814,
+     "value": 1.0,
+     "said": "Oh, yeah, I'm doing vlogs. You come from being in my vlog. Yeah, I don't care. Yeah. Okay. Nice to meet you. I'll tell you too. Bye Uh, what's your name? Hey, I love your rings. Thank you. Hey, what's your name? Hey, whe"
+    },
+    {
+     "at": 235,
+     "value": 0.363,
+     "said": "Okay, but we don't see I'm gonna take them at the end of the vid. I'm gonna take some on stream I actually don't know yet, but yeah, we gonna find out. Yeah, that's a doubt. That's a good job. What's your name? Jenna nic"
+    },
+    {
+     "at": 344,
+     "value": 0.338,
+     "said": "I've gone her twice that's wild we couldn't get for the 3 feet"
+    }
+   ],
+   "dips": [
+    {
+     "at": 733,
+     "value": 0.006,
+     "said": "I just like healthy people I'll like with their problem"
+    },
+    {
+     "at": 172,
+     "value": 0.01,
+     "said": "Are you like open the listing? You're listening. Okay, so I'm here looking for friends and You just seem like you have a nice vibrant personality. Would you be interested in being my friend?"
+    },
+    {
+     "at": 72,
+     "value": 0.019,
+     "said": "So you can make the solution. I will be honest. I completely sold that I got that I got to the situation No, I didn't know what to say like I got in the court and I just suddenly didn't know how to shoot no more"
+    }
+   ]
+  },
+  {
+   "vid": "RDtWN2pO1xc",
+   "title": "The Psychology of Making Them Crave You | Robert Greene",
+   "channel": "Silent Mastery",
+   "views": 346704,
+   "group": "Explainer Video",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=RDtWN2pO1xc",
+   "bucket": "niche:Explainer Video",
+   "minutes": 15.8,
+   "wpm": 167,
+   "wpm_by_fifth": [
+    165,
+    163,
+    164,
+    172,
+    170
+   ],
+   "first_30s_words": 92,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 3.72,
+   "pivot_per_min": 5.36,
+   "question_per_min": 0.95,
+   "list_marker_per_min": 0.38,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 820,
+     "value": 1.0,
+     "said": "Injecting a little bit of pain at the end of this towards this moment in the seduction. Like, I'm going to leave you. It's over. We're not done with you. Man, that'll be very, very"
+    },
+    {
+     "at": 277,
+     "value": 0.807,
+     "said": "The woman is the one who's in control. I'm under her clause. She's the one that's operating this."
+    },
+    {
+     "at": 658,
+     "value": 0.7,
+     "said": "every one of our desires is secretly something else, secretly something, maybe the opposite that we want, but we're not aware of it. And so if everything in the seduction were so smooth and wonderful"
+    }
+   ],
+   "dips": [
+    {
+     "at": 76,
+     "value": 0.0,
+     "said": "But it's not predictable. It's unfamiliar. It's theatre. Because let's face it. For most of us, our day-to-day lives are rather banal and rather boring."
+    },
+    {
+     "at": 563,
+     "value": 0.003,
+     "said": "your own values and your own ideas. So their values and ideas. Now are the only ones you can rely upon. So one of the isolations is from the things that you and your brain kind of use to support you"
+    },
+    {
+     "at": 639,
+     "value": 0.01,
+     "said": "that they want everything to be so comfortable and easy and perfect in their life. They want everything to be good, everything to be sweet and angelic, but people are complicated."
+    }
+   ]
+  },
+  {
+   "vid": "RgDCIvRnfcI",
+   "title": "POV: She Invited Me Home - Best Nightgame Pickup Ever  | Real Infield (Uncut)",
+   "channel": "Empathic Pickup Artist",
+   "views": 43438,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=RgDCIvRnfcI",
+   "bucket": "niche:In-Person",
+   "minutes": 126.0,
+   "wpm": 132,
+   "wpm_by_fifth": [
+    139,
+    127,
+    131,
+    132,
+    128
+   ],
+   "first_30s_words": 97,
+   "open_loop_per_min": 0.01,
+   "re_hook_per_min": 0.02,
+   "stakes_per_min": 0.16,
+   "direct_address_per_min": 1.42,
+   "pivot_per_min": 5.58,
+   "question_per_min": 3.5,
+   "list_marker_per_min": 0.21,
+   "median_secs_between_rehooks": 134,
+   "first_cta_sec": 7458,
+   "cta_count": 1,
+   "has_heatmap": false
+  },
+  {
+   "vid": "Sz1f6OiO5Ko",
+   "title": "How To Approach Hot Women (Infield Examples)",
+   "channel": "Social Stoic",
+   "views": 42664,
+   "group": "Preferred:social stoic",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=Sz1f6OiO5Ko",
+   "bucket": "niche:Preferred:social stoic",
+   "minutes": 15.7,
+   "wpm": 184,
+   "wpm_by_fifth": [
+    202,
+    169,
+    172,
+    187,
+    187
+   ],
+   "first_30s_words": 108,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.06,
+   "direct_address_per_min": 3.18,
+   "pivot_per_min": 4.13,
+   "question_per_min": 3.18,
+   "list_marker_per_min": 0.13,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": 343,
+   "cta_count": 1,
+   "has_heatmap": false
+  },
+  {
+   "vid": "UUlHWMDoSsk",
+   "title": "GETTING EVERY BADDIE ON THE MONKEY APP 😈 *BEST MOMENTS*",
+   "channel": "Jameer",
+   "views": 2991855,
+   "group": "Preferred:jameer",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=UUlHWMDoSsk",
+   "bucket": "niche:Preferred:jameer",
+   "minutes": 37.0,
+   "wpm": 74,
+   "wpm_by_fifth": [
+    113,
+    50,
+    21,
+    88,
+    95
+   ],
+   "first_30s_words": 49,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.11,
+   "direct_address_per_min": 1.38,
+   "pivot_per_min": 1.22,
+   "question_per_min": 1.89,
+   "list_marker_per_min": 0.11,
+   "median_secs_between_rehooks": 814,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1355,
+     "value": 1.0,
+     "said": ""
+    },
+    {
+     "at": 1000,
+     "value": 0.764,
+     "said": "Can't keep a bitch You know, it's here. So you stop playing. Yeah, that's brother starving Oh, now you wailing Oh Yo, what's the name?"
+    },
+    {
+     "at": 800,
+     "value": 0.75,
+     "said": ""
+    }
+   ],
+   "dips": [
+    {
+     "at": 1533,
+     "value": 0.0,
+     "said": "I think it's just meant to be No, I'm a liberal Oh my god He's a Libra y'all is that like a bad thing? What are you? I'm a bad the best sign We compatible that's all I need to know Man the last the last situation I have "
+    },
+    {
+     "at": 1666,
+     "value": 0.009,
+     "said": "18 I don't know what this say because I said this up a while ago And I should be lying like an accent. Thank you. I want to take a trip out this. I ain't gonna It's cool for a trip. What you mean for a trip like you don'"
+    },
+    {
+     "at": 1067,
+     "value": 0.035,
+     "said": ""
+    }
+   ]
+  },
+  {
+   "vid": "Y6ZGkjdFAZs",
+   "title": "Exploring the World's Largest $100 Billion Failed Ghost City (why did nobody move here?)",
+   "channel": "@YesTheory",
+   "views": 10000000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=Y6ZGkjdFAZs",
+   "bucket": "general:social_experiment",
+   "minutes": 24.5,
+   "wpm": 158,
+   "wpm_by_fifth": [
+    133,
+    130,
+    175,
+    163,
+    191
+   ],
+   "first_30s_words": 53,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.04,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 0.61,
+   "pivot_per_min": 3.06,
+   "question_per_min": 3.55,
+   "list_marker_per_min": 0.29,
+   "median_secs_between_rehooks": 112,
+   "first_cta_sec": 601,
+   "cta_count": 1,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 687,
+     "value": 1.0,
+     "said": "We're from Sweden. Sweden, you come here to buy a house or a lot. Maybe we're exploring, we're open. Sweden is rich, you can buy the whole essay. Yeah, exactly. You live here? Yeah, yeah, yeah. Okay, nice. How long have "
+    },
+    {
+     "at": 886,
+     "value": 0.715,
+     "said": "I think they are coming around, okay? So maybe we can take the buggy over there. Oh yeah, don't be good. Thomas, a phone, and Corin. Nice Alan. You have a good positive energy. You're very... I'm old, okay? I'm tired. It"
+    },
+    {
+     "at": 825,
+     "value": 0.689,
+     "said": "Today, only one of the four planned islands has been partially developed, home to only an estimated 9,000 residents, yet, due to the developers' legal obligations, the entire city still completely maintained, making it f"
+    }
+   ],
+   "dips": [
+    {
+     "at": 1359,
+     "value": 0.0,
+     "said": "off the bat to be able to just jump into the middle of Silicon Valley or whatever. But if you could provide the right channel or the right place for them to come, maybe could accomplish a lot if you just have the right p"
+    },
+    {
+     "at": 1420,
+     "value": 0.022,
+     "said": "What will truly happen to this place a few years from now? And will Chinese real estate projects like this ever happen again given the challenges they ultimately faced? As we inevitably take in the scale that was built h"
+    },
+    {
+     "at": 351,
+     "value": 0.031,
+     "said": "It looks beautiful here. Volleyball, volleyball courts, it's like, it has everything to be a great place. With an episode like this, we have no idea where it's gonna take us. Like, it's very hard to predict. The vibe is "
+    }
+   ]
+  },
+  {
+   "vid": "YXvo995yAFU",
+   "title": "7 Hidden Signs She Secretly Craves You Powerful Female Attraction Psychology Explained | Stoicism",
+   "channel": "Iron Mindset",
+   "views": 136375,
+   "group": "Explainer Video",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=YXvo995yAFU",
+   "bucket": "niche:Explainer Video",
+   "minutes": 36.0,
+   "wpm": 173,
+   "wpm_by_fifth": [
+    182,
+    170,
+    171,
+    171,
+    169
+   ],
+   "first_30s_words": 102,
+   "open_loop_per_min": 0.11,
+   "re_hook_per_min": 0.03,
+   "stakes_per_min": 0.17,
+   "direct_address_per_min": 1.28,
+   "pivot_per_min": 1.31,
+   "question_per_min": 0.28,
+   "list_marker_per_min": 0.92,
+   "median_secs_between_rehooks": 96,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 738,
+     "value": 1.0,
+     "said": "The moment you master this particular restraint, women stop experiencing you as an unreadable wall on one extreme, or a needy, eager puppy on the other, and instead begin experiencing you as a man who is simply secure wi"
+    },
+    {
+     "at": 586,
+     "value": 0.951,
+     "said": "When a woman is interested in a man, she will find small, seemingly accidental reasons to close the physical distance between the two of you. She will lean in slightly to hear him better, even in a room that is otherwise"
+    },
+    {
+     "at": 1084,
+     "value": 0.883,
+     "said": "What do you do on weekends? I climb most Saturdays, usually alone. It clears my head completely and resets something in me. What about you? Do you have your own version of that? Something specific that resets you the sam"
+    }
+   ],
+   "dips": [
+    {
+     "at": 1974,
+     "value": 0.083,
+     "said": "The natural ability to understand a person without needing anything from them in return. This is why the stoic spent so little time actually discussing romance directly and so much time discussing the cultivation of char"
+    },
+    {
+     "at": 1822,
+     "value": 0.116,
+     "said": "It was always about staying grounded enough in yourself, in your own inherent worth, in your own settled stoic center, that you never actually needed her signals in order to feel whole in the first place. You read them c"
+    },
+    {
+     "at": 1909,
+     "value": 0.151,
+     "said": "to sense and gradually walk away from, without ever fully explaining why. The discipline covered in this video was never the ultimate goal in itself. The discipline was only ever meant to be the long path leading back to"
+    }
+   ]
+  },
+  {
+   "vid": "ZVG-wBNZeu8",
+   "title": "HOW TO FLIRT (No BS Beginner's Guide)",
+   "channel": "Todd V Dating",
+   "views": 390693,
+   "group": "Preferred:todd v",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=ZVG-wBNZeu8",
+   "bucket": "niche:Preferred:todd v",
+   "minutes": 14.7,
+   "wpm": 246,
+   "wpm_by_fifth": [
+    238,
+    233,
+    256,
+    252,
+    247
+   ],
+   "first_30s_words": 124,
+   "open_loop_per_min": 0.2,
+   "re_hook_per_min": 0.2,
+   "stakes_per_min": 0.07,
+   "direct_address_per_min": 6.32,
+   "pivot_per_min": 5.85,
+   "question_per_min": 0.75,
+   "list_marker_per_min": 0.75,
+   "median_secs_between_rehooks": 56,
+   "first_cta_sec": 427,
+   "cta_count": 2,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 601,
+     "value": 1.0,
+     "said": "wow, so we're both attractive people. What do you do now? Is this the part where we get married and have 2.2 kids or should we start with a drink first? Should we get married and have 2.2 kids? It's clearly an exaggerati"
+    },
+    {
+     "at": 115,
+     "value": 0.792,
+     "said": "Next, I'm going to give you a few definitions that are going to be very useful in this video. There are three words I want you to understand. The first word I want you to understand is premise. Premise is anything that i"
+    },
+    {
+     "at": 663,
+     "value": 0.619,
+     "said": "going to have to go get married in Vegas. We'll drop into one of those Elvis chapels. We'll get an annulled tomorrow though and I'm going to take half your money. Something like that. It's a crazy exaggerated idea of wha"
+    }
+   ],
+   "dips": [
+    {
+     "at": 822,
+     "value": 0.121,
+     "said": "Most likely it'll make the interaction better. If you notice that it is making the interaction better or at the very least it's not making the interaction worse, you can add in a few more and"
+    },
+    {
+     "at": 80,
+     "value": 0.134,
+     "said": "They never learned flirting formally. They never learned a technique, but they do it somewhat naturally because they are in a playful mood, because they've decided to have fun and because they have a lot of energy."
+    },
+    {
+     "at": 751,
+     "value": 0.166,
+     "said": "a decent amount of examples. And again, if you want some more examples, you can check out the steel my lines PDF below so you can check that link as well. But one huge point I want to make"
+    }
+   ]
+  },
+  {
+   "vid": "_ziM21q_VMY",
+   "title": "Clavicular hops on Monkey App!!!",
+   "channel": "gren",
+   "views": 312813,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=_ziM21q_VMY",
+   "bucket": "niche:Video Chat",
+   "minutes": 21.2,
+   "wpm": 136,
+   "wpm_by_fifth": [
+    150,
+    145,
+    127,
+    136,
+    122
+   ],
+   "first_30s_words": 90,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 1.37,
+   "pivot_per_min": 1.8,
+   "question_per_min": 0.0,
+   "list_marker_per_min": 0.0,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1145,
+     "value": 1.0,
+     "said": "can't do this segment yo I'm the segment I can't do this I can't do this you guys are gonna make me freak out I'm losing it I'm losing my mind here Nick from"
+    },
+    {
+     "at": 789,
+     "value": 0.538,
+     "said": "fucks you and they start farting and shitting while you what the fuck what was that what the fuck was that clav clav clav look better I skipped you it's what yo appreciate you let me know if I miss a sub or some shit yo "
+    },
+    {
+     "at": 280,
+     "value": 0.454,
+     "said": "on her tell me tell me I didn't get that right huh what is so bad I'm fat like my belly fat oh and you you speak in fucking retard ebonics it's over what"
+    }
+   ],
+   "dips": [
+    {
+     "at": 1196,
+     "value": 0.0,
+     "said": "Hayden's live oh my viewers are gone oh whole girls on monkey play scary games hold on yes act like cuff him or I'm leaving bro I'm not acting like any"
+    },
+    {
+     "at": 916,
+     "value": 0.006,
+     "said": "could probably we could probably try to get the girls to do it yo what up are you streamer are you yeah I'm streaming what's those those headphones that's kind of an interesting selection eraser do you do like a discord "
+    },
+    {
+     "at": 165,
+     "value": 0.008,
+     "said": "this is crazy chat what the fuck this is crazy though but why do the black girls not like me ever I swear to you I'm even I'm even rocking the thug Max fit and they don't like me it's outrageous it's outrageous my f-20 f"
+    }
+   ]
+  },
+  {
+   "vid": "aDbtrdfYqBc",
+   "title": "Why the US is deporting so many people",
+   "channel": "@johnnyharris",
+   "views": 6200000,
+   "group": "story_explainer",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=aDbtrdfYqBc",
+   "bucket": "general:story_explainer",
+   "minutes": 44.8,
+   "wpm": 166,
+   "wpm_by_fifth": [
+    173,
+    170,
+    175,
+    167,
+    146
+   ],
+   "first_30s_words": 81,
+   "open_loop_per_min": 0.13,
+   "re_hook_per_min": 0.11,
+   "stakes_per_min": 0.04,
+   "direct_address_per_min": 0.36,
+   "pivot_per_min": 3.32,
+   "question_per_min": 0.45,
+   "list_marker_per_min": 0.4,
+   "median_secs_between_rehooks": 132,
+   "first_cta_sec": 220,
+   "cta_count": 1,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 2209,
+     "value": 1.0,
+     "said": "and then I put it together. It comes down to the numbers. Even after this huge initial crackdown right after Trump took office they still weren't hitting their numbers. This is like way too hard. This is when Stephen Mil"
+    },
+    {
+     "at": 736,
+     "value": 0.99,
+     "said": "A very real demand on farms, in construction, in restaurants, 4 million undocumented people living in the United States. Congress sees this as a growing problem. So they decide to get tough on immigration. Congress wants"
+    },
+    {
+     "at": 1009,
+     "value": 0.977,
+     "said": "not live in the shadows anymore. George Bush was our guy on this. Every immigrant by embracing these ideals makes our country more, not less American. George Bush was in the middle of sort of negotiating sort of a new co"
+    }
+   ],
+   "dips": [
+    {
+     "at": 2127,
+     "value": 0.0,
+     "said": "have no rights. Now hold on. Due process still exists like Trump hasn't destroyed the constitution. Daniel had a really good case for being here. He had a green card. His wife is an American citizen. I could have fought."
+    },
+    {
+     "at": 218,
+     "value": 0.015,
+     "said": "Clarity and multiple perspectives is vital, which is why I am partnering with today's sponsor, Ground News, who I want to tell you briefly about. I use their app and site to pull thousands of stories from all around the "
+    },
+    {
+     "at": 1118,
+     "value": 0.046,
+     "said": "news, by your newsfeed. I feel at two in today's news cycle. This is why my team and I've been working on creating a new space to interact with these topics. That is more about understanding and dialogue than it is about"
+    }
+   ]
+  },
+  {
+   "vid": "apgWBMEjzrY",
+   "title": "DREADHEAD WITH HAND TATTOO MAKES BADDIES  FOLD (monkey app)",
+   "channel": "Jaiden 28 Medeiros",
+   "views": 52633,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=apgWBMEjzrY",
+   "bucket": "niche:Video Chat",
+   "minutes": 7.4,
+   "wpm": 119,
+   "wpm_by_fifth": [
+    192,
+    171,
+    179,
+    0,
+    53
+   ],
+   "first_30s_words": 84,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 1.08,
+   "pivot_per_min": 1.75,
+   "question_per_min": 6.34,
+   "list_marker_per_min": 0.0,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": 2,
+   "cta_count": 1,
+   "has_heatmap": false
+  },
+  {
+   "vid": "dpHpKeXm-B0",
+   "title": "\"he's crazy\" - We Found a Man Living Alone in the Amazon (39 years isolated)",
+   "channel": "@YesTheory",
+   "views": 9000000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=dpHpKeXm-B0",
+   "bucket": "general:social_experiment",
+   "minutes": 42.1,
+   "wpm": 132,
+   "wpm_by_fifth": [
+    138,
+    122,
+    131,
+    120,
+    150
+   ],
+   "first_30s_words": 61,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.02,
+   "stakes_per_min": 0.31,
+   "direct_address_per_min": 1.0,
+   "pivot_per_min": 2.09,
+   "question_per_min": 2.26,
+   "list_marker_per_min": 0.17,
+   "median_secs_between_rehooks": 32,
+   "first_cta_sec": 1290,
+   "cta_count": 3,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 898,
+     "value": 1.0,
+     "said": "It's crazy as him. You say much to me. Yeah, we'll find out. Yeah, yeah, yeah. Traveling down this river felt like exploring planet Earth from millions of years ago before it was ever touched by any humans."
+    },
+    {
+     "at": 487,
+     "value": 0.95,
+     "said": "Yeah. Yeah, man. Yeah. Come on, Major. Proud of you, man. Yeah, we did it to you, but you are a legend. We all have said it to you, man. You paved the way. Okay, let's have lunch. Oh, I know you're in the garden. It's go"
+    },
+    {
+     "at": 2206,
+     "value": 0.922,
+     "said": "I've got my name on my head. And I have to pay, you know. I do not need any food. I have to pay on my head. But I'm not sure if I'm here to pay on my head. I have to pay on my head. You know, I have to pay on my head. Yo"
+    }
+   ],
+   "dips": [
+    {
+     "at": 231,
+     "value": 0.0,
+     "said": "It begins. It's been raining a lot here, but we had a window now to go for it, having a 15-minute ride. It's our fourth mode of transportation, and it's still not our last. We got delayed for an hour because of the rain."
+    },
+    {
+     "at": 616,
+     "value": 0.002,
+     "said": "Like we're so fucked. We're doodled. Yes, yeah. What do you think the plan is? We could stop just a little bit before we get there. Yeah. Spend the night and tomorrow morning we meeting. So best call is to anchor somewhe"
+    },
+    {
+     "at": 539,
+     "value": 0.015,
+     "said": "We've been riding the boat for many hours now. And there's a lot of very narrow passages like this."
+    }
+   ]
+  },
+  {
+   "vid": "gFKS1t1tyUI",
+   "title": "Psychology of People Who Don't Post Their Photos on Social Media",
+   "channel": "@IAmMarkManson",
+   "views": 1300000,
+   "group": "mens_self_improvement",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=gFKS1t1tyUI",
+   "bucket": "general:mens_self_improvement",
+   "minutes": 8.1,
+   "wpm": 201,
+   "wpm_by_fifth": [
+    202,
+    217,
+    221,
+    166,
+    198
+   ],
+   "first_30s_words": 104,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.12,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 3.2,
+   "pivot_per_min": 3.82,
+   "question_per_min": 0.49,
+   "list_marker_per_min": 0.37,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": 270,
+   "cta_count": 2,
+   "has_heatmap": false
+  },
+  {
+   "vid": "hf8wHNm2Rmc",
+   "title": "How I Exploded A Yellow Card At The Sidemen Charity Match",
+   "channel": "@MaxFosh",
+   "views": 5100000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=hf8wHNm2Rmc",
+   "bucket": "general:social_experiment",
+   "minutes": 14.0,
+   "wpm": 156,
+   "wpm_by_fifth": [
+    191,
+    166,
+    146,
+    145,
+    125
+   ],
+   "first_30s_words": 92,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.29,
+   "stakes_per_min": 0.07,
+   "direct_address_per_min": 1.0,
+   "pivot_per_min": 3.15,
+   "question_per_min": 1.15,
+   "list_marker_per_min": 0.5,
+   "median_secs_between_rehooks": 168,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 784,
+     "value": 1.0,
+     "said": ""
+    },
+    {
+     "at": 211,
+     "value": 0.337,
+     "said": "That is"
+    },
+    {
+     "at": 708,
+     "value": 0.331,
+     "said": "You played them in half time had arrived and while the rest of the players gathered for their team talks"
+    }
+   ],
+   "dips": [
+    {
+     "at": 320,
+     "value": 0.0,
+     "said": "Okay, that's because we tried to throw it that's fine I quickly learned that out of all of my stunts This was definitely the most risky so one thing to be wary of is your surroundings and who's near you because if that d"
+    },
+    {
+     "at": 135,
+     "value": 0.004,
+     "said": "Okay, I like this causing the cards disappear in a ball of flames That's possible doable. What could go wrong setting something on fire without anyone giving me permission in front of 90,000 people in six days time?"
+    },
+    {
+     "at": 565,
+     "value": 0.011,
+     "said": "I had reached my limit of pyrotechnical Preparations, but I basically have enough to do it one more time and that's gonna be at the game"
+    }
+   ]
+  },
+  {
+   "vid": "imny7n9lcME",
+   "title": "HOW TO RIZZ BADDIES EASILY 😎 (MONKEY APP)",
+   "channel": "Jay Throck",
+   "views": 2535642,
+   "group": "Preferred:jay throck",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=imny7n9lcME",
+   "bucket": "niche:Preferred:jay throck",
+   "minutes": 14.6,
+   "wpm": 139,
+   "wpm_by_fifth": [
+    131,
+    177,
+    130,
+    112,
+    143
+   ],
+   "first_30s_words": 87,
+   "open_loop_per_min": 0.07,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.27,
+   "direct_address_per_min": 2.75,
+   "pivot_per_min": 2.2,
+   "question_per_min": 1.99,
+   "list_marker_per_min": 0.55,
+   "median_secs_between_rehooks": 90,
+   "first_cta_sec": 277,
+   "cta_count": 3,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 400,
+     "value": 1.0,
+     "said": "Why you skipped me last time because because what you probably made me nervous nine times out of two"
+    },
+    {
+     "at": 142,
+     "value": 0.757,
+     "said": ""
+    },
+    {
+     "at": 524,
+     "value": 0.715,
+     "said": "Listed me up. I think that was me by accident. I think that was me by accident, bro"
+    }
+   ],
+   "dips": [
+    {
+     "at": 320,
+     "value": 0.0,
+     "said": "I would recommend that you guys start with their level one system that comes with a daily face vise that you use every single day and Am facial moisturizer that you use every single morning that has built in sunscreen th"
+    },
+    {
+     "at": 738,
+     "value": 0.004,
+     "said": "I'm Mexican and watermelon. You speak Spanish. Yeah, I know a little bit as many as that Like where like you understand I tell you a conversation. It depends on how fast you say it and what you say"
+    },
+    {
+     "at": 231,
+     "value": 0.01,
+     "said": "You look good. Thank you. Were you staying? I stay in Arizona. You know Phoenix. Yeah, you like it out there It's all right. It's just hot. So if I come to visit you gonna like show me around as you if that's what you wa"
+    }
+   ]
+  },
+  {
+   "vid": "jfW6gL6hKhk",
+   "title": "If I Wanted to Make My First $100K in 2026, I’d Do This",
+   "channel": "@AlexHormozi",
+   "views": 1600000,
+   "group": "mens_self_improvement",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=jfW6gL6hKhk",
+   "bucket": "general:mens_self_improvement",
+   "minutes": 15.7,
+   "wpm": 239,
+   "wpm_by_fifth": [
+    222,
+    251,
+    225,
+    242,
+    250
+   ],
+   "first_30s_words": 101,
+   "open_loop_per_min": 0.06,
+   "re_hook_per_min": 0.19,
+   "stakes_per_min": 0.51,
+   "direct_address_per_min": 5.72,
+   "pivot_per_min": 7.25,
+   "question_per_min": 1.78,
+   "list_marker_per_min": 1.46,
+   "median_secs_between_rehooks": 85,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 595,
+     "value": 1.0,
+     "said": "give you feedback loop, but you post to be his content, nothing happens. It is still feedback, it's that it's sucked, right? But you can still get better. The fastest way to learn skills is to find somebody who's really "
+    },
+    {
+     "at": 510,
+     "value": 0.846,
+     "said": "Pick one. And so I have a 111 rule, which is you want to sell one product or service to one avatar on one channel until you make one million dollars. That's it. So we saved our money. We saved our"
+    },
+    {
+     "at": 312,
+     "value": 0.719,
+     "said": "people that give you money, what you promised them. The third four hour chunk is building. So this is building the future. Figure out what to do next and how to do it. This is a combination of two things. It's going to b"
+    }
+   ],
+   "dips": [
+    {
+     "at": 142,
+     "value": 0.0,
+     "said": "humanly possible, but ideally just pay off your car so you don't have to think about it again. All right. So that comes your food, your car, your shelter. And the reason that this is so important for us to basically stac"
+    },
+    {
+     "at": 76,
+     "value": 0.045,
+     "said": "two years. Period. No exceptions. Just keep reusing it. Trade or go to goodwill. You go to work, you go home, and home is ideally with your family or worst case with another family,"
+    },
+    {
+     "at": 860,
+     "value": 0.101,
+     "said": "So you have money to spend on the right stuff. You got to stop wasting time so that you have time to invest in the right stuff. What stuff do you invest in? Number three is you have to research."
+    }
+   ]
+  },
+  {
+   "vid": "kjKo-JAlNck",
+   "title": "I Gifted Mystry Box TO MY LOVE I FOUND ON OMEGLE 😍 || MET IN REAL LIFE",
+   "channel": "adarshuc",
+   "views": 6722098,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=kjKo-JAlNck",
+   "bucket": "niche:Video Chat",
+   "minutes": 16.1,
+   "wpm": 134,
+   "wpm_by_fifth": [
+    124,
+    153,
+    140,
+    105,
+    145
+   ],
+   "first_30s_words": 52,
+   "open_loop_per_min": 0.06,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.12,
+   "direct_address_per_min": 1.8,
+   "pivot_per_min": 2.61,
+   "question_per_min": 2.55,
+   "list_marker_per_min": 0.31,
+   "median_secs_between_rehooks": 98,
+   "first_cta_sec": 960,
+   "cta_count": 1,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 678,
+     "value": 1.0,
+     "said": "You know what you're talking about? I'm scared to get confused. I'm scared to get confused."
+    },
+    {
+     "at": 775,
+     "value": 0.946,
+     "said": "You are not the only one in private. So I get that. I got it back! I mean, what? I'm just kidding!"
+    },
+    {
+     "at": 58,
+     "value": 0.809,
+     "said": "Can I find it? Can I find it? Can I find the hand? Everything. It's all good. Stop! It's all good! It's all good. It's all good. I mean, it's all good. I'm just looking forward to it!"
+    }
+   ],
+   "dips": [
+    {
+     "at": 155,
+     "value": 0.0,
+     "said": "Yeah. Both hands. Thank you. Thank you. Thank you. I'm going to give you some gifts for you. We are going to give you some gifts. I'm going to give you some gifts. Okay."
+    },
+    {
+     "at": 330,
+     "value": 0.048,
+     "said": "He was like that. He's just what I said. He had a little taste. I can't say that in good place. Accepted."
+    },
+    {
+     "at": 610,
+     "value": 0.073,
+     "said": "So it works. I do not have the time. I like the N"
+    }
+   ]
+  },
+  {
+   "vid": "phH1JuTWruM",
+   "title": "Cuffem confronts Paul miller on the monkey app(censored & cut version)",
+   "channel": "Steve French ",
+   "views": 408554,
+   "group": "Video Chat",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=phH1JuTWruM",
+   "bucket": "niche:Video Chat",
+   "minutes": 6.5,
+   "wpm": 242,
+   "wpm_by_fifth": [
+    264,
+    247,
+    241,
+    239,
+    212
+   ],
+   "first_30s_words": 145,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.0,
+   "direct_address_per_min": 9.72,
+   "pivot_per_min": 3.55,
+   "question_per_min": 8.79,
+   "list_marker_per_min": 0.0,
+   "median_secs_between_rehooks": null,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 78,
+     "value": 0.742,
+     "said": ">> Jake, what? [ __ ] >> Yo. Yo. I swear to Yo. Yo. Why did your wife divorce you and answer my question?"
+    },
+    {
+     "at": 184,
+     "value": 0.702,
+     "said": ">> Yeah. Cornball. >> I got my gun right there. That's the only gun that I need. >> You stink poor. You stink poor. You stink poor. That's why your wife need"
+    },
+    {
+     "at": 310,
+     "value": 0.561,
+     "said": "deserve to live in civilized society. You never have, you never will. And no"
+    }
+   ],
+   "dips": [
+    {
+     "at": 102,
+     "value": 0.0,
+     "said": "and where you're dubbing my question. >> And what's your name? I just want to know because you're the one that we're"
+    },
+    {
+     "at": 27,
+     "value": 0.023,
+     "said": "me that. >> Have you ever even been married? Stop stepping over the cushions, white boy. Why did you get a divorce? Did a"
+    },
+    {
+     "at": 169,
+     "value": 0.04,
+     "said": "scared to New York. So you went to New York and hiding like a little scared. Are you scared? >> Come to Atlanta. Come to Atlanta or come"
+    }
+   ]
+  },
+  {
+   "vid": "qG0UwUeKhAg",
+   "title": "Inside Japan's Illegal Drifting Underworld - TOKYO DRIFT",
+   "channel": "@YesTheory",
+   "views": 7200000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=qG0UwUeKhAg",
+   "bucket": "general:social_experiment",
+   "minutes": 24.5,
+   "wpm": 118,
+   "wpm_by_fifth": [
+    133,
+    114,
+    161,
+    91,
+    88
+   ],
+   "first_30s_words": 39,
+   "open_loop_per_min": 0.04,
+   "re_hook_per_min": 0.04,
+   "stakes_per_min": 0.2,
+   "direct_address_per_min": 0.65,
+   "pivot_per_min": 2.24,
+   "question_per_min": 1.67,
+   "list_marker_per_min": 0.49,
+   "median_secs_between_rehooks": 28,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1198,
+     "value": 1.0,
+     "said": "team nobody knew rolled in. What was meant to be a standard practice night turned into a standoff. And I think it might have set everyone off. This guy's trying to kill me."
+    },
+    {
+     "at": 547,
+     "value": 0.477,
+     "said": "zeitgeist with force. His driving inspired manga, anime, video games and movies. Here he is acting as a fisherman in Tokyo Driftman. And this is him driving as a stunt double. By the 2000s, drifting even got his own prof"
+    },
+    {
+     "at": 1020,
+     "value": 0.408,
+     "said": "Mountain. Hey, it's Mountain. I just lost phone service and we have not seen a car in a long time and there are no street"
+    }
+   ],
+   "dips": [
+    {
+     "at": 666,
+     "value": 0.0,
+     "said": "They wanted to show to the world what they were doing and stuff. That's how it all started. Still feel like unreal again. I feel so glad that they trust us and trust me to really be the close world. They also want to sho"
+    },
+    {
+     "at": 592,
+     "value": 0.013,
+     "said": "So we are going to have to manage our access here carefully and respectfully and then see how much we can actually do. I was hesitant to fall on the beginning. Like can we tell a story like this? Is it possible?"
+    },
+    {
+     "at": 1065,
+     "value": 0.022,
+     "said": "lights on the street. We are inside a very hidden world up here in the mountains."
+    }
+   ]
+  },
+  {
+   "vid": "s26Erk3AK5M",
+   "title": "I Hired Hollywood Stuntmen To Lose To Me In A Fight",
+   "channel": "@MaxFosh",
+   "views": 4700000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=s26Erk3AK5M",
+   "bucket": "general:social_experiment",
+   "minutes": 11.8,
+   "wpm": 178,
+   "wpm_by_fifth": [
+    200,
+    208,
+    199,
+    190,
+    92
+   ],
+   "first_30s_words": 104,
+   "open_loop_per_min": 0.17,
+   "re_hook_per_min": 0.17,
+   "stakes_per_min": 0.08,
+   "direct_address_per_min": 0.76,
+   "pivot_per_min": 3.22,
+   "question_per_min": 2.29,
+   "list_marker_per_min": 0.59,
+   "median_secs_between_rehooks": 66,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 576,
+     "value": 1.0,
+     "said": "Right? Does any of you be such a d*** about it? You're good. The commotion by the dukebox had worked, and all lies were on me. Time for a fight."
+    },
+    {
+     "at": 64,
+     "value": 0.502,
+     "said": "Johnny, Anna, Charlotte and Zack. They all came to the wrestling, like very supportive friends. Max the Dodge Varch walking around in a three-piece suit with all the arrogance of his ancestors colonising my ancestors."
+    },
+    {
+     "at": 299,
+     "value": 0.341,
+     "said": "And I better turn up as well. Here we go. It's the day of the fight. I come to the pub about four hours for everyone else to get in here,"
+    }
+   ],
+   "dips": [
+    {
+     "at": 121,
+     "value": 0.0,
+     "said": "This is the woo. In one-to-one scale. Doing it out of cardboard because we're probably going to be crashing into walls"
+    },
+    {
+     "at": 441,
+     "value": 0.004,
+     "said": "And we're just under an hour until my friends arrive. This was a bit of a problem. The breakaway door that we've got doesn't quite fit the frame that we needed to. So, relatively last minute at dot com,"
+    },
+    {
+     "at": 199,
+     "value": 0.008,
+     "said": "And there's going to be a nice wide circle. And yeah, lovely. And despite being a total amateur, the guys were coming up with some pretty ambitious moves for me. I'm going to deliver you back. We're going to kick Josh. B"
+    }
+   ]
+  },
+  {
+   "vid": "sMr1ddukSQ4",
+   "title": "I tried to 'Cold Approach' 100 girls without any experience (Introvert vs Girls)",
+   "channel": "Dylan McKnight",
+   "views": 2398707,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=sMr1ddukSQ4",
+   "bucket": "niche:In-Person",
+   "minutes": 17.7,
+   "wpm": 171,
+   "wpm_by_fifth": [
+    195,
+    182,
+    181,
+    190,
+    106
+   ],
+   "first_30s_words": 117,
+   "open_loop_per_min": 0.11,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.11,
+   "direct_address_per_min": 2.88,
+   "pivot_per_min": 2.99,
+   "question_per_min": 0.0,
+   "list_marker_per_min": 0.17,
+   "median_secs_between_rehooks": 209,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 448,
+     "value": 1.0,
+     "said": "attractive thank you what's your name ka ka I'm Dylan it's nice to meet you that's a unique name how old are you do I look old I'm older than me yes I'm 23 I'm 16 damn [ __ ] catching a case bro let's"
+    },
+    {
+     "at": 53,
+     "value": 0.349,
+     "said": "sure yeah uh I'm just looking for your number my number yeah how old are you why do I look old no I'm sure you're old enough old enough yeah you're not older than me how old are you old as you want"
+    },
+    {
+     "at": 202,
+     "value": 0.215,
+     "said": "like chicks to pick up what chicks chicks like hot chicks at the Apple Store what's up thought I'd see what you guys had going on in here yes we're just you selling these cowboy boots selling"
+    }
+   ],
+   "dips": [
+    {
+     "at": 586,
+     "value": 0.003,
+     "said": "the bottle maybe that's cuz you spilled it everywhere dang I really want this date okay that's definitely one of the coffee flavors yeahoo strong don't have to like drink it no"
+    },
+    {
+     "at": 149,
+     "value": 0.006,
+     "said": "you are Mel that's an interesting name short for Melanie I assume Noel it's just Mel mhm yeah myom my mom named me after Mel Gibson actually shut up Mel"
+    },
+    {
+     "at": 298,
+     "value": 0.006,
+     "said": "none of the above so from probo it's like an hour probably like an hour damn like why' did you move to probo I was living with my parents and I was like N I got to get a change of pace I'm not"
+    }
+   ]
+  },
+  {
+   "vid": "t6TPHYSkUeo",
+   "title": "I Tried Cold Approaching Older Women In Public And Here's What Happened... Rizz Pickup Day Game",
+   "channel": "Cold Approach Rizz",
+   "views": 1105102,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=t6TPHYSkUeo",
+   "bucket": "niche:In-Person",
+   "minutes": 8.4,
+   "wpm": 196,
+   "wpm_by_fifth": [
+    215,
+    214,
+    225,
+    162,
+    159
+   ],
+   "first_30s_words": 108,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.0,
+   "stakes_per_min": 0.24,
+   "direct_address_per_min": 5.01,
+   "pivot_per_min": 3.1,
+   "question_per_min": 6.92,
+   "list_marker_per_min": 0.0,
+   "median_secs_between_rehooks": 265,
+   "first_cta_sec": 499,
+   "cta_count": 1,
+   "has_heatmap": false
+  },
+  {
+   "vid": "wDlwkiw31mw",
+   "title": "Hot Seat at Home By Tyler RSD infield (Owen Cook) (2016)",
+   "channel": "Xlabel",
+   "views": 28581,
+   "group": "In-Person",
+   "source": "niche",
+   "videoUrl": "https://www.youtube.com/watch?v=wDlwkiw31mw",
+   "bucket": "niche:In-Person",
+   "minutes": 131.6,
+   "wpm": 205,
+   "wpm_by_fifth": [
+    223,
+    211,
+    204,
+    216,
+    168
+   ],
+   "first_30s_words": 82,
+   "open_loop_per_min": 0.06,
+   "re_hook_per_min": 0.05,
+   "stakes_per_min": 0.09,
+   "direct_address_per_min": 3.39,
+   "pivot_per_min": 5.02,
+   "question_per_min": 4.48,
+   "list_marker_per_min": 0.28,
+   "median_secs_between_rehooks": 243,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": false
+  },
+  {
+   "vid": "wtDDjBOfTZo",
+   "title": "⁠Give Me 26 minutes, I'll Give You 10,000 hours of Claude Knowledge",
+   "channel": "@ImanGadzhi",
+   "views": 1400000,
+   "group": "mens_self_improvement",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=wtDDjBOfTZo",
+   "bucket": "general:mens_self_improvement",
+   "minutes": 26.4,
+   "wpm": 243,
+   "wpm_by_fifth": [
+    235,
+    244,
+    237,
+    261,
+    237
+   ],
+   "first_30s_words": 106,
+   "open_loop_per_min": 0.04,
+   "re_hook_per_min": 0.19,
+   "stakes_per_min": 0.04,
+   "direct_address_per_min": 5.73,
+   "pivot_per_min": 6.41,
+   "question_per_min": 0.53,
+   "list_marker_per_min": 0.72,
+   "median_secs_between_rehooks": 25,
+   "first_cta_sec": 314,
+   "cta_count": 5,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 222,
+     "value": 1.0,
+     "said": "import option to import memory from another AI. Claude actually then gives you a prompt that you run in your old AI platform, you're going to copy what it gives you back, and then you're actually going to paste it into C"
+    },
+    {
+     "at": 698,
+     "value": 0.839,
+     "said": "you just tell clock to go ahead and turn that into a skill. That's pretty much all there is to it. And honestly, if that's too much effort for you, you can actually go ahead and grab other people's skills that they've al"
+    },
+    {
+     "at": 1000,
+     "value": 0.743,
+     "said": "Chrome store, install it and then sign in. And that's pretty much all there is to it. Now once you've got this running, cloud can actually work inside whatever page you've got open in front of you. It can read the page, "
+    }
+   ],
+   "dips": [
+    {
+     "at": 127,
+     "value": 0.016,
+     "said": "because Claude is literally your right hand person, someone who's working with you every single day. And as time goes on, they're going to find out more about you, what you like, where you don't like how you want things "
+    },
+    {
+     "at": 444,
+     "value": 0.085,
+     "said": "things, then you need to now look, I know 99% of you aren't spending hundreds of thousands of dollars a month on tokens like we do at our business, but you're going to have the exact same problem just on a smaller scale."
+    },
+    {
+     "at": 1492,
+     "value": 0.092,
+     "said": "sitting, because they are still typing questions manually into a chat window. And then just copying the answers that they get back out, you are now playing a different game at this point. And if you really think about it"
+    }
+   ]
+  },
+  {
+   "vid": "z2SPBQMrye8",
+   "title": "I Tried Every Room on the Most Expensive Cruise",
+   "channel": "@ryan",
+   "views": 29000000,
+   "group": "social_experiment",
+   "source": "general",
+   "videoUrl": "https://www.youtube.com/watch?v=z2SPBQMrye8",
+   "bucket": "general:social_experiment",
+   "minutes": 28.3,
+   "wpm": 153,
+   "wpm_by_fifth": [
+    174,
+    133,
+    164,
+    140,
+    151
+   ],
+   "first_30s_words": 115,
+   "open_loop_per_min": 0.0,
+   "re_hook_per_min": 0.04,
+   "stakes_per_min": 0.32,
+   "direct_address_per_min": 0.88,
+   "pivot_per_min": 2.97,
+   "question_per_min": 1.91,
+   "list_marker_per_min": 0.28,
+   "median_secs_between_rehooks": 123,
+   "first_cta_sec": null,
+   "cta_count": 0,
+   "has_heatmap": true,
+   "peaks": [
+    {
+     "at": 1188,
+     "value": 1.0,
+     "said": "Each bunk bed has its own TV as well. I love these beach ball lights. So this must be the main bedroom. My goodness. These animals, towel animals, they got googly eyes. Maybe the cozy is bed yet. The main bathroom is unb"
+    },
+    {
+     "at": 1510,
+     "value": 0.998,
+     "said": "The nucleus that I have formed on this cruise ship is so strong. Unfortunately Lori can't make it, but that's okay. I mean, the flow rider is super fun. I understand. I'm not going to lie, I'm starting to get a little bi"
+    },
+    {
+     "at": 882,
+     "value": 0.764,
+     "said": "We went back down the slide again and actually got this cool shot. Hopefully you think this shot was cool. I'm just going to play it again. Pretty cool, yeah. I don't know. You tell me."
+    }
+   ],
+   "dips": [
+    {
+     "at": 1426,
+     "value": 0.058,
+     "said": "room right here is something that only I can experience. At least until 7 p.m. I decided that I'm throwing my party at 7 o'clock. I've asked the genie to organize a party in this room for 7 p.m. and to formally invite my"
+    },
+    {
+     "at": 984,
+     "value": 0.072,
+     "said": "That's why I'm wearing my fancy jeans. For dinner. It's a steak dinner. Whether you've got a weird idea, need help solving a problem or just want to understand your customers a little better, Sidekick can do it all. Now "
+    },
+    {
+     "at": 458,
+     "value": 0.076,
+     "said": "Do I use the short knife for the big fork for this? I don't know. And finally, creme brulee. Creme brulee is one of those desserts where you're like, how do I get myself into this situation where I'm eating creme brulee?"
+    }
+   ]
+  }
+ ]
+}

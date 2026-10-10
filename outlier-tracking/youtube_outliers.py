@@ -38,6 +38,15 @@ def to_dashboard_row(row: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def merge_formats(path: str, new_rows: List[Dict[str, Any]], formats: set) -> List[Dict[str, Any]]:
+    """Keep existing rows of other formats, swap in new_rows for `formats`, drop dupes, sort by score."""
+    import json
+    existing = json.load(open(path, encoding="utf-8")) if os.path.exists(path) else []
+    new_ids = {r["vid"] for r in new_rows}
+    kept = [r for r in existing if r.get("format") not in formats and r.get("vid") not in new_ids]
+    return sorted(kept + new_rows, key=lambda r: r.get("score", 0), reverse=True)
+
+
 def main() -> None:
     rows: List[Dict[str, Any]] = []
     shorts_rows: List[Dict[str, Any]] = []
@@ -51,6 +60,7 @@ def main() -> None:
     print(f"Searching In-Person keywords: {', '.join(common.KEYWORDS)}")
     print(f"Searching Video Chat keywords: {', '.join(common.VIDEO_CHAT_KEYWORDS)}")
     print(f"Searching Explainer keywords: {', '.join(common.EXPLAINER_KEYWORDS)}")
+    print(f"Searching Texting keywords: {', '.join(common.TEXTING_KEYWORDS)}")
     print(f"Lookback period: {common.LOOKBACK_DAYS} days")
     print(f"High view threshold: {long_form_tracker.HIGH_VIEW_THRESHOLD:,}")
     print()
@@ -59,10 +69,18 @@ def main() -> None:
         [(k, "In-Person") for k in common.KEYWORDS]
         + [(k, "Video Chat") for k in common.VIDEO_CHAT_KEYWORDS]
         + [(k, "Explainer Video") for k in common.EXPLAINER_KEYWORDS]
+        + [(k, "Texting") for k in common.TEXTING_KEYWORDS]
     )
+    # --only "Texting" (comma-separated formats): scan just those formats and merge the
+    # results into the existing data.json, replacing only rows of those formats. Saves
+    # quota when adding or refreshing one format between the weekly full runs.
+    only = None
+    if "--only" in sys.argv:
+        only = {f.strip() for f in sys.argv[sys.argv.index("--only") + 1].split(",")}
+        search_targets = [t for t in search_targets if t[1] in only]
 
     for keyword, format_label in search_targets:
-        extended = format_label in ("Video Chat", "Explainer Video") or keyword in common.NIGHTGAME_KEYWORDS
+        extended = format_label in ("Video Chat", "Explainer Video", "Texting") or keyword in common.NIGHTGAME_KEYWORDS
         for item in common.search_videos(youtube, keyword, common.EXTENDED_LOOKBACK_DAYS if extended else None):
             video_id = item.get("id", {}).get("videoId")
             if not video_id:
@@ -116,6 +134,10 @@ def main() -> None:
                 print(f"  → Skipped (non-English title)")
                 continue
 
+            if common.is_south_asian_content(title, channel_title, tags, stats.get("snippet", {})):
+                print(f"  → Skipped (Hindi/Urdu creator)")
+                continue
+
             # Filter out unrelated content based on video tags (with title fallback)
             category_id = stats.get("snippet", {}).get("categoryId", "")
             if not common.is_relevant_tags(tags, title, category_id, keyword, channel_title):
@@ -137,6 +159,13 @@ def main() -> None:
             # so force the Format tag to Video Chat whenever the platform is actually named.
             if common.is_video_chat_content(title, tags):
                 format_label = "Video Chat"
+            elif common.is_texting_content(title, tags):
+                format_label = "Texting"
+            elif format_label == "Texting":
+                print(f"  → Skipped (texting search hit that isn't texting advice)")
+                continue
+            if only and format_label not in only:
+                continue
 
             row_data = {
                 "title": title,
@@ -191,10 +220,16 @@ def main() -> None:
     long_form_path = os.path.join(this_dir, "niche-long-form", "data.json")
     short_form_path = os.path.join(this_dir, "niche-short-form", "data.json")
 
-    common.write_rows_to_json(long_form_path, [to_dashboard_row(r) for r in capped_rows])
+    long_out = [to_dashboard_row(r) for r in capped_rows]
+    short_out = [to_dashboard_row(r) for r in capped_shorts_rows]
+    if only:
+        long_out = merge_formats(long_form_path, long_out, only)
+        short_out = merge_formats(short_form_path, short_out, only)
+
+    common.write_rows_to_json(long_form_path, long_out)
     print(f"Wrote {len(capped_rows)} outlier videos to {long_form_path}")
 
-    common.write_rows_to_json(short_form_path, [to_dashboard_row(r) for r in capped_shorts_rows])
+    common.write_rows_to_json(short_form_path, short_out)
     print(f"Wrote {len(capped_shorts_rows)} outlier shorts to {short_form_path}")
 
 

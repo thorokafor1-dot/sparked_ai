@@ -1,0 +1,88 @@
+{
+ "type": "explainer",
+ "n": 10,
+ "sources": [
+  "05goHpSY8gw Coach Kyle (337,108 views)",
+  "20eV8Z2krq8 MAGDA KY MINDSET (252,422 views)",
+  "bTBJ9vF_oC0 Iron Man Lifestyle (215,555 views)",
+  "cg8609P_IaQ Courtney Ryan (361,574 views)",
+  "DOM5-ur_Rg4 Dan Bacon (452,710 views)",
+  "kHr3RrRTGBw Mark Manson (542,451 views)",
+  "kurZS8M6-rI Kimberly Hill - Men's Dating & Relationship Coach (570,662 views)",
+  "MhYIVfvm2dQ Matthew Hussey (346,705 views)",
+  "XUBoAzAlrFU Benjamin Seda (616,106 views)",
+  "zgNon3wMpgM Pauly Walnuts (273,785 views)"
+ ],
+ "bands": {
+  "cuts_per_min": {
+   "p25": 1.67,
+   "median": 10.2,
+   "p75": 15.15,
+   "min": 0.0,
+   "max": 22.7
+  },
+  "hook_cuts_per_min": {
+   "p25": 1.0,
+   "median": 11.0,
+   "p75": 30.0,
+   "min": 0.0,
+   "max": 38.0
+  },
+  "setup_cuts_per_min": {
+   "p25": 2.48,
+   "median": 10.0,
+   "p75": 17.85,
+   "min": 0.0,
+   "max": 30.0
+  },
+  "body_cuts_per_min": {
+   "p25": 1.65,
+   "median": 9.85,
+   "p75": 15.18,
+   "min": 0.0,
+   "max": 21.8
+  },
+  "shot_median_secs": {
+   "p25": 2.37,
+   "median": 4.62,
+   "p75": 30.61,
+   "min": 1.46,
+   "max": 1215.41
+  },
+  "shot_p90_secs": {
+   "p25": 9.62,
+   "median": 11.83,
+   "p75": 108.58,
+   "min": 5.01,
+   "max": 1215.41
+  },
+  "longest_shot_secs": {
+   "p25": 28.68,
+   "median": 48.35,
+   "p75": 133.85,
+   "min": 20.7,
+   "max": 1215.4
+  },
+  "words_per_min": {
+   "p25": 181.4,
+   "median": 204.85,
+   "p75": 210.15,
+   "min": 157.7,
+   "max": 229.1
+  },
+  "dead_air_share": {
+   "p25": 0.02,
+   "median": 0.04,
+   "p75": 0.06,
+   "min": 0.0,
+   "max": 0.09
+  },
+  "duration_min": {
+   "p25": 11.04,
+   "median": 19.9,
+   "p75": 20.66,
+   "min": 6.84,
+   "max": 29.69
+  }
+ }
+}

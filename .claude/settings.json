@@ -4,7 +4,7 @@
     "ask": [
       "Bash(rm *)",
       "Bash(rmdir *)",
-      "Bash(find *)",
+      "Bash(find * -delete*)",
       "Bash(git clean *)"
     ]
   },

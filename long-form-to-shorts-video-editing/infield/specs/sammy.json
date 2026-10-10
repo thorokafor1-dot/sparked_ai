@@ -1,0 +1,162 @@
+{
+ "_note": "Mall 2026-03-22 clip C, approach C5 (boots). Cold-open hook (user 2026-10-08: first 2s must catch attention): 'All the Sammies I've known, they've been trouble', dip, then the opener. No freezes (user: 'there's a freeze'): opener audio plays over live footage of her (turn to camera + silent listening at 2105.7). Camera sits on the boots 2049-2103 (incl. 'fun size'), so that stretch is out. Words verified with medium.en; 'fresh off the plane' disagreed between passes, so it is cut. Ends on her boyfriend answer and his graceful exit.",
+ "source": "long-form-video-editing/infield-mall-2026-03-22/raw/2026-03-22_165208.mov",
+ "words": "long-form-video-editing/infield-mall-2026-03-22/work/2026-03-22_165208_words.json",
+ "keep": [
+  [
+   2207.25,
+   2209.27
+  ],
+  [
+   2044.6,
+   2045.45
+  ],
+  [
+   2045.95,
+   2048.55
+  ],
+  [
+   2115.2,
+   2125.95
+  ],
+  [
+   2199.95,
+   2201.55
+  ],
+  [
+   2204.95,
+   2219.0
+  ],
+  [
+   2219.7,
+   2221.65
+  ],
+  [
+   2222.4,
+   2223.75
+  ]
+ ],
+ "her": [
+  [
+   2115.2,
+   2116.5
+  ],
+  [
+   2122.8,
+   2125.95
+  ],
+  [
+   2201.1,
+   2201.55
+  ],
+  [
+   2206.0,
+   2206.65
+  ],
+  [
+   2217.5,
+   2218.8
+  ]
+ ],
+ "patch": [
+  [
+   2044.55,
+   2048.65,
+   "EXCUSE@2044.7 ME,@2045.3 WE'RE@2046.0 LOOKING@2046.6 FOR@2046.7 SOME@2046.9 BOOTS@2047.0 FOR@2047.4 HIS@2047.8 SISTER.@2048.2"
+  ],
+  [
+   2115.2,
+   2116.5,
+   "JUST@2115.4 WALKING@2115.5 AROUND@2115.8 SHOPPING?@2116.2"
+  ],
+  [
+   2116.55,
+   2121.3,
+   "YEAH,@2116.6 WE'RE@2116.8 JUST@2117.0 GETTING@2117.1 TO@2117.3 KNOW@2117.4 THE@2117.6 AREA,@2117.7 YOU@2118.0 KNOW,@2118.2 GET@2118.5 TO@2118.7 KNOW@2118.9 THE@2119.0 PEOPLE.@2119.1 I@2119.4 CAME@2119.5 ALL@2119.6 THE@2119.8 WAY@2119.85 HERE@2119.9 TO@2120.0 MEET@2120.1 YOU.@2120.2"
+  ],
+  [
+   2122.8,
+   2125.95,
+   "I'M@2123.0 SURE@2123.3 YOU@2123.4 CAME@2123.6 AROUND@2123.9 EVERYWHERE@2124.2 TO@2124.7 MEET@2124.9 EVERYBODY,@2125.1 HUH?@2125.7"
+  ],
+  [
+   2126.0,
+   2128.15,
+   "OH@2126.3 YEAH,@2126.5 YEAH.@2126.7 I@2127.2 GOTTA@2127.3 GET@2127.4 TO@2127.6 KNOW@2127.7 THE@2127.8 AREA.@2128.0"
+  ],
+  [
+   2198.4,
+   2200.9,
+   "BUT@2198.5 I@2198.7 HAVE@2199.0 A@2199.1 FEELING,@2199.2 WAIT,@2200.0 DID@2200.1 I@2200.2 CATCH@2200.25 YOUR@2200.4 NAME?@2200.5"
+  ],
+  [
+   2201.1,
+   2201.55,
+   "SAMMY.@2201.2"
+  ],
+  [
+   2201.6,
+   2202.5,
+   "OH,@2201.6 SAMMY,@2201.7 THAT'S@2202.0 RIGHT.@2202.05"
+  ],
+  [
+   2203.0,
+   2205.9,
+   "BECAUSE@2203.1 WHEN@2203.2 YOU@2203.4 TOLD@2203.5 ME@2203.7 YOUR@2203.8 NAME@2203.9 IS@2204.0 SAMMY,@2204.2 I@2204.6 WAS@2204.65 LIKE,@2204.7 THAT'S@2205.0 A@2205.2 BEAUTIFUL@2205.4 NAME.@2205.6"
+  ],
+  [
+   2206.0,
+   2206.65,
+   "OH,@2206.1 THANK@2206.3 YOU.@2206.4"
+  ],
+  [
+   2206.8,
+   2217.45,
+   "BUT@2206.9 ALL@2207.3 THE@2207.7 SAMMIES@2207.9 I'VE@2208.2 KNOWN,@2208.4 THEY'VE@2208.6 BEEN@2208.9 TROUBLE.@2209.0 SO@2209.3 I@2210.7 WAS@2210.8 LIKE,@2211.4 DAMN,@2211.5 DO@2211.7 I@2211.8 GOTTA@2211.9 BE@2212.0 CAREFUL@2212.2 WITH@2212.4 YOU@2212.6 NOW?@2212.7 LIKE,@2212.9 YOUR@2213.7 PATTERNS@2214.3 REPEAT@2214.6 THEMSELVES.@2214.9 SO@2215.4 ARE@2215.8 YOU@2215.9 AN@2216.0 EXCEPTION@2216.1 TO@2216.5 THE@2216.7 RULE@2216.8 TYPE@2217.0 OF@2217.2 THING?@2217.3"
+  ],
+  [
+   2217.5,
+   2218.8,
+   "NO,@2217.6 I@2218.1 HAVE@2218.3 A@2218.4 BOYFRIEND.@2218.5"
+  ],
+  [
+   2218.85,
+   2223.75,
+   "OH,@2218.9 I@2219.8 SEE,@2220.6 I@2220.9 SEE.@2221.0 WELL,@2221.4 ANYWAY,@2222.5 IT@2222.7 WAS@2223.1 NICE@2223.2 MEETING@2223.4 YOU.@2223.6"
+  ]
+ ],
+ "sfx": [
+  [
+   2120.3,
+   "meme_rizz_bright",
+   null,
+   0.9
+  ]
+ ],
+ "hold": [],
+ "vsub": {
+  "1": [
+   [
+    2045.77,
+    2046.62
+   ]
+  ],
+  "2": [
+   [
+    2046.62,
+    2046.95
+   ],
+   [
+    2105.7,
+    2107.97
+   ]
+  ]
+ },
+ "dip": [
+  1
+ ],
+ "notch": [
+  1523,
+  3046
+ ]
+}

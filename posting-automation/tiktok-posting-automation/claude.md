@@ -82,6 +82,10 @@ form.
     typing `y` at a prompt. Pass `--yes` to skip that prompt once it's already been
     reviewed (e.g. reviewed in chat, then re-run with `--yes` to actually post).
 - `post_to_tiktok.bat`, convenience wrapper for `upload_short.py`.
+- `prep_studio_upload.py`, the current default path (the API still can't post publicly): pre-flights the
+  caption and video, copies the caption to the clipboard (emoji-safe), puts the cover next to the video,
+  and opens Explorer plus TikTok Studio's upload page so the user uploads by hand. `--dry-run` only
+  pre-flights and prints. Always show the printed caption in chat as a copy-paste block.
 
 ## Important: audit status gates privacy_level
 Until the TikTok app passes audit for the `video.publish` scope, the API only accepts

@@ -1,0 +1,756 @@
+{
+ "name": "first_video_v37",
+ "badges": [
+  {
+   "span": [
+    1790,
+    1870
+   ],
+   "r": 177
+  },
+  {
+   "span": [
+    2900,
+    3110
+   ],
+   "r": 188
+  },
+  {
+   "span": [
+    6033.85,
+    6225
+   ],
+   "r": 145
+  },
+  {
+   "span": [
+    6275,
+    6350
+   ],
+   "r": 152
+  },
+  {
+   "span": [
+    6815,
+    6835
+   ],
+   "r": 166
+  },
+  {
+   "span": [
+    9045,
+    9135
+   ],
+   "r": 148
+  }
+ ],
+ "her_offscreen_ok": [
+  [
+   6032.9,
+   6034.0
+  ]
+ ],
+ "teaser_bars": {
+  "h": 132,
+  "end": 8.745
+ },
+ "pieces": [
+  {
+   "type": "clip",
+   "in": 6134.138,
+   "out": 6136.95,
+   "fx": [],
+   "teaser": true,
+   "cap_src": "small",
+   "badge_y": 158
+  },
+  {
+   "type": "clip",
+   "in": 6138.525,
+   "out": 6140.16,
+   "fx": [],
+   "teaser": true,
+   "zoom": [
+    1.2,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small",
+   "badge_y": 158
+  },
+  {
+   "type": "clip",
+   "in": 1860.237,
+   "out": 1862.575,
+   "fx": [],
+   "cap_src": "medium",
+   "teaser": true,
+   "badge_y": 158
+  },
+  {
+   "type": "clip",
+   "in": 2977.12,
+   "out": 2979.08,
+   "fx": [],
+   "cap_src": "medium",
+   "fout": 0.3,
+   "teaser": true,
+   "cut_ok": true,
+   "badge_y": 158
+  },
+  {
+   "type": "cut",
+   "clip": "brand_sting",
+   "start": 0,
+   "dur": 2.0,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 6033.0,
+   "out": 6033.9,
+   "fx": [],
+   "mute": true,
+   "fin": 0.25,
+   "cut_ok": true,
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6044.02,
+   "out": 6048.51,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6049.05,
+   "out": 6052.92,
+   "fx": [],
+   "pan": "right",
+   "cap_src": "medium",
+   "cut_ok": true
+  },
+  {
+   "type": "clip",
+   "in": 6054.113,
+   "out": 6063.05,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6063.288,
+   "out": 6069.187,
+   "fx": [
+    {
+     "at": 6066.0
+    }
+   ],
+   "zooms": [
+    [
+     6063.288,
+     6066.1,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "denzel_my_man",
+   "start": 0,
+   "dur": 3.0,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 6097.838,
+   "out": 6104.0,
+   "fx": [],
+   "cap_map": {
+    "COLD": "CALL"
+   },
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "athlete_facepalm",
+   "start": 0,
+   "dur": 1.5,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 6119.787,
+   "out": 6125.537,
+   "fx": [],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6134.138,
+   "out": 6140.16,
+   "fx": [],
+   "zooms": [
+    [
+     6134.138,
+     6137.0,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "steve_harvey_shocked",
+   "start": 0,
+   "dur": 2.8,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 6141.625,
+   "out": 6144.39,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6144.875,
+   "out": 6150.71,
+   "fx": [
+    {
+     "at": 6149.85,
+     "img": "memes/badge_grace.png",
+     "w": 560,
+     "pos": [
+      480,
+      190
+     ],
+     "dur": 2.0,
+     "sfx": [
+      "rizz_2353"
+     ],
+     "vol": 0.6
+    }
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6155.263,
+   "out": 6161.35,
+   "fx": [],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "khaled_you_smart",
+   "start": 0,
+   "dur": 3.94,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 6201.025,
+   "out": 6203.71,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6204.413,
+   "out": 6210.887,
+   "fx": [],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6213.025,
+   "out": 6214.81,
+   "fx": [
+    {
+     "at": 6214.2
+    }
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 6216.065,
+   "out": 6218.29,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "imma_head_out",
+   "start": 2.5,
+   "dur": 2.0,
+   "fx": []
+  },
+  {
+   "type": "cut",
+   "clip": "tv_glitch",
+   "start": 0,
+   "dur": 0.37,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 1798.025,
+   "out": 1803.828,
+   "fx": [],
+   "cap_src": "medium"
+  },
+  {
+   "type": "cut",
+   "clip": "nick_young_confused",
+   "start": 0,
+   "dur": 1.6,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 1803.838,
+   "out": 1813.86,
+   "fx": [],
+   "cap_src": "medium",
+   "zooms": [
+    [
+     1810.7,
+     1813.86,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ]
+  },
+  {
+   "type": "cut",
+   "clip": "studio_laugh",
+   "start": 0.45,
+   "dur": 0.69,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 1839.685,
+   "out": 1842.143,
+   "fx": [
+    {
+     "at": 1841.7,
+     "keep": true,
+     "sfx": [
+      "impact_2303"
+     ],
+     "vol": 0.8
+    }
+   ],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "jontron_what",
+   "start": 0,
+   "dur": 1.63,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 1842.925,
+   "out": 1844.588,
+   "fx": [],
+   "cap_map": {
+    "HE": "",
+    "COULDN'T": ""
+   },
+   "cap_src": "medium"
+  },
+  {
+   "type": "clip",
+   "in": 1846.353,
+   "out": 1850.438,
+   "fx": [],
+   "cap_src": "medium"
+  },
+  {
+   "type": "clip",
+   "in": 1851.055,
+   "out": 1853.388,
+   "fx": [],
+   "cap_src": "medium"
+  },
+  {
+   "type": "clip",
+   "in": 1854.275,
+   "out": 1858.263,
+   "fx": [],
+   "cap_src": "medium",
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ]
+  },
+  {
+   "type": "clip",
+   "in": 1858.863,
+   "out": 1872.393,
+   "fx": [],
+   "cap_src": "medium",
+   "zooms": [
+    [
+     1861.3,
+     1867.0,
+     1.45,
+     0.25,
+     0.5
+    ]
+   ]
+  },
+  {
+   "type": "cut",
+   "clip": "kevin_hart_stare",
+   "start": 0,
+   "dur": 2.6,
+   "fx": []
+  },
+  {
+   "type": "cut",
+   "clip": "tv_glitch",
+   "start": 0,
+   "dur": 0.37,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 2970.05,
+   "out": 2983.62,
+   "fx": [],
+   "cap_src": "medium",
+   "cut_ok": true
+  },
+  {
+   "type": "clip",
+   "in": 2989.437,
+   "out": 2992.068,
+   "fx": [],
+   "cap_src": "medium"
+  },
+  {
+   "type": "clip",
+   "in": 2993.362,
+   "out": 3010.273,
+   "fx": [],
+   "cap_src": "medium",
+   "cap_map": {
+    "BRO": "",
+    "WHAT": "",
+    "A": ""
+   }
+  },
+  {
+   "type": "cut",
+   "clip": "jim_smirk",
+   "start": 0,
+   "dur": 0.95,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 3012.105,
+   "out": 3020.945,
+   "fx": [
+    {
+     "at": 3020.4
+    }
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "gatsby_toast",
+   "start": 0,
+   "dur": 3.2,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 3025.412,
+   "out": 3027.81,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 3038.105,
+   "out": 3039.832,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 3087.125,
+   "out": 3101.082,
+   "fx": [
+    {
+     "at": 3098.0
+    }
+   ],
+   "zooms": [
+    [
+     3094.8,
+     3098.2,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "leo_pointing",
+   "start": 0,
+   "dur": 2.1,
+   "fx": []
+  },
+  {
+   "type": "cut",
+   "clip": "tv_glitch",
+   "start": 0,
+   "dur": 0.37,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 9053.563,
+   "out": 9059.967,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9059.967,
+   "out": 9065.093,
+   "fx": [],
+   "zooms": [
+    [
+     9059.967,
+     9062.6,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9076.663,
+   "out": 9079.79,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9100.503,
+   "out": 9105.267,
+   "fx": [],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9107.175,
+   "out": 9112.658,
+   "fx": [],
+   "zooms": [
+    [
+     9107.175,
+     9110.3,
+     1.18,
+     0.5,
+     0.5
+    ]
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9112.75,
+   "out": 9119.385,
+   "fx": [
+    {
+     "at": 9118.9
+    }
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "clip",
+   "in": 9120.675,
+   "out": 9127.76,
+   "fx": [],
+   "zoom": [
+    1.45,
+    0.25,
+    0.5
+   ],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "suit_thats_it",
+   "start": 0,
+   "dur": 0.61,
+   "fx": []
+  },
+  {
+   "type": "clip",
+   "in": 9128.363,
+   "out": 9130.08,
+   "fx": [],
+   "cap_src": "small"
+  },
+  {
+   "type": "cut",
+   "clip": "lying_down",
+   "start": 0,
+   "dur": 1.24,
+   "fx": []
+  },
+  {
+   "type": "cut",
+   "clip": "brand_outro_end",
+   "start": 0,
+   "dur": 8.95,
+   "fx": []
+  }
+ ],
+ "music": [
+  {
+   "file": "music/breezy.mp3",
+   "start": 0.0,
+   "end": 8.745000000000118,
+   "vol": 0.22,
+   "seek": 1.0,
+   "fade_in": 0.03,
+   "drops": [
+    [
+     7.965000000000328,
+     8.745000000000118
+    ]
+   ]
+  },
+  {
+   "file": "music/greenchair.mp3",
+   "start": 8.745000000000118,
+   "end": 93.87100000000235,
+   "vol": 0.08,
+   "drops": [
+    [
+     31.40399999999954,
+     32.853999999999544
+    ],
+    [
+     67.81500000000051,
+     69.56500000000051
+    ]
+   ]
+  },
+  {
+   "file": "music/chillbro.mp3",
+   "start": 93.87100000000235,
+   "end": 144.64300000000193,
+   "vol": 0.08,
+   "drops": []
+  },
+  {
+   "file": "music/babe.mp3",
+   "start": 144.64300000000193,
+   "end": 211.29700000000201,
+   "vol": 0.08,
+   "drops": [
+    [
+     187.12000000000216,
+     188.57000000000215
+    ]
+   ]
+  },
+  {
+   "file": "music/rnb.mp3",
+   "start": 211.29700000000201,
+   "end": 254.15800000000422,
+   "vol": 0.08,
+   "drops": [
+    [
+     242.47100000000137,
+     244.72100000000137
+    ]
+   ]
+  }
+ ],
+ "key_words": [
+  "LOVE",
+  "BABY",
+  "KISS",
+  "KISSING",
+  "HEART",
+  "DATE",
+  "SPARKS",
+  "MAGIC",
+  "GLOWING",
+  "FALL",
+  "PARIS",
+  "SPECIAL",
+  "LIPSTICK",
+  "MODEL",
+  "TOUCH",
+  "SPICY",
+  "INTEREST",
+  "THOR",
+  "HONEYMOON",
+  "HONEYMOONS",
+  "BEAUTIFUL",
+  "FLIRTY",
+  "VOICE",
+  "TOGETHER"
+ ],
+ "caption_fixes": {
+  "DENVER": "DENMARK",
+  "SATISFIED": "CERTIFIED",
+  "VACHATA": "BACHATA",
+  "LEARY": "LYRIC"
+ }
+}

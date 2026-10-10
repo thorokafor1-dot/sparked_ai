@@ -3,7 +3,7 @@ import os
 
 from elevenlabs.client import ElevenLabs
 
-_client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY"])
+_client = ElevenLabs(api_key=os.environ["ELEVENLABS_API_KEY_SECRET"])   # the sk_ secret; ELEVENLABS_API_KEY_ID is only the key ID
 _voice_id = os.environ["ELEVENLABS_VOICE_ID"]
 
 

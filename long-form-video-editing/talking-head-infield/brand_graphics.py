@@ -145,12 +145,21 @@ def logo(size: int) -> Image.Image:
 
 
 def title_card(num: int, name: str, line: str) -> Image.Image:
-    """Transition card: just the opener line, big, on the ember background (user: 'just show the line')."""
+    """Transition card: the countdown number in gold over the opener line, on the ember background.
+
+    The line stays the hero (user: 'just show the line'); the number was added after the user asked for
+    the number graphics to show the number (2026-10-01).
+    """
     card = ember_background(alpha=255, seed=num)
     d = ImageDraw.Draw(card)
     q = font("playfair_italic_600.ttf", 84)
     text = f"\u201c{line}\u201d"
-    d.multiline_text((W / 2, H / 2), text, font=q, fill=TEXT, anchor="mm", align="center", spacing=26)
+    tb = d.multiline_textbbox((0, 0), text, font=q, spacing=26)
+    quote_h = tb[3] - tb[1]
+    numeral = font("playfair_800.ttf", 200)
+    spaced(d, (W / 2, H / 2 - quote_h / 2 - 250), "OPENER", font("mono_500.ttf", 26), TEXT_DIM, 10)
+    d.text((W / 2, H / 2 - quote_h / 2 - 50), f"#{num}", font=numeral, fill=GOLD, anchor="ms")
+    d.multiline_text((W / 2, H / 2 + 70), text, font=q, fill=TEXT, anchor="mm", align="center", spacing=26)
     return card
 
 

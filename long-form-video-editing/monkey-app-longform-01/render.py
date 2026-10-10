@@ -28,7 +28,8 @@ W, H, FPS, SR = 1920, 1080, 30, 48000
 
 # Monkey web layout inside the 1280x720 browser screen recording
 CROP_W, CROP_H, CROP_X, CROP_Y = 1280, 614, 0, 72
-BADGE = (0, 0, 330, 80)            # her name/age/location badge, relative to the crop
+BADGE = (0, 0, 205, 90)            # her name/age badge pill (longest names end ~x170, y68), relative to the crop
+BADGE_FEATHER = 18                 # soft right/bottom edge so the blur blends in (a hard box looked like a bug)
 FG_H = round(W * CROP_H / CROP_W / 2) * 2   # 920
 FG_Y = (H - FG_H) // 2
 
@@ -61,25 +62,40 @@ ZOOM_VER = 2          # bump when the zoom look changes so zoomed pieces re-rend
 EASE_FRAMES = 12      # push-in eases over ~0.4s
 
 
+FILL_W = round(CROP_H * 16 / 9 / 2) * 2    # 1092: the 16:9 window of the 1280x614 call view
+FILL_X = (CROP_W - FILL_W) // 2           # trims ~94px of outer UI each side instead of blurred top/bottom bands
+
+
+# "as if it was in the past" (user): warm sepia, grain, vignette; audio band-limited like old footage
+FLASHBACK_VF = (",colorchannelmixer=.393:.769:.189:0:.349:.686:.168:0:.272:.534:.131,eq=contrast=1.05:brightness=-0.02,"
+                "noise=alls=14:allf=t,vignette=PI/4")
+
+
 def frame_chain(zoom, dim=False, ease=False, blurs=()):
-    """Shared video chain: crop browser chrome, blur badge, zoom, blurred-bg letterbox."""
+    """Shared video chain: crop browser chrome, blur badge/chat, fill 16:9 (no letterbox), optional eased zoom.
+
+    The call view is wider than 16:9; it used to be fitted with blurred bands top and bottom (user: "why is the
+    top and bottom blurred"). Now it fills the frame, trimming a little off the far left/right edges.
+    """
     z, cx, cy = zoom or (1.0, 0.5, 0.5)
+    cx = (cx * CROP_W - FILL_X) / FILL_W   # zoom targets are in full-crop coords; remap into the 16:9 window
     bx, by, bw, bh = BADGE
-    zw, zh = round(CROP_W / z / 2) * 2, round(CROP_H / z / 2) * 2
-    zx = min(max(cx * CROP_W - zw / 2, 0), CROP_W - zw)
+    zw, zh = round(FILL_W / z / 2) * 2, round(CROP_H / z / 2) * 2
+    zx = min(max(cx * FILL_W - zw / 2, 0), FILL_W - zw)
     zy = min(max(cy * CROP_H - zh / 2, 0), CROP_H - zh)
     c = (f"crop={CROP_W}:{CROP_H}:{CROP_X}:{CROP_Y},split[a][b];"
-         f"[b]crop={bw}:{bh}:{bx}:{by},boxblur=18:4[bb];[a][bb]overlay={bx}:{by},"
+         f"[b]crop={bw}:{bh}:{bx}:{by},gblur=sigma=12:steps=3,format=yuva420p,"
+         f"geq=lum='p(X,Y)':cb='p(X,Y)':cr='p(X,Y)':a='255*clip(min(W-1-X,H-1-Y)/{BADGE_FEATHER},0,1)'[bb];"
+         f"[a][bb]overlay={bx}:{by}:format=auto,format=yuv420p,"
          + "".join(f"split[p{i}][q{i}];[q{i}]crop={w}:{h}:{x}:{y},gblur=sigma=14:steps=3[r{i}];[p{i}][r{i}]overlay={x}:{y},"
                    for i, (x, y, w, h) in enumerate(blurs))   # personal info typed in chat (handles, numbers)
-         + (f"scale={CROP_W * 2}:{CROP_H * 2}:flags=lanczos,"
+         + f"crop={FILL_W}:{CROP_H}:{FILL_X}:0,"
+         + (f"scale={FILL_W * 2}:{CROP_H * 2}:flags=lanczos,"
             f"zoompan=z='1+({z}-1)*(1-pow(1-min(on/{EASE_FRAMES},1),3))':"
-            f"x='max(0,min(iw-iw/zoom,{cx}*iw-iw/zoom/2))':y='max(0,min(ih-ih/zoom,{cy}*ih-ih/zoom/2))':"
-            f"d=1:s={W}x{FG_H}:fps={FPS},setsar=1,split[f][g];"
+            f"x='max(0,min(iw-iw/zoom,{cx:.4f}*iw-iw/zoom/2))':y='max(0,min(ih-ih/zoom,{cy}*ih-ih/zoom/2))':"
+            f"d=1:s={W}x{H}:fps={FPS},setsar=1"
             if ease and zoom else
-            f"crop={zw}:{zh}:{zx:.0f}:{zy:.0f},scale={W}:{FG_H}:flags=lanczos,setsar=1,split[f][g];") +
-         f"[g]scale=-2:{H},crop={W}:{H},boxblur=40:3,eq=brightness=-0.18[bg];"
-         f"[bg][f]overlay=0:{FG_Y}")
+            f"crop={zw}:{zh}:{zx:.0f}:{zy:.0f},scale={W}:{H}:flags=lanczos,setsar=1"))
     if dim:
         c += ",eq=brightness=-0.25:saturation=0.6"
     return c
@@ -133,7 +149,7 @@ def atempo(speed):
 
 
 def render_piece(p):
-    key = hashlib.md5(json.dumps({k: p.get(k) for k in ("type", "in", "out", "at", "dur", "zoom", "speed", "mute", "dim", "vol", "mutes", "clip", "start", "blurs")} | ({"lufs": CUT_LUFS} if p["type"] == "cut" else {}) | {"exact": 1}
+    key = hashlib.md5(json.dumps({k: p.get(k) for k in ("type", "in", "out", "at", "dur", "zoom", "speed", "mute", "dim", "vol", "mutes", "clip", "start", "blurs", "flashback")} | ({"lufs": CUT_LUFS} if p["type"] == "cut" else {}) | {"exact": 1, "badge": 2, "fill": 1}
                                  | ({"zv": ZOOM_VER} if p.get("zoom") and p["type"] == "clip" else {}),
                                  sort_keys=True).encode()).hexdigest()[:12]
     path = PIECES / f"{key}.mkv"   # PCM audio: AAC priming would drift when concatenated
@@ -143,12 +159,14 @@ def render_piece(p):
            "-c:a", "pcm_s16le", "-ar", str(SR), "-ac", "2"]
     if p["type"] == "clip":
         sp = p.get("speed", 1.0)
-        vf = f"[0:v]{frame_chain(p.get('zoom'), p.get('dim'), ease=True, blurs=p.get('blurs', ()))},setpts=(PTS-STARTPTS)/{sp},fps={FPS}[v]"
+        look = FLASHBACK_VF if p.get("flashback") else ""
+        vf = f"[0:v]{frame_chain(p.get('zoom'), p.get('dim'), ease=True, blurs=p.get('blurs', ()))}{look},setpts=(PTS-STARTPTS)/{sp},fps={FPS}[v]"
         nf = frames_of((p["out"] - p["in"]) / sp)
         dur = nf / FPS          # frame-exact: audio and video end on the same sample, so concat can't drift
         vol = 0 if p.get("mute") else p.get("vol", 1.0)
         bleeps = "".join(f"volume=0:enable='between(t,{a - p['in']:.3f},{b - p['in']:.3f})'," for a, b in p.get("mutes", []))
-        af = (f"[0:a]asetpts=PTS-STARTPTS,{bleeps}{atempo(sp) + ',' if sp != 1 else ''}volume={vol},"
+        old_audio = "highpass=f=250,lowpass=f=3800," if p.get("flashback") else ""
+        af = (f"[0:a]asetpts=PTS-STARTPTS,{old_audio}{bleeps}{atempo(sp) + ',' if sp != 1 else ''}volume={vol},"
               f"apad,atrim=end_sample={round(dur * SR)},afade=t=in:d=0.012,afade=t=out:st={max(dur - 0.015, 0):.3f}:d=0.015[a]")
         cmd = ["ffmpeg", "-v", "error", "-y", "-ss", f"{p['in']:.3f}", "-to", f"{p['out']:.3f}", "-i", RAW,
                "-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]", "-frames:v", str(nf), *enc, str(path)]
@@ -173,7 +191,11 @@ def render_piece(p):
                "-f", "lavfi", "-i", f"anullsrc=r={SR}:cl=stereo",
                "-filter_complex", vf + f";[1:a]atrim=end_sample={round(n / FPS * SR)}[a]",
                "-map", "[v]", "-map", "[a]", "-frames:v", str(n), *enc, str(path)]
+    # write to a temp name and rename when done: a killed render must never leave a half-written "cached" piece
+    tmp = path.with_name(path.stem + ".part.mkv")
+    cmd[-1] = str(tmp)
     run(cmd)
+    tmp.replace(path)
     return path
 
 
@@ -253,10 +275,12 @@ def captions(pieces, edit):
               for w in ws if clean(w["w"])]
         for w in ws:
             w["t"] = fixes.get(w["t"], w["t"])
+            w["t"] = p.get("cap_map", {}).get(w["t"].strip("?!.,"), w["t"])
             for k, v in MASK.items():
                 w["t"] = w["t"].replace(k, v)
         # chunk into 1-3 word groups
         chunks, cur = [], []
+        ws = [w for w in ws if w["t"]]
         for i, w in enumerate(ws):
             if cur and (len(cur) == 3 or w["s"] - cur[-1]["e"] > 0.35 or sum(len(x["t"]) for x in cur) + len(w["t"]) > 16
                         or cur[-1]["t"][-1:] in "?!"):
@@ -529,6 +553,8 @@ def main():
             continue
         bad = [w for w in words if p["in"] <= (w["s"] + w["e"]) / 2 < p["out"] and PROFANE.match(re.sub(r"[^\w]", "", w["w"]))]
         p["mutes"] = [[max(w["s"] - 0.02, p["in"]), min(w["e"] + 0.02, p["out"])] for w in bad]
+        if p.get("bleep_all"):   # spoken personal info (handles, numbers): the whole clip is bleeped
+            p["mutes"] = [[p["in"], p["out"]]]
         p["fx"] = p.get("fx", []) + [{"at": a, "sfx": "beep_1000", "vol": 0.3, "max": round(b - a, 3), "_auto": 1} for a, b in p["mutes"]]
     print(f"{len(pieces)} pieces, runtime {total / 60:.1f} min")
 

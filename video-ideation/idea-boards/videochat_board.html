@@ -1,0 +1,179 @@
+<title>E-Date Idea Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: a single column of idea "dossiers". Each one is the mock thumbnail beside its evidence: the model video it copies and the better thumbnail it borrows an upgrade from. */
+:root {
+  --bg: #fbf6f1; --panel: #ffffff; --fg: #1f1714; --muted: #6f5f57; --line: #eadbd0;
+  --ember: #d9481f; --gold: #b7791f; --good: #1f8a4c; --chip: #f6e7dc;
+  --display: "DM Sans", system-ui, sans-serif;
+  --body: "DM Sans", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #16110f; --panel: #211916; --fg: #f6ece5; --muted: #b9a59a; --line: #3a2c26;
+  --ember: #ff7a45; --gold: #f2b54a; --good: #4fd08a; --chip: #2e221d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #16110f; --panel: #211916; --fg: #f6ece5; --muted: #b9a59a; --line: #3a2c26;
+  --ember: #ff7a45; --gold: #f2b54a; --good: #4fd08a; --chip: #2e221d; color-scheme: dark }
+
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 15px; line-height: 1.55; }
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 20px; padding-block: 36px 64px; display: grid; gap: 28px; }
+header { display: grid; gap: 12px; max-width: 70ch; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--ember); }
+h1 { font-family: var(--display); font-weight: 800; letter-spacing: -0.02em; font-size: clamp(34px, 5vw, 54px); line-height: 1.05; margin: 0; text-wrap: balance; }
+.lede { color: var(--muted); margin: 0; }
+.key { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: var(--muted); }
+.key b { color: var(--fg); font-family: var(--mono); font-weight: 700; }
+.filters { display: flex; flex-wrap: wrap; gap: 8px; }
+.filters button { font: 500 13px var(--body); padding: 7px 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--panel); color: var(--fg); cursor: pointer; }
+.filters button[aria-pressed="true"] { background: var(--ember); border-color: var(--ember); color: #fff; }
+.filters button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+.idea { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 22px; padding-block: 26px; border-top: 1px solid var(--line); }
+.idea:first-of-type { border-top: 0; }
+.mock { display: grid; gap: 10px; min-width: 0; }
+.mock img { width: 100%; aspect-ratio: 16/9; object-fit: cover; border-radius: 10px; display: block; box-shadow: 0 10px 30px -18px rgba(0,0,0,.55); }
+.title-row { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.num { font-family: var(--mono); font-weight: 700; color: var(--ember); font-size: 14px; }
+.idea h2 { font-family: var(--display); font-weight: 700; letter-spacing: -0.01em; font-size: clamp(21px, 2.4vw, 27px); line-height: 1.2; margin: 0; text-wrap: balance; flex: 1 1 280px; }
+.chip { font-family: var(--mono); font-size: 11px; letter-spacing: .06em; text-transform: uppercase; padding: 4px 9px; border-radius: 6px; background: var(--chip); color: var(--muted); white-space: nowrap; }
+.chip.first { background: var(--ember); color: #fff; }
+.chip.low { background: transparent; border: 1px dashed var(--line); }
+.evidence { display: grid; gap: 14px; align-content: start; min-width: 0; }
+.ref { display: grid; grid-template-columns: 132px minmax(0, 1fr); gap: 12px; align-items: start; }
+.ref img { width: 132px; aspect-ratio: 16/9; object-fit: cover; border-radius: 6px; }
+.ref .lab { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+.ref .t { font-weight: 500; font-size: 13.5px; overflow-wrap: anywhere; }
+.ref .stat { font-family: var(--mono); font-size: 12.5px; color: var(--fg); font-variant-numeric: tabular-nums; }
+.ref .stat strong { color: var(--good); }
+.ref a { color: inherit; text-decoration-color: var(--line); }
+.twist { border-left: 3px solid var(--gold); padding-left: 12px; display: grid; gap: 4px; }
+.twist .lab, .record .lab { font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); }
+.record .lab { color: var(--muted); }
+.twist p, .record p { margin: 0; font-size: 14px; }
+footer { color: var(--muted); font-size: 13px; max-width: 75ch; display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 18px; }
+@media (max-width: 820px) { .idea { grid-template-columns: 1fr; } }
+@media (max-width: 420px) { .ref { grid-template-columns: 104px minmax(0, 1fr); } .ref img { width: 104px; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Sparked · video chat e-dates · 2026-10-09</div>
+    <h1>Proven ideas, each with one twist</h1>
+    <p class="lede">Every idea copies a concept that already won on a comparable channel, then adds one upgrade taken from a better-performing thumbnail or from a gap the genre misses. The mock on the left is a layout and concept test, built without any image generation.</p>
+    <div class="key">
+      <span><b>5.9x</b> = views vs. that channel's own median</span>
+      <span><b>score 152</b> = outlier tracker score</span>
+      <span>Bubble lines on mocks are placeholders. Finals use her real words.</span>
+    </div>
+    <div class="filters" role="group" aria-label="Thumbnail text">
+      <button id="v-text" aria-pressed="true" data-v="text">With text</button>
+      <button id="v-notext" aria-pressed="false" data-v="notext">No text</button>
+    </div>
+    <p class="lede" style="font-size:14px">Text or no text: no-text thumbnails win when the picture alone tells the story (Jameer "I RETURNED TO OMEGLE AND SAW MY EX" 3.0x, Teige dyed dreads 5.0x, Edtki Michael Myers 2.5x; Jay Throck's text-free ones average 1.0x vs 0.8x with bubbles). Text wins when the hook can't be seen: a rule, a number, a twist (ItsMP3 bingo 108x). Each idea below says which to lead with. Upload both to YouTube's Test &amp; Compare and let watch time decide.</p>
+    <div class="filters" role="group" aria-label="Filter ideas">
+      <button id="f-all" aria-pressed="true" data-f="all">All 10</button>
+      <button id="f-first" aria-pressed="false" data-f="first">Shoot first</button>
+      <button id="f-teach" aria-pressed="false" data-f="teach">Teaching formats</button>
+      <button id="f-test" aria-pressed="false" data-f="test">Controlled tests</button>
+    </div>
+  </header>
+
+  <main id="ideas"></main>
+
+  <footer>
+    <span>Women in the mocks are mock-only Pinterest stand-ins (real strangers, never used in a published thumbnail). Each final uses a woman of the same archetype as the video's star, and the colour grade changes per upload so the feed never sees two in a row.</span>
+    <span>Counts in titles ("20 e-dates", "10 women") include only conversations that lasted 2+ minutes. Scores and verdicts are hers, said on camera.</span>
+    <span>Sources: last 24 long-forms of Jameer, Jay Throck, Zaen Azzuri, ItsMP3, LilPraisey, Edtki and Teige, plus the niche outlier tracker. Pulled 2026-10-09.</span>
+  </footer>
+</div>
+
+<script>
+const yt = id => `https://www.youtube.com/watch?v=${id}`;
+const IDEAS = [
+  { n: 1, lead: "text", title: "Flirting Bingo on E-Dates: Clear the Board or Take the Forfeit", mock: "mock_01_bingo.jpg", tags: ["first", "teach"], prio: "Shoot first",
+    model: { id: "PKzB1_QB4s8", ch: "ItsMP3", t: "Monkey App But I Play BINGO", v: "2.39M", x: "108x" },
+    up: { id: "jyEgFFCfMZ0", ch: "Jay Throck", t: "Win Monkey App Bingo… Or Suffer A CRAZY Dare", v: "553K", x: "2.8x", what: "visible checklist header and running timer" },
+    twist: "Their squares are stunts. Yours are 9 flirting moves, so the board itself teaches. A full card with 2 empty squares is an open loop the viewer wants closed.",
+    rec: "Bingo card of moves (tease, callback, push-pull...). Tick each live on a timer, with a named forfeit." },
+  { n: 2, lead: "text", title: "I Taught My Friend With Zero Rizz to Flirt in One Night (Before vs After)", mock: "mock_02_zero_rizz_friend.jpg", tags: ["first", "teach"], prio: "Shoot first",
+    model: { id: "vDyDb4hkSe0", ch: "Teige", t: "Monkey App with My Friend Who Has ZERO RIZZ", v: "796K", x: "5.9x" },
+    up: { id: "fSa68YLo85c", ch: "ItsMP3", t: "How Baddies TREAT ME Dressed HOMELESS", v: "120K", x: "5.4x", what: "before and after states in one frame" },
+    twist: "Teige laughs at his friend. You coach him, and the thumbnail shows the before and after, so the transformation is the promise.",
+    rec: "Friend on camera. Coach between calls; the score comes from the women's reactions." },
+  { n: 3, lead: "text", title: "Dressed My Worst, Flirting My Best: Testing If Game Beats Looks (20 E-Dates)", mock: "mock_03_worst_fit.jpg", tags: ["first", "test"], prio: "Shoot first",
+    model: { id: "l0iNk0XjTq0", ch: "Edtki", t: "YOU CAN SAY ANYTHING IF YOU LOOK GOOD...", v: "142K", x: "8.0x" },
+    up: { id: "5heZ_x2KQo0", ch: "Teige", t: "Going On Monkey SHIRTLESS To Test My Rizz..", v: "605K", x: "4.5x", what: "her verdict line about the variable" },
+    twist: "The genre's premise is that looks win. Flip it into the brand promise and frame it as a test, so either result is a payoff.",
+    rec: "Half the calls in a rough outfit, half sharp, same lines both ways." },
+  { n: 4, lead: "text", title: "What Women Find Attractive: Beard vs Clean Shaven (Same Lines, 20 E-Dates)", mock: "mock_04_beard_vs_clean.jpg", tags: ["test"], prio: "Next",
+    model: { id: "jUdsE4pbXpo", ch: "Teige", t: "Freeforms VS Dreads On The Monkey App..", v: "470K", x: "3.5x" },
+    up: { id: "tcDLFRFn-Lo", ch: "Teige", t: "Fake Skipping BADDIES With Dyed Freeforms...", v: "658K", x: "4.9x", what: "her line as a verdict on him (\"HE WAS SOO FINEE\")" },
+    twist: "Same VS split, plus her verdict, and titled with the phrase men search. None of the 152 genre titles say \"attractive\".",
+    rec: "Beard half first, shave, then the same scripted lines on 10 more." },
+  { n: 5, lead: "text", title: "Me vs My Friend: Women Score Our Flirting on E-Dates", mock: "mock_05_women_score_me.jpg", tags: ["test"], prio: "Next",
+    model: { id: "rfPJ3DnCVuE", ch: "Corey2U", t: "First To Get A Date On Monkey App Wins $1000...", v: "137K", x: "score 13" },
+    up: { id: "KflK_5i4xPM", ch: "Jameer", t: "RATING MY CRUSH OUTFITS! *SHE KISSED ME*", v: "76K", x: "1.4x", what: "her rating as the hook" },
+    twist: "Corey2U races his friend to a date. You both flirt with the same women and she holds the scorecard, so women are the judges, a gap no competitor titles for.",
+    rec: "You and a friend, same women, 1-2 minutes each, her score said on camera." },
+  { n: 6, lead: "text", title: "I Skipped Her on E-Dates, Then Came Back and Flirted", mock: "mock_06_skip_then_back.jpg", tags: [], prio: "Next",
+    model: { id: "wEQnQMLcC68", ch: "Tristan Clausen", t: "What OmeTV Strangers Say Behind My Back!", v: "3.65M", x: "score 122" },
+    up: { id: "tcDLFRFn-Lo", ch: "Teige", t: "Fake Skipping BADDIES With Dyed Freeforms...", v: "658K", x: "4.9x", what: "loading spinner over his face plus her regret line" },
+    twist: "They stop at the reaction. You come back on and turn it into a flirt, an act two nobody shows.",
+    rec: "Fake a skip, keep listening, return. Use only real returns." },
+  { n: 7, lead: "notext", title: "1 Hour of Flirting With Women on E-Dates (Every Move Explained)", mock: "mock_07_best_of_explained.jpg", tags: ["teach"], prio: "Next",
+    model: { id: "MaZUjMEQHFw", ch: "Edtki", t: "MONKEY APP GREATEST RIZZ & FUNNIEST MOMENTS!", v: "255K", x: "14.3x" },
+    up: { id: "d46Ctq6BOEw", ch: "Jay Throck", t: "RIZZING UP THE FINEST GIRLS ON MONKEY *BEST OF 2024*", v: "495K", x: "2.5x", what: "no bubble, faces carry it" },
+    twist: "The genre's most reliable format, with each move labelled, so it gets rewatched and saved.",
+    rec: "Cut from your library. Label only moves you can name." },
+  { n: 8, lead: "text", title: "Fixing My Viewers' Worst Flirty Lines Live on E-Dates", mock: "mock_08_fix_viewer_lines.jpg", tags: ["teach", "test"], prio: "Next",
+    model: { id: "XrvkUsH_76Y", ch: "Jameer", t: "Helping My Viewers Rizz Up Girls On The Monkey App Pt.1", v: "258K", x: "4.6x" },
+    up: { id: "fSa68YLo85c", ch: "ItsMP3", t: "How Baddies TREAT ME Dressed HOMELESS", v: "120K", x: "5.4x", what: "before and after in one frame" },
+    twist: "Jameer feeds viewers lines. You fix their bad one and test both live. Repeatable from every comment section.",
+    rec: "Real comments only. Test the two versions on different women." },
+  { n: 9, lead: "text", title: "Guessing Her Name as a Flirting Opener on E-Dates", mock: "mock_09_name_guess.jpg", tags: [], prio: "Low priority",
+    model: { id: "YMOknaj6MWQ", ch: "Peter Prankster", t: "Guessing People's Names 1-20", v: "3.96M", x: "score 132" },
+    up: { id: "Y74cweDhLVs", ch: "LilPraisey", t: "I Rizzed Up Girls On Omegle For 24 Hours", v: "3.1K", x: "2.8x", what: "his line plus her reaction" },
+    twist: "A proven curiosity game turned into an opener. The model wasn't flirting content, so this is the least proven.",
+    rec: "Guess every name. Add the real hit rate after recording if it's good." },
+  { n: 10, lead: "notext", title: "Flirting With Women on E-Dates in a Spider-Man Mask (Then the Reveal)", mock: "mock_10_spiderman_mask.jpg", tags: ["first"], prio: "Post by Oct 31",
+    model: { id: "LU7o5uw16uA", ch: "Jay Throck", t: "SPIDER-MAN RIZZ ON THE MONKEY APP (HALLOWEEN SPECIAL)", v: "1.0M", x: "score 34" },
+    up: { id: "OjOaHl5vQ3c", ch: "Edtki", t: "I FOUND MY HALLOWEEN BAE... (MONKEY APP)", v: "45K", x: "2.5x", what: "seasonal costume as the hook" },
+    twist: "Words only until the mask comes off, so the costume episode doubles as a test of your lines.",
+    rec: "Spider-Man suit, mask on for the lines, reveal at the end." }
+];
+
+function refHTML(lab, r, extra) {
+  return `<div class="ref"><a href="${yt(r.id)}" target="_blank" rel="noopener"><img src="img/m_${r.id}.jpg" alt="${r.ch} thumbnail" loading="lazy"></a>
+    <div><div class="lab">${lab}</div><div class="t"><a href="${yt(r.id)}" target="_blank" rel="noopener">${r.t}</a></div>
+    <div class="stat">${r.ch} · ${r.v} · <strong>${r.x}</strong></div>${extra ? `<div class="stat" style="color:var(--muted)">Borrowed: ${extra}</div>` : ""}</div></div>`;
+}
+let variant = "text", currentFilter = "all";
+function render(filter) {
+  currentFilter = filter;
+  document.getElementById("ideas").innerHTML = IDEAS.filter(i => filter === "all" || i.tags.includes(filter)).map(i => {
+    const cls = i.prio === "Low priority" ? "chip low" : (i.tags.includes("first") ? "chip first" : "chip");
+    return `<article class="idea" id="idea-${i.n}">
+      <div class="mock"><img src="img/${variant === "notext" ? i.mock.replace(".jpg", "_notext.jpg") : i.mock}" alt="Mock thumbnail for idea ${i.n}">
+        <div class="title-row"><span class="num">${String(i.n).padStart(2, "0")}</span><h2>${i.title}</h2><span class="${cls}">${i.prio}</span><span class="chip">Lead with: ${i.lead === "notext" ? "no text" : "text"}</span></div></div>
+      <div class="evidence">${refHTML("Model video (the proven concept)", i.model)}${refHTML("Upgrade borrowed from", i.up, i.up.what)}
+        <div class="twist"><div class="lab">The twist</div><p>${i.twist}</p></div>
+        <div class="record"><div class="lab">What to record</div><p>${i.rec}</p></div></div></article>`;
+  }).join("");
+}
+document.querySelectorAll("[data-v]").forEach(b => b.addEventListener("click", () => {
+  variant = b.dataset.v;
+  document.querySelectorAll("[data-v]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  render(currentFilter);
+}));
+document.querySelectorAll("[data-f]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll("[data-f]").forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
+  render(b.dataset.f);
+  try { localStorage.setItem("edate-filter", b.dataset.f); } catch (e) {}
+}));
+let start = "all";
+try { start = localStorage.getItem("edate-filter") || "all"; } catch (e) {}
+const sb = document.querySelector(`[data-f="${start}"]`);
+if (sb) sb.click(); else render("all");
+</script>

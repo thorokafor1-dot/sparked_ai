@@ -115,6 +115,42 @@ EXPLAINER_KEYWORDS = [k.strip() for k in os.getenv(
     "female psychology dating advice,signs she's flirting with you,"
     "how to read a woman's body language,why is she testing me,signs of female interest"
 ).split(",") if k.strip()]
+# Texting / text game (user request 2026-10-09, planned series): how to text women, DM and
+# dating-app messaging. Tagged Format "Texting". Thin niche, so it uses EXTENDED_LOOKBACK_DAYS.
+TEXTING_KEYWORDS = [k.strip() for k in os.getenv(
+    "YOUTUBE_TEXTING_KEYWORDS",
+    "how to text a girl,how to text women,text game,texting girls,texting tips for men,"
+    "what to text a girl,how to text a girl you like,texting a girl after getting her number,"
+    "first text to a girl,how to flirt over text,texting mistakes men make,"
+    "how to text your crush,how to get a girl to text back,reacting to my texts with girls,"
+    "rating texts with girls,texting game breakdown,how to dm a girl on instagram,"
+    "tinder conversation tips,hinge messages that work,dating app openers,"
+    "how to ask a girl out over text,texting a girl you met in person"
+).split(",") if k.strip()]
+# Content check (like is_video_chat_content): a title counts as Texting only when it's about
+# HOW to text/DM/message women, not just any title with "text" in it. First scan (2026-10-09)
+# showed the loose version pulls in murder trials ("flirty texts"), celebrity DM gossip,
+# texting advice aimed at women, and generic dating videos found via a texting search term.
+TEXTING_CONTENT_TERMS = [
+    "how to text", "how i text", "how you text", "you text", "want you to text", "text her",
+    "text a girl", "text a woman", "text women", "text girls", "texting women", "texting girls",
+    "texting a girl", "texting her", "text game", "texting game", "texting tips", "texting mistake",
+    "texting secret", "texting rule", "texting method", "texting advice", "laws of texting",
+    "understand texting", "texting trick", "texts from men", "texts to get her", "over text",
+    "through texting", "using texts", "only using texts", "left on read", "dm girls", "her dms",
+    "girls dms", "dms (instagram", "first message", "opener", "tinder", "hinge", "bumble",
+    "dating app", "text breakdown",
+]
+TEXTING_EXCLUDED_TERMS = [
+    # Texting advice aimed at women, not the men's audience
+    "man lose interest", "men lose interest", "lose interest in you", "your crush",
+    # News, crime, celebrity and relationship drama
+    "murder", "trial", "police", "court", "perjury", "cnn", "dr. phil", "husband", "boyfriend",
+    "coworker", "celeb", "lizzo", "caught", "cheating", "musical", "song", "catfish",
+    "mukbang", "flirty text",
+]
+
+
 # Governs the search's publishedAfter cutoff for both In-Person and Video Chat keywords
 # (one shared scan). Shorts get an additional, separately-bounded post-filter via
 # SHORTS_LOOKBACK_DAYS in short_form_tracker.py, so raising this doesn't widen Shorts'
@@ -239,7 +275,7 @@ def get_video_stats(youtube, video_id: str) -> Dict[str, Any]:
         id=video_id,
         maxHeight=720,
         maxWidth=720,
-        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,contentDetails/duration,player/embedWidth,player/embedHeight,status/madeForKids,status/selfDeclaredMadeForKids)",
+        fields="items(id,statistics/viewCount,statistics/likeCount,snippet/title,snippet/tags,snippet/categoryId,snippet/channelId,snippet/channelTitle,snippet/publishedAt,snippet/thumbnails,snippet/defaultAudioLanguage,snippet/defaultLanguage,contentDetails/duration,player/embedWidth,player/embedHeight,status/madeForKids,status/selfDeclaredMadeForKids)",
     )
     response = execute_request(request)
     if not response:
@@ -406,6 +442,58 @@ def is_english_title(title: str) -> bool:
 # exclusion already failed twice for Kiriakos Spanos via two different mechanisms, so
 # this is a direct, reliable backstop per explicit user request.
 EXCLUDED_CHANNELS = {"kiriakos spanos", "always abroad"}
+
+
+# Indian/Pakistani/Nepali creators whose videos are in Hindi/Urdu/Hinglish (user request
+# 2026-10-09: exclude from Video Chat outliers). is_english_title() can't catch them, their
+# titles are plain Latin script. Three signals, any one rejects: YouTube's own language
+# fields (snippet.defaultAudioLanguage / defaultLanguage), a channel blocklist of creators
+# confirmed by hand, and Hinglish/South Asian marker words in the title or channel name.
+SOUTH_ASIAN_LANGS = {"hi", "pa", "bn", "ur", "ne", "mr", "gu", "ta", "te", "kn", "ml", "or", "as", "si"}
+SOUTH_ASIAN_CHANNELS = {
+    "adarshuc", "ramesh maity", "adrishya", "inspire hub story", "cliptuber", "justabhix",
+    "omegle flex", "its kunal", "uzii", "godl highlights", "monkey ke diwane", "monkey chats",
+    "monkey chat", "uneasy darpan", "panki streams", "panki shorts 07", "nihaan bhatt",
+    "pratham uncut", "desi meme creator", "allen magicツ", "dilip rana shorts", "kalki",
+    "call prank", "mr_akki9795", "adios clips hub", "unick", "scroll with me", "minivlog",
+    "chillbro videos", "rahul omegle", "np clip", "suraz speaks", "jixson ray",
+}
+SOUTH_ASIAN_MARKERS = [
+    "bhabhi", "desi", "hindi", "punjabi", "indian", "pakistani", "bengali", "nepali", "delhi",
+    "mumbai", "begam", "mummy", "kr", "liya", "dia", "hai", "konsi", "yaar", "bhai", "kya",
+    "nahi", "cringistaan", "dhruv rathee", "kohli", "prankur", "panki",
+]
+_SOUTH_ASIAN_MARKER_PATTERN = None
+
+
+def is_south_asian_content(title: str = "", channel_title: str = "", tags: list = None,
+                           snippet: Dict[str, Any] = None) -> bool:
+    """True for Hindi/Urdu/Hinglish creator content (see SOUTH_ASIAN_* above)."""
+    import re
+    global _SOUTH_ASIAN_MARKER_PATTERN
+    snippet = snippet or {}
+    for field in ("defaultAudioLanguage", "defaultLanguage"):
+        lang = (snippet.get(field) or "").lower()
+        if lang.split("-")[0] in SOUTH_ASIAN_LANGS or lang == "en-in":
+            return True
+    chan = (channel_title or "").strip().lower()
+    if chan in SOUTH_ASIAN_CHANNELS:
+        return True
+    if _SOUTH_ASIAN_MARKER_PATTERN is None:
+        _SOUTH_ASIAN_MARKER_PATTERN = re.compile(
+            r"\b(" + "|".join(re.escape(m) for m in SOUTH_ASIAN_MARKERS) + r")\b")
+    text = " ".join([title or "", chan, " ".join(tags or [])]).lower()
+    return bool(_SOUTH_ASIAN_MARKER_PATTERN.search(text))
+
+
+def is_texting_content(title: str, tags: list = None) -> bool:
+    """True when the title is about how to text/DM/message women (Format "Texting"). Title only,
+    tags are too loose (a #texts tag on a song short)."""
+    import re
+    text = (title or "").lower()
+    if any(t in text for t in TEXTING_EXCLUDED_TERMS):
+        return False
+    return any(re.search(r'\b' + re.escape(t), text) for t in TEXTING_CONTENT_TERMS)
 
 
 def is_video_chat_content(title: str, tags: list = None) -> bool:
@@ -591,7 +679,7 @@ def is_relevant_tags(tags: list, title: str = "", category_id: str = "", search_
         # above. Deliberately kept as a content-based check (title/tags must actually
         # contain one of these) rather than trusting search-query origin the way
         # cold approach/daygame/infield are, see PRECISE_SEARCH_KEYWORDS above for why.
-    ] + EXPLAINER_KEYWORDS + [
+    ] + EXPLAINER_KEYWORDS + TEXTING_CONTENT_TERMS + [
         "attraction signs", "female interest", "interested in you signs",
     ] + VIDEO_CHAT_PLATFORM_TERMS
 

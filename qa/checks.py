@@ -35,8 +35,10 @@ OUTPUT_GLOBS = [
     "long-form-to-shorts-video-editing/*/work/*.ass",
     "long-form-video-editing/*/output/*.mp4",
     "long-form-video-editing/*/out/*.mp4",
+    "long-form-video-editing/*/work/captions.ass",
     "thumbnail-creation/output/*.png",
     "thumbnail-creation/output/*.jpg",
+    "brand-audio/*/out/*.mp3",
 ]
 CACHE_FILE = ROOT / ".claude" / "qa_state" / "cache.json"
 
@@ -142,6 +144,19 @@ def no_merge_markers(path: Path) -> list[str]:
     return [f"git merge conflict marker on line {i}" for i in hits[:5]]
 
 
+# A shell heredoc once turned the regex "\b" in a Python string into a literal backspace
+# (U+0008), silently breaking two filters in outlier-tracking/common.py (2026-10-09).
+@check("no-control-chars", exts={".py", ".js", ".ts", ".md", ".html", ".yml", ".yaml"})
+def no_control_chars(path: Path) -> list[str]:
+    text = read_text(path)
+    if text is None:
+        return []
+    hits = [i for i, line in enumerate(text.splitlines(), 1)
+            if any(ord(c) < 32 and c not in "\t\r\f" for c in line)]
+    return [f"control character (e.g. a mangled \\b backspace) on line(s) {', '.join(map(str, hits[:10]))}; "
+            "write the escape with the Edit tool instead of a shell heredoc"] if hits else []
+
+
 @check("valid-json", exts={".json"})
 def valid_json(path: Path) -> list[str]:
     text = read_text(path)
@@ -219,9 +234,10 @@ def python_imports_resolve(path: Path) -> list[str]:
     # denoise.py: sys.path.insert(0, str(Path(__file__).resolve().parents[N] / "name")),
     # which makes that folder's .py files importable as top-level modules even though
     # the folder isn't itself an ancestor of this file.
-    for n_str, folder in re.findall(r"parents\[(\d+)\]\s*/\s*[\"'](\w[\w\-]*)[\"']", text):
+    # One or more "/ 'segment'" after parents[N] (e.g. parents[1] / "long-form-video-editing" / "talking-head-infield").
+    for n_str, chain in re.findall(r"parents\[(\d+)\]((?:\s*/\s*[\"']\w[\w\-]*[\"'])+)", text):
         try:
-            target = path.parents[int(n_str)] / folder
+            target = path.parents[int(n_str)].joinpath(*re.findall(r"[\"'](\w[\w\-]*)[\"']", chain))
         except IndexError:
             continue
         if target.is_dir():

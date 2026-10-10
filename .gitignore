@@ -48,3 +48,28 @@ tools/bin/
 # Channel analytics OAuth token, never commit
 channel-analytics/token.json
 video-ideation/strategist/dashboard/
+brand-audio/*/out/
+
+# downloaded model weights (fetched by the scripts that use them)
+tools/models/
+# Mock-only women pool (local AI + saved pins), never commit
+thumbnail-creation/reference/women_pool/
+
+# Media stays local (public repo, 2026-10-10): copyrighted clips/music, AI images,
+# posting-bot screenshots of the account. Already-tracked files are unaffected.
+*.mp4
+*.mkv
+*.mov
+*.mp3
+*.wav
+*.m4a
+**/debug_screenshots/
+**/memeclips/
+**/memes/
+**/sfx/
+**/emoji/
+**/music/
+video-ideation/tier_list_tiles/
+posting-automation/**/*.png
+posting-automation/**/*.jpg
+long-form-video-editing/style-research/measurements/**/*.jpg

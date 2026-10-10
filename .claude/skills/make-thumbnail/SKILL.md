@@ -5,6 +5,8 @@ description: Build a finished YouTube thumbnail for a long-form video from its r
 
 # Make a thumbnail
 
+Video-chat / e-date videos use the `videochat-thumbnail` skill instead (split call layout).
+
 The style rules and tools are in `thumbnail-creation/claude.md`: natural light, medium/wide framing, and minimal text.
 
 ## Steps

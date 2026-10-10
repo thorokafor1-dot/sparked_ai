@@ -103,3 +103,35 @@ def hook_transcripts(path: Path) -> list[str]:
             problems.append(f"{vid}: transcript doesn't look English (dubbed/foreign audio under an English "
                             f"title?); exclude it from pattern research")
     return problems
+
+
+@check("script-research-transcript", paths=["long-form-script-research/transcripts/*.json"], exts={".json"})
+def script_research_transcript(path: Path) -> list[str]:
+    """Full transcripts feed retention metrics; an empty or unordered one skews every median."""
+    try:
+        d = json.loads(path.read_text(encoding="utf-8"))
+    except (ValueError, OSError):
+        return ["not valid JSON"]
+    meta, segs = d.get("meta") or {}, d.get("segments") or []
+    problems = [f"meta missing {k}" for k in ("vid", "title", "channel", "source", "group") if not meta.get(k)]
+    if len(segs) < 20:
+        problems.append(f"only {len(segs)} segments; partial transcript, delete and re-pull")
+    starts = [s.get("start", 0) for s in segs]
+    if any(b < a for a, b in zip(starts, starts[1:])):
+        problems.append("segments are not time-ordered")
+    return problems
+
+
+@check("script-research-playbook", paths=["long-form-script-research/retention_playbook.md"], exts={".md"})
+def script_research_playbook(path: Path) -> list[str]:
+    """The playbook must keep niche and general evidence distinct and be finished."""
+    t = path.read_text(encoding="utf-8")
+    problems = []
+    for need in ("niche", "general", "Apply to Sparked"):
+        if need.lower() not in t.lower():
+            problems.append(f"missing '{need}' section/evidence")
+    if re.search(r"\b(TODO|TBD|XXX)\b", t):
+        problems.append("has placeholders")
+    if "\u2014" in t:
+        problems.append("contains an em dash")
+    return problems

@@ -15,4 +15,5 @@ Details live in `channel-analytics/claude.md`.
 
 ## Gotchas (keep this list updated)
 - Analytics lag about 2 to 3 days, so fresh uploads show "no data yet".
+- **First run 403 `accessNotConfigured`** (2026-10-01): the Cloud project 777575800011 needed the YouTube Analytics API enabled at console.developers.google.com/apis/api/youtubeanalytics.googleapis.com/overview?project=777575800011 (Thor profile). It takes a few minutes to propagate after enabling.
 - Livestreams and test streams are filtered out on purpose.

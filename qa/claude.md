@@ -7,7 +7,7 @@ This is the automated quality gate for the whole Sparked AI project. Its job is 
   - `fast`: runs after every edit
   - `full`: runs before a turn can end
 - `checks_<area>.py`: folder-specific checks. `load_all()` picks these up automatically, they register with `from checks import check`, and a module that fails to import is itself reported as a failure.
-  - `checks_video.py`: render specs, black/frozen/silent stretches, loudness, and face-on-screen for the Monkey App shorts.
+  - `checks_video.py`: render specs, black/frozen/silent stretches, loudness, and face-on-screen for the Monkey App shorts, plus `short-call-as-cutaway` (real call footage rendered letterboxed as if it were a meme).
   - `checks_image.py`: thumbnail size/format, main-face sharpness and exposure.
   - `checks_text.py`: script timeline, pacing and dialogue rules, concept-doc sections, caption safe zone, hook-pattern docs.
   - `checks_data.py`: outlier `data.json` integrity plus the general-tab 500K/90-day bar, and English-only hook transcripts.

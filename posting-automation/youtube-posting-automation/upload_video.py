@@ -46,6 +46,7 @@ def upload(
     privacy: str,
     category_id: str,
     thumbnail_path: str | None,
+    publish_at: str | None = None,
 ) -> str:
     youtube = build("youtube", "v3", credentials=_load_credentials())
 
@@ -61,6 +62,10 @@ def upload(
             "selfDeclaredMadeForKids": False,
         },
     }
+    if publish_at:
+        # YouTube schedules only private videos: it stays private until publishAt, then goes public itself
+        body["status"]["privacyStatus"] = "private"
+        body["status"]["publishAt"] = publish_at
     media = MediaFileUpload(video_path, chunksize=-1, resumable=True)
     request = youtube.videos().insert(part="snippet,status", body=body, media_body=media)
 
@@ -70,7 +75,8 @@ def upload(
         if status:
             print(f"Uploaded {int(status.progress() * 100)}%")
     video_id = response["id"]
-    print(f"Video created: https://youtu.be/{video_id} (privacy={privacy})")
+    print(f"Video created: https://youtu.be/{video_id} "
+          + (f"(scheduled, goes public at {publish_at})" if publish_at else f"(privacy={privacy})"))
 
     if thumbnail_path:
         try:
@@ -92,14 +98,54 @@ def upload(
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Upload a video to YouTube via the Data API v3.")
-    parser.add_argument("--video", required=True)
-    parser.add_argument("--title", required=True)
+    parser.add_argument("--video-id", default=None,
+                        help="Already-uploaded video: set its --thumbnail and/or schedule it with --publish-at (no upload)")
+    parser.add_argument("--video")
+    parser.add_argument("--title")
     parser.add_argument("--description", default="")
     parser.add_argument("--tags", default="", help="Comma-separated tags")
     parser.add_argument("--thumbnail", default=None)
     parser.add_argument("--privacy", default="private", choices=["private", "unlisted", "public"])
+    parser.add_argument("--publish-at", default=None,
+                        help='Schedule: local time "YYYY-MM-DD HH:MM" (or ISO with offset); uploads private, auto-publishes then')
     parser.add_argument("--category-id", default="22", help="YouTube category ID (default 22 = People & Blogs)")
     args = parser.parse_args()
+
+    publish_at = None
+    if args.publish_at:
+        from datetime import datetime, timezone
+        when = datetime.fromisoformat(args.publish_at)
+        when = when.astimezone() if when.tzinfo is None else when  # naive = this machine's local time
+        if when <= datetime.now(timezone.utc):
+            parser.error(f"--publish-at {args.publish_at} is in the past")
+        publish_at = when.astimezone(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        print(f"Scheduling for {when.strftime('%a %d %b %H:%M %Z')} ({publish_at})")
+
+    if args.video_id:
+        import sys
+        sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "qa"))
+        import checks_image
+        from preflight_post import enforce
+        if not (args.thumbnail or publish_at):
+            parser.error("--video-id needs --thumbnail and/or --publish-at")
+        if args.thumbnail:
+            enforce([f"thumbnail: {p}" for p in checks_image.thumbnail_specs(Path(args.thumbnail))], "thumbnail")
+        youtube = build("youtube", "v3", credentials=_load_credentials())
+        if args.thumbnail:
+            youtube.thumbnails().set(videoId=args.video_id, media_body=MediaFileUpload(args.thumbnail)).execute()
+            print(f"Thumbnail set on https://youtu.be/{args.video_id}")
+        if publish_at:
+            # videos.update replaces the whole status part, so carry the existing fields over
+            status = youtube.videos().list(part="status", id=args.video_id).execute()["items"][0]["status"]
+            status.update(privacyStatus="private", publishAt=publish_at)
+            keep = ("privacyStatus", "publishAt", "license", "embeddable", "publicStatsViewable",
+                    "selfDeclaredMadeForKids", "containsSyntheticMedia")
+            body = {"id": args.video_id, "status": {k: v for k, v in status.items() if k in keep}}
+            youtube.videos().update(part="status", body=body).execute()
+            print(f"Scheduled https://youtu.be/{args.video_id} to go public at {publish_at}")
+        return
+    if not (args.video and args.title):
+        parser.error("--video and --title are required for an upload")
 
     # Project-wide pre-flight (qa/preflight_post.py): abort before anything is uploaded.
     import sys
@@ -108,7 +154,7 @@ def main() -> None:
     enforce(youtube_problems(args.title, args.description, args.tags, args.thumbnail, args.video), "YouTube upload")
 
     tags = [t.strip() for t in args.tags.split(",") if t.strip()]
-    upload(args.video, args.title, args.description, tags, args.privacy, args.category_id, args.thumbnail)
+    upload(args.video, args.title, args.description, tags, args.privacy, args.category_id, args.thumbnail, publish_at)
 
 
 if __name__ == "__main__":

@@ -1,10 +1,10 @@
-# Publish package: monkey_longform_v6
+# Publish package: monkey_longform_v11
 
 Reviewed by the critic (verdict REVISE on the first pack, fixes applied below).
 
 ## Title
-- Primary: She Asked "Who Do You Think You Are?" (Monkey App)
-- A/B alternative: I Used the Same Rizz Line on 2 Girls (Monkey App)
+- Primary: She Asked "Who Do You Think You Are?"
+- A/B alternative: I Used the Same Rizz Line on 2 Girls
 
 ## Thumbnail
 Anna's red-lipstick reaction beside Thor's smirk. Text: "I'M THOR ⚡"

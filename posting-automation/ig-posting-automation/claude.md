@@ -9,7 +9,7 @@ Single job of this folder: get a finished Short/Reel from a Google Drive link on
 
 ## Quality gates (automatic, `qa/preflight_post.py`)
 The upload script runs a pre-flight on its own inputs and exits with code 2, before anything is downloaded or uploaded, if a check fails:
-- Caption: not empty, no em dash, no placeholders, within the character limit, no repeated hashtags. Hashtag limits: Facebook 1-3 (the user's rule), IG/TikTok 30 max.
+- Caption: not empty, no em dash, no placeholders, within the character limit, no repeated hashtags. Hashtag limits: Facebook 1-3 (the user's rule), Instagram 3-5 (platform cap is 5 since late 2025), TikTok 30 max.
 - Video file: 9:16, at least 1280px tall, has audio, within the platform's length limit, h264.
 - YouTube (`upload_video.py`): title 1-100 chars, no `<`/`>`, description and tag limits, and the thumbnail must pass `thumbnail-specs`.
 Never bypass a failed pre-flight. Fix the input and re-run. Publish itself stays a human click.
