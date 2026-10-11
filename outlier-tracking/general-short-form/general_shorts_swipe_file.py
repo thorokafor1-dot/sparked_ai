@@ -20,29 +20,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from common import write_rows_to_json
 
 SWIPE_FILE = [
-    {
-        "title": "The Viral Gift 🎁✨ [Kindzilla] # kindzilla #funny #shorts #hero #kindness #justice",
-        "channel": "Kindzilla",
-        "url": "https://www.youtube.com/watch?v=DLhAVf99DC8",
-        "published_at": "2026-07-07",
-        "duration": "0:32",
-        "niche": "Kindness/Small-Gesture Reveal (Kids)",
-        "views": "74,619,981 views (743,000 subscribers) -- a real, high-reach video used here as a proven thumbnail/title/retention example regardless of channel size.",
-        "views_num": 74619981,
-        "subscribers": 743000,
-        "score": "74,619,981 views",
-        "pattern": "A small, specific, kid-scale act of kindness (a bracelet exchange) captured candidly and framed with the channel's recurring branded name as a trust signal for the genre.",
-        "trigger": "Warmth from witnessing an unprompted, small generous gesture + brand-name recognition for viewers already familiar with the channel's format.",
-        "thumbnail": "Two boys facing each other indoors, one handing over a small item (bracelet), candid unposed framing, natural indoor lighting.",
-        "formula": "\"The Viral [Object] 🎁✨ [Channel Branding] #kindness\"",
-        "why": "Keeping the act small and specific makes it feel achievable and real, and consistent branding across entries builds a recognizable, trusted \"kindness content\" identity.",
-        "translation": "Reframe \"kids exchanging a small gift\" as \"a small, specific generous gesture between a guy and a woman he's just met\", same small-scale-specific-kindness framing.",
-        "ca_title": "I Gave Her Something Small, Her Reaction Went Viral",
-        "ca_thumbnail": "The creator and a woman facing each other outdoors, mid-handoff of a small item, candid unposed framing, natural daylight.",
-        "notes": "A recurring branded \"kindness series\" identity is a reusable device for building trust and repeat viewership across many individually low-stakes moments.",
-        "status": "Not Adapted",
-        "scanned_at": "2026-10-04",
-    },
 ]
 
 
